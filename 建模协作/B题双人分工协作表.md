@@ -2,7 +2,7 @@
 
 > 阶段：DRAFT（H4 分工与实验协议）  
 > 成员：钟江铭、蔡乔夕  
-> 最后更新：2026-08-07  
+> 最后更新：2026-08-08
 > 适用范围：B题问题 1-4 的模型开发、交叉复核、实验运行和论文结果交接  
 > 重要说明：本文只规定开发与验证流程，不包含任何已经运行的模型结果。
 
@@ -94,7 +94,7 @@ data/raw 原始附件
 输出：模块坐标和方向、运行状态、运行时间、评价次数、布局文件、日志文件
 ```
 
-模型可以输出内部调试指标，但正式面积、长宽比、死区、HPWL 和合法性必须由共享评价器重新计算，再由独立审计脚本抽查。
+模型可以输出内部调试指标，但正式 `area=W*H`、`module_area`、长宽比、死区、题面 `dead_space_ratio=deadspace/module_area`、轮廓占比 `rho=deadspace/area`、HPWL 和合法性必须由共享评价器重新计算，再由独立审计脚本抽查。
 
 建议 P2 使用可独立关闭的配置开关：
 
@@ -262,8 +262,8 @@ V1 验收标准：两人不依赖口头说明即可解释每问的主模型、�
 | seed/budget | 种子、墙钟和评价次数预算 |
 | status | `success`、`no_feasible`、`timeout` 或 `crash` |
 | legal | 独立评价器是否合法 |
-| W/H/area/rho | 几何指标 |
-| deadspace/HPWL | 死区和原始总 HPWL |
+| W/H/area/module_area | 轮廓边长、轮廓面积和模块面积和 |
+| deadspace/dead_space_ratio/rho/HPWL | 死区面积、题面死区比例、轮廓死区占比和原始总 HPWL |
 | runtime/evaluations | 实际耗时和评价次数 |
 | layout/log path | 布局坐标和日志入口 |
 
