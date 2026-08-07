@@ -1,0 +1,180 @@
+{
+  "raw_files": [
+    {
+      "file": "raw/.gitkeep",
+      "bytes": 25,
+      "sha256": "10a665fca1cc81a266edd4b23d09176638642f6f6e942ea6a1a643db9a326115"
+    },
+    {
+      "file": "raw/B\u9898 VLSI\u5e03\u56fe\u89c4\u5212\u8bbe\u8ba1.pdf",
+      "bytes": 1385562,
+      "sha256": "f5e74a5d3997efc2252bc2ef204e5a20ba66bba442ae05ad2e4f473261b32566"
+    },
+    {
+      "file": "raw/Modern Floorplanning Based on B \u2217 -Tree and Fast Simulated.pdf",
+      "bytes": 864205,
+      "sha256": "f6f8b53e7b9324c1e0318b4549e15b2fa4f2dcf4299ed5840b9fbc570e003c2e"
+    },
+    {
+      "file": "raw/\u9644\u4ef6/n100.blocks",
+      "bytes": 8999,
+      "sha256": "c66f917c48f3c7ee9624bec8e0dc053eb349d10121d3278d25b09b67a2e94e2b"
+    },
+    {
+      "file": "raw/\u9644\u4ef6/n100.nets",
+      "bytes": 19997,
+      "sha256": "cd86e1b49547f9c76144aa2acef6d643c8fd9222c3a4b8c91a40bb6f7ca42193"
+    },
+    {
+      "file": "raw/\u9644\u4ef6/n100.pl",
+      "bytes": 3818,
+      "sha256": "cb8b03aff82241643ca899aa9759d8aa42bcf085ead64d5011f52c83f836355f"
+    },
+    {
+      "file": "raw/\u9644\u4ef6/n200.blocks",
+      "bytes": 16719,
+      "sha256": "bed652bf55c2034b04a1c1bbe97ad617e027c11736bf069727a63baf575720ef"
+    },
+    {
+      "file": "raw/\u9644\u4ef6/n200.nets",
+      "bytes": 38414,
+      "sha256": "8867f3f167845d88623a5cadba68f7a19fe343278779538e7804c5ac0c5940a2"
+    },
+    {
+      "file": "raw/\u9644\u4ef6/n200.pl",
+      "bytes": 6512,
+      "sha256": "0400507fcb07124e01f6cdb86c5e71cdce1bbbb871030651f5583a2f66ec3589"
+    },
+    {
+      "file": "raw/\u9644\u4ef6/n300.blocks",
+      "bytes": 21289,
+      "sha256": "88ca80814070d9578c7ccd31182ff31ab026a1a1ea9da5fd0e0342d26327bc82"
+    },
+    {
+      "file": "raw/\u9644\u4ef6/n300.nets",
+      "bytes": 46787,
+      "sha256": "39d9cc7b7d347dd0ecefb8d17e0adfbcbf2af1c071079fbf64caec34bcc0d94c"
+    },
+    {
+      "file": "raw/\u9644\u4ef6/n300.pl",
+      "bytes": 6609,
+      "sha256": "7b095ff15624666c3fdf95c71fda72e45ffff70acdf27d10302830ba3031f035"
+    }
+  ],
+  "instances": [
+    {
+      "instance": "n100",
+      "declared_blocks": 100,
+      "actual_blocks": 100,
+      "declared_terminals": 334,
+      "actual_terminals": 334,
+      "missing_terminal_positions": [],
+      "extra_terminal_positions": [],
+      "terminal_sets_match": true,
+      "declared_nets": 885,
+      "actual_nets": 885,
+      "degree_count": 885,
+      "declared_pins": 1873,
+      "degree_sum": 1873,
+      "pin_reference_count": 1873,
+      "reference_count": 434,
+      "referenced_blocks": 100,
+      "referenced_terminals": 334,
+      "missing_references": [],
+      "references_complete": true,
+      "files": [
+        {
+          "file": "raw/\u9644\u4ef6/n100.blocks",
+          "bytes": 8999,
+          "sha256": "c66f917c48f3c7ee9624bec8e0dc053eb349d10121d3278d25b09b67a2e94e2b"
+        },
+        {
+          "file": "raw/\u9644\u4ef6/n100.nets",
+          "bytes": 19997,
+          "sha256": "cd86e1b49547f9c76144aa2acef6d643c8fd9222c3a4b8c91a40bb6f7ca42193"
+        },
+        {
+          "file": "raw/\u9644\u4ef6/n100.pl",
+          "bytes": 3818,
+          "sha256": "cb8b03aff82241643ca899aa9759d8aa42bcf085ead64d5011f52c83f836355f"
+        }
+      ]
+    },
+    {
+      "instance": "n200",
+      "declared_blocks": 200,
+      "actual_blocks": 200,
+      "declared_terminals": 564,
+      "actual_terminals": 564,
+      "missing_terminal_positions": [],
+      "extra_terminal_positions": [],
+      "terminal_sets_match": true,
+      "declared_nets": 1585,
+      "actual_nets": 1585,
+      "degree_count": 1585,
+      "declared_pins": 3599,
+      "degree_sum": 3599,
+      "pin_reference_count": 3599,
+      "reference_count": 764,
+      "referenced_blocks": 200,
+      "referenced_terminals": 564,
+      "missing_references": [],
+      "references_complete": true,
+      "files": [
+        {
+          "file": "raw/\u9644\u4ef6/n200.blocks",
+          "bytes": 16719,
+          "sha256": "bed652bf55c2034b04a1c1bbe97ad617e027c11736bf069727a63baf575720ef"
+        },
+        {
+          "file": "raw/\u9644\u4ef6/n200.nets",
+          "bytes": 38414,
+          "sha256": "8867f3f167845d88623a5cadba68f7a19fe343278779538e7804c5ac0c5940a2"
+        },
+        {
+          "file": "raw/\u9644\u4ef6/n200.pl",
+          "bytes": 6512,
+          "sha256": "0400507fcb07124e01f6cdb86c5e71cdce1bbbb871030651f5583a2f66ec3589"
+        }
+      ]
+    },
+    {
+      "instance": "n300",
+      "declared_blocks": 300,
+      "actual_blocks": 300,
+      "declared_terminals": 569,
+      "actual_terminals": 569,
+      "missing_terminal_positions": [],
+      "extra_terminal_positions": [],
+      "terminal_sets_match": true,
+      "declared_nets": 1893,
+      "actual_nets": 1893,
+      "degree_count": 1893,
+      "declared_pins": 4358,
+      "degree_sum": 4358,
+      "pin_reference_count": 4358,
+      "reference_count": 869,
+      "referenced_blocks": 300,
+      "referenced_terminals": 569,
+      "missing_references": [],
+      "references_complete": true,
+      "files": [
+        {
+          "file": "raw/\u9644\u4ef6/n300.blocks",
+          "bytes": 21289,
+          "sha256": "88ca80814070d9578c7ccd31182ff31ab026a1a1ea9da5fd0e0342d26327bc82"
+        },
+        {
+          "file": "raw/\u9644\u4ef6/n300.nets",
+          "bytes": 46787,
+          "sha256": "39d9cc7b7d347dd0ecefb8d17e0adfbcbf2af1c071079fbf64caec34bcc0d94c"
+        },
+        {
+          "file": "raw/\u9644\u4ef6/n300.pl",
+          "bytes": 6609,
+          "sha256": "7b095ff15624666c3fdf95c71fda72e45ffff70acdf27d10302830ba3031f035"
+        }
+      ]
+    }
+  ]
+}
