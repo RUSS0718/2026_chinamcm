@@ -51,11 +51,16 @@ class Round0Tests(unittest.TestCase):
         bare = evaluate(self.rect, layout)
         fixed = evaluate(self.rect, layout, (0, 0, 6, 4))
         self.assertEqual((bare.width, bare.height), (5, 2))
+        self.assertEqual((bare.area, bare.module_area), (10, 8))
         self.assertEqual(bare.aspect_ratio, 2.5)
         self.assertEqual((fixed.width, fixed.height), (6, 4))
         self.assertEqual(fixed.aspect_ratio, 1.5)
-        self.assertEqual((fixed.area, fixed.deadspace, fixed.square_side), (8, 16, 6))
+        self.assertEqual((fixed.area, fixed.module_area, fixed.deadspace, fixed.square_side), (24, 8, 16, 6))
+        self.assertEqual(fixed.dead_space_ratio, 2)
         self.assertTrue(math.isclose(fixed.rho, 16 / 24))
+        spread = evaluate(self.rect, {'a': (0, 0, 0), 'b': (8, 0, 0)})
+        self.assertEqual(spread.module_area, bare.module_area)
+        self.assertNotEqual(spread.area, bare.area)
 
     def test_touch_overlap_outline_edge_and_outside(self):
         self.assertTrue(evaluate(self.rect, {'a': (0, 0, 0), 'b': (3, 0, 0)}).legal)

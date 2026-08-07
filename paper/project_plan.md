@@ -1,8 +1,8 @@
 # V1 项目技术计划
 
-- 状态：REVIEWING；项目成员：钟江铭、蔡乔夕；Agent 技术实现：terra_worker；Agent 技术验收：main Agent；更新：2026-08-07。
+- 状态：REVIEWING；项目成员：钟江铭、蔡乔夕；Agent 技术实现：terra_worker；Agent 技术验收：main Agent；更新：2026-08-08。
 - 已确认：第 0 轮记录三实例解析计数和共享几何/指标测试；尚未运行任一优化候选。
-- 未执行：不修改 `data/raw/`、第 0 轮材料、优化器、结果表或 Git commit/push。
+- 本次未执行：不修改 `data/raw/`、优化器、正式结果表或 Git commit/push。
 
 ## 依赖与组件
 
@@ -10,11 +10,11 @@
 
 ## 接口与数据权威
 
-唯一原始事实为 `data/raw/`；首个解析器须经另一人独立审计后冻结。统一输入为 `instance, problem, candidate, config, seed, budget`，统一输出为模块坐标/方向、`status,runtime,evaluations,layout_path,log_path`。正式指标只能由共享评价器重算，独立审计脚本抽查；Terminal 是 `.pl` 绝对坐标，不是 HardBlock 轮廓约束。
+唯一原始事实为 `data/raw/`；首个解析器须经另一人独立审计后冻结。`.blocks/.nets/.pl` 的审计哈希以 LF 规范字节计算，并通过 `.gitattributes` 禁止后续 Git 换行转换；程序不得覆盖或原地清洗原始附件。统一输入为 `instance, problem, candidate, config, seed, budget`，统一输出为模块坐标/方向、`status,runtime,evaluations,layout_path,log_path`。正式指标只能由共享评价器重算，独立审计脚本抽查；Terminal 是 `.pl` 绝对坐标，不是 HardBlock 轮廓约束。
 
 ## 指标口径
 
-令布局包围盒边长为 `W,H`，则 `area=W*H`，`aspect_ratio=max(W,H)/min(W,H)`；`deadspace=area-sum(module_area)`，`rho=deadspace/area`。一个网络的 `HPWL=(max x-min x)+(max y-min y)`，总 HPWL 为所有网络之和，模块引脚为中心且 Terminal 使用其绝对坐标。正面积相交非法，边界接触合法。Q4 的面积与碰撞均基于真实正交多边形。
+令布局包围盒或固定轮廓边长为 `W,H`，则 `area=W*H`，`module_area` 为模块真实多边形面积之和，`deadspace=area-module_area`，`aspect_ratio=max(W,H)/min(W,H)`。题面参数 `dead_space_ratio=deadspace/module_area`；内部同时记录 `rho=deadspace/area=dead_space_ratio/(1+dead_space_ratio)`，但 Q2/Q3 的轮廓公式和报告均使用题面的 `dead_space_ratio`。一个网络的 `HPWL=(max x-min x)+(max y-min y)`，总 HPWL 为所有网络之和，模块引脚为中心且 Terminal 使用其绝对坐标。正面积相交非法，边界接触合法。Q4 的模块面积与碰撞均基于真实正交多边形。
 
 ## 候选、预注册与失败语义
 
@@ -22,11 +22,11 @@ P0 是独立基线，P1 是稳健主干，P2 是可逐一关闭的创新组件�
 
 ## V1 至 V3 验收
 
-V1：各报告说明目标、接口、候选、开关与回退。V2：冻结数据哈希、公式、参数、入口和实际命令。V3：完整明细/汇总表、独立审计、匹配的比较或敏感性检验，以及论文数字追溯。每问选型至少保留 P0；P2 仅在稳定收益且不降低合法率时采用，否则回退 P1。
+V1：各报告说明目标、接口、候选、开关与回退。进入某问 n100 开发前，须完成第 0 轮、该问 V1 和该问专属几何/数据口径复核；参数、重启次数、墙钟/评价次数预算、机器、线程和 RNG 在 n100 开发结束、n200 正式比较前冻结。Q4 的 `b1` 完整顶点只阻塞 Q4 V2，不阻塞 Q1 n100 开发。V3：完整明细/汇总表、独立审计、匹配的比较或敏感性检验，以及论文数字追溯。每问选型至少保留 P0；P2 仅在稳定收益且不降低合法率时采用，否则回退 P1。
 
 ## 本阶段验证记录
 
-主 Agent 使用 bundled Python 实际执行 `validate.py paper/diagrams/v1_technical_route.drawio --score`，结果为 `0 error(s), 0 warning(s)`。随后使用 `D:\Program Files\draw.io\draw.io.exe` 31.1.8 导出预览 PNG，完成两轮视觉检查并修正 `第0轮 -> Q4` 的误导性路由；正式导出 `v1_technical_route.drawio.png`（嵌入 XML）和 `v1_technical_route.svg`，最终 PNG 已完成像素检查，无标签裁切、节点重叠或错误连线。
+主 Agent 使用 bundled Python 实际执行 `validate.py paper/diagrams/v1_technical_route.drawio --score`，结果为 `0 error(s), 0 warning(s)`。随后使用 `D:\Program Files\draw.io\draw.io.exe` 31.1.8 导出预览 PNG，完成两轮视觉检查并修正 `第0轮 -> Q4` 的误导性路由；正式导出 `v1_technical_route.drawio.png`（嵌入 XML）和 `v1_technical_route.svg`，最终 PNG 已完成像素检查，无标签裁切、节点重叠或错误连线。2026-08-08 又实际执行 6 项第 0 轮基础测试和审计入口，纠正 `area/module_area` 语义，确认 Q1/Q3 题面口径，并复现三实例规范哈希与解析计数。
 
 ## 协作确认与资料边界
 

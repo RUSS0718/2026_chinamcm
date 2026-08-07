@@ -3,19 +3,35 @@ import argparse, hashlib, json
 from pathlib import Path
 from ._internal.parser import parse_instance_files
 
+_TEXT_DATA_SUFFIXES = {'.blocks', '.nets', '.pl'}
+
+def _audited_bytes(path):
+    data = path.read_bytes()
+    if path.suffix.lower() in _TEXT_DATA_SUFFIXES:
+        return data.replace(b'\r\n', b'\n').replace(b'\r', b'\n')
+    return data
+
+def _file_record(path, relative_to):
+    data = _audited_bytes(path)
+    return {
+        'file': path.relative_to(relative_to).as_posix(),
+        'bytes': len(data),
+        'sha256': hashlib.sha256(data).hexdigest(),
+    }
+
 def audit_files(raw_dir, processed_dir):
     raw_dir, processed_dir = Path(raw_dir), Path(processed_dir); processed_dir.mkdir(parents=True, exist_ok=True)
     all_files=[]
     for path in sorted(raw_dir.parent.rglob('*')):
         if path.is_file():
-            all_files.append({'file':path.relative_to(raw_dir.parent.parent).as_posix(),'bytes':path.stat().st_size,'sha256':hashlib.sha256(path.read_bytes()).hexdigest()})
+            all_files.append(_file_record(path, raw_dir.parent.parent))
     rows=[]
     for stem in ('n100','n200','n300'):
         paths=[raw_dir/f'{stem}{ext}' for ext in ('.blocks','.nets','.pl')]
         inst=parse_instance_files(*paths)
         hashes=[]
         for p in paths:
-            h=hashlib.sha256(p.read_bytes()).hexdigest(); hashes.append({'file':p.relative_to(raw_dir.parent.parent).as_posix(),'bytes':p.stat().st_size,'sha256':h})
+            hashes.append(_file_record(p, raw_dir.parent.parent))
         block_refs={p for n in inst.nets for p in n.pins if p in inst.blocks}; term_refs={p for n in inst.nets for p in n.pins if p in inst.terminals}
         missing=sorted({p for n in inst.nets for p in n.pins if p not in inst.blocks and p not in inst.terminals})
         missing_terminal_positions=sorted(set(inst.declared_terminal_names)-set(inst.terminals))

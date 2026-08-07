@@ -33,7 +33,7 @@ def audit_layout(instance, layout, outline=None):
     else:
         W=max(x+w for x,y,w,h in placed.values())-min(x for x,y,w,h in placed.values()); H=max(y+h for x,y,w,h in placed.values())-min(y for x,y,w,h in placed.values())
     def area(poly): return abs(sum(x1*y2-x2*y1 for (x1,y1),(x2,y2) in zip(poly,poly[1:]+poly[:1])))/2
-    area=sum(area(poly) for poly in polygons.values()); dead=W*H-area
+    module_area=sum(area(poly) for poly in polygons.values()); area=W*H; dead=area-module_area
     hpwl=0
     for net in instance.nets:
         pts=[]
@@ -42,4 +42,4 @@ def audit_layout(instance, layout, outline=None):
                 x,y,w,h=placed[pin]; pts.append((x+w/2,y+h/2))
             elif pin in instance.terminals: pts.append(instance.terminals[pin])
         if pts: hpwl += max(x for x,y in pts)-min(x for x,y in pts)+max(y for x,y in pts)-min(y for x,y in pts)
-    return {'legal':bool(legal),'W':W,'H':H,'area':area,'aspect_ratio':max(W,H)/min(W,H) if min(W,H) else float('inf'),'rho':dead/(W*H) if W*H else 0,'deadspace':dead,'HPWL':hpwl,'square_side':max(W,H)}
+    return {'legal':bool(legal),'W':W,'H':H,'area':area,'module_area':module_area,'dead_space_ratio':dead/module_area if module_area else 0,'aspect_ratio':max(W,H)/min(W,H) if min(W,H) else float('inf'),'rho':dead/area if area else 0,'deadspace':dead,'HPWL':hpwl,'square_side':max(W,H)}

@@ -7,8 +7,8 @@ class Positioned:
 
 @dataclass
 class Evaluation:
-    legal: bool; width: float; height: float; area: float; aspect_ratio: float; rho: float; deadspace: float; hpwl: float; square_side: float; blocks: dict
-    def as_dict(self): return {'legal':self.legal,'W':self.width,'H':self.height,'area':self.area,'aspect_ratio':self.aspect_ratio,'rho':self.rho,'deadspace':self.deadspace,'HPWL':self.hpwl,'square_side':self.square_side}
+    legal: bool; width: float; height: float; area: float; module_area: float; dead_space_ratio: float; aspect_ratio: float; rho: float; deadspace: float; hpwl: float; square_side: float; blocks: dict
+    def as_dict(self): return {'legal':self.legal,'W':self.width,'H':self.height,'area':self.area,'module_area':self.module_area,'dead_space_ratio':self.dead_space_ratio,'aspect_ratio':self.aspect_ratio,'rho':self.rho,'deadspace':self.deadspace,'HPWL':self.hpwl,'square_side':self.square_side}
 
 def evaluate(instance, layout, outline=None):
     placed = {}; polys = {}
@@ -24,7 +24,8 @@ def evaluate(instance, layout, outline=None):
     if outline:
         ox,oy,ow,oh=outline; legal &= all(p.x >= ox and p.y >= oy and p.x+p.width <= ox+ow and p.y+p.height <= oy+oh for p in placed.values()); W,H=ow,oh
     else: W,H=maxx-minx,maxy-miny
-    area=sum(polygon_area(poly) for poly in polys.values()); deadspace=W*H-area; rho=deadspace/(W*H) if W*H else 0
+    area=W*H; module_area=sum(polygon_area(poly) for poly in polys.values()); deadspace=area-module_area
+    dead_space_ratio=deadspace/module_area if module_area else 0; rho=deadspace/area if area else 0
     hpwl=0
     for net in instance.nets:
         pts=[]
@@ -33,4 +34,4 @@ def evaluate(instance, layout, outline=None):
             elif pin in instance.terminals: pts.append(instance.terminals[pin])
         if pts: hpwl += max(x for x,y in pts)-min(x for x,y in pts)+max(y for x,y in pts)-min(y for x,y in pts)
     aspect_ratio=max(W,H)/min(W,H) if min(W,H) else float('inf')
-    return Evaluation(bool(legal),W,H,area,aspect_ratio,rho,deadspace,hpwl,max(W,H),placed)
+    return Evaluation(bool(legal),W,H,area,module_area,dead_space_ratio,aspect_ratio,rho,deadspace,hpwl,max(W,H),placed)
