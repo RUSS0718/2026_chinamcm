@@ -1,3 +1,3 @@
-# Q4 论文材料（V1）
+# Q4 论文材料（V1/V2）
 
-状态：REVIEWING。当前仅引用 `outputs/q4/reports/v1_problem_analysis.md` 的问题分析与待验证路线；不含布局、指标、图表或最优性结论。V2 后补充已运行且独立审计通过的模型、参数和结果追溯链。
+状态：REVIEWING。V1 问题分析见 [v1_problem_analysis.md](../../outputs/q4/reports/v1_problem_analysis.md)；V2 方法、结果边界和追溯链见 [v2_model_report.md](../../outputs/q4/reports/v2_model_report.md)，手交接见 [v2_handoff.md](v2_handoff.md)。材料不标记 VERIFIED/FINAL，正式发布前仍需人工复核与全量回归。
