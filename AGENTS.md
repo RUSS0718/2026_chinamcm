@@ -22,7 +22,7 @@
 - `data/raw/` 是只读输入，不得由程序覆盖或原地清洗。
 - 清洗数据和特征写入 `data/processed/`；正式结果写入 `outputs/qN/`；论文可用材料写入 `paper/`。
 - `tmp/` 只用于本地临时文件，不纳入阶段 commit。
-- 使用 `src/q1.py`、`src/q2.py`、`src/q3.py` 或 `requirements.txt` 前先检查实际内容；仅有占位说明的文件不得视为已实现、已运行或可复现。
+- 使用 `python -m src.Q1`、`src/q2.py`、`src/q3.py` 或 `requirements.txt` 前先检查实际内容；仅有占位说明的文件不得视为已实现、已运行或可复现。
 - 未通过数据来源、实际运行和复核的文件，不得迁入 `outputs/qN/final/` 或写成论文确定结论。
 
 ## 数据与模型

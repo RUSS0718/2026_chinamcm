@@ -1,0 +1,4 @@
+config_id,candidate,runs,legal_runs,status_success,status_timeout,status_no_feasible,status_crash,best_area,median_area,median_evaluations,best_layout_path
+Q1-G,Q1-G,10,10,10,0,0,0,279189.0,279189.0,1.0,outputs/q1/_runtime/v2_n100_p0_p1/n100/Q1-G/seed_1101/layout.json
+Q1-SP,Q1-SP,10,10,0,10,0,0,203840.0,206895.0,24873.0,outputs/q1/_runtime/v2_n100_p0_p1/n100/Q1-SP/seed_1102/layout.json
+Q1-BT,Q1-BT,10,10,0,10,0,0,191394.0,195955.5,73858.0,outputs/q1/_runtime/v2_n100_p0_p1/n100/Q1-BT/seed_1107/layout.json

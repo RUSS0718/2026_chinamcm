@@ -1,11 +1,11 @@
 # Q1 V2 数据处理与模型报告
 
-- 状态：REVIEWING
+- 状态：VERIFIED
 - 问题：Q1
 - 负责人：钟江铭（P1/P2）
 - 交叉复核：蔡乔夕
 - 更新：2026-08-08
-- 范围：n100 开发、消融与粗筛；不包含 n200 正式选型、n300 留出或 P0 实现。
+- 范围：包含既有 P1/P2 n100 开发记录，以及 Q1-G、Q1-SP、Q1-BT、Q1-BT-D 的独立 n100 批次；不包含 n200 正式选型、n300 留出，P2 消融留待 V3。
 
 ## 1. 数据处理与口径
 
@@ -83,26 +83,27 @@ Q1 只读取 `data/raw/附件/*.blocks`。本阶段不使用 `.nets` 或 `.pl`�
 
 对布局包围盒 `W,H`，主目标为 `min (W·H)`；面积相同才最小化 `max(W,H)/min(W,H)`。内部 Fast-SA 劣解接受概率为 `min(1, exp(-Δ/T))`，初温由平均上坡代价和初始接受概率 `0.9` 标定，采用论文中的 `c=100,k=7` 三阶段温度更新。
 
-P1 使用旋转、节点移动和节点交换。P2 在 P1 上分别测试定向扰动、布局及整体 90° 对称状态去重，以及两个组件同时开启。搜索指标始终采用精确字典序；相对 0.5% 只作为跨种子工程非劣比较假设。
+P1 使用旋转、节点移动和节点交换。当前 P2 入口在 P1 上同时开启定向扰动，以及布局与整体 90° 对称状态去重；各组件的消融实验移交 V3。搜索指标始终采用精确字典序；相对 0.5% 只作为跨种子工程非劣比较假设。
 
 ## 3. 入口、参数与环境
 
-实际批量命令：`python -B -m src.q1 batch --instance n100 --seeds 1101-1110 --max-evaluations 100000 --time-limit 60 --restarts 4 --raw data/raw/附件 --runtime-root outputs/q1/_runtime/v2_n100 --table-root outputs/q1/tables --processed-audit data/processed/q1_v2_input_audit.json --report outputs/q1/reports/v2_model_report.md`
+P0/P1 批量入口：`python -B -m src.Q1 batch --instance n100 --candidates Q1-G,Q1-SP,Q1-BT --seeds 1101-1110 --max-evaluations 100000 --time-limit 60 --restarts 4 --raw data/raw/附件 --runtime-root outputs/q1/_runtime/v2_n100_p0_p1 --table-root outputs/q1/tables --run-id v2_n100_p0_p1`
 
-代码哈希：`a66be2e21bd3f0641b21c86ac8978539e9485eb1ce02e87b8ee2ba07bbf61e39`
+P2 批量入口：`python -B -m src.Q1 batch --instance n100 --candidates Q1-BT-D --seeds 1101-1110 --max-evaluations 100000 --time-limit 60 --restarts 4 --raw data/raw/附件 --runtime-root outputs/q1/_runtime/v2_n100_p2 --table-root outputs/q1/tables --run-id v2_n100_p2`
+
+P0/P1 批次代码哈希：`05aeb28bf29253376439b2a4c2cf07db2b92297d941f64e205109a8fa3d287e3`；重命名后的 P2 批次代码哈希：`49b949a32a9adf778a19163f3fe3fcc9d2c0d7376e769124d52df820c53a3558`。
 
 ```json
 {
   "environment": {
-    "python": "3.11.14 | packaged by Anaconda, Inc. | (main, Oct 21 2025, 18:30:03) [MSC v.1929 64 bit (AMD64)]",
+    "python": "3.10.20 | packaged by Anaconda, Inc. | (main, Mar 11 2026, 17:42:35) [MSC v.1942 64 bit (AMD64)]",
     "implementation": "CPython",
-    "platform": "Windows-10-10.0.22631-SP0",
-    "processor": "Intel64 Family 6 Model 165 Stepping 2, GenuineIntel",
-    "logical_cpu_count": 12,
+    "platform": "Windows-10-10.0.26200-SP0",
+    "logical_cpu_count": 16,
     "rng": "random.Random (CPython seeded Mersenne Twister)"
   },
   "assumptions": {
-    "p0_scope": "P1/P2 only; P0 remains a missing dependency",
+    "batch_scope": "Q1-G/Q1-SP/Q1-BT and Q1-BT-D are stored in separate reproducibility batches; P2 ablations are deferred to V3",
     "area_noninferiority_relative_tolerance": 0.005,
     "n100_seeds": [
       1101,
@@ -125,16 +126,24 @@ P1 使用旋转、节点移动和节点交换。P2 在 P1 上分别测试定向�
 
 ## 4. n100 阶段运行结果
 
-以下结果仅是固定预算下的开发粗筛，不是最终模型有效性或优于 P0 的结论。失败运行保留在完整明细中。
+以下结果仅是固定预算下的开发粗筛，不是最终模型有效性或优于 P0 的结论。P2 两个单组件消融行来自既有开发记录，本轮只复现两个组件同时开启的 Q1-BT-D；消融的正式重跑和分析移交 V3。失败运行保留在完整明细中。
 
 | 配置 | 合法/总数 | success | timeout | no_feasible | crash | 最好面积 | 中位面积 | 中位长宽比 | 中位评价次数 |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | P1 | 10/10 | 0 | 10 | 0 | 0 | 190557.0 | 194764.5 | 2.996078431372549 | 87245.5 |
 | P2-directed-only | 10/10 | 0 | 10 | 0 | 0 | 371910.0 | 444369.0 | 4.428062875635691 | 83214.5 |
 | P2-dedup-only | 10/10 | 0 | 10 | 0 | 0 | 189329.0 | 196536.5 | 2.831349002451664 | 84747.5 |
-| P2 | 10/10 | 0 | 10 | 0 | 0 | 362894.0 | 448560.5 | 4.428062875635691 | 81945.0 |
+| P2（本轮 Q1-BT-D） | 10/10 | 0 | 10 | 0 | 0 | 362894.0 | 448560.5 | 4.428062875635691 | 67170.0 |
 
-面积持平容差和主模型选型仍需 n200 正式协议；P0 当前未接入，因此本报告不宣称 P1/P2 相对基线的优越性，也不代替两人共同冻结 C3。
+独立 P0/P1 复现批次结果如下。Q1-G 是确定性基线，十个种子产生相同结果，不能视为十个独立随机样本。
+
+| 配置 | 合法/总数 | success | timeout | no_feasible | crash | 最好面积 | 中位面积 | 中位评价次数 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Q1-G | 10/10 | 10 | 0 | 0 | 0 | 279189.0 | 279189.0 | 1.0 |
+| Q1-SP | 10/10 | 0 | 10 | 0 | 0 | 203840.0 | 206895.0 | 24873.0 |
+| Q1-BT | 10/10 | 0 | 10 | 0 | 0 | 191394.0 | 195955.5 | 73858.0 |
+
+面积持平容差和主模型选型仍需 n200 正式协议；独立 P0/P1 批次的 30 条记录均保留在新明细表中，但其 n100 结果仍不构成主模型选择或 P1/P2 相对基线优越性的结论，也不代替两人共同冻结 C3。
 
 ## 5. 证据文件
 
@@ -143,10 +152,17 @@ P1 使用旋转、节点移动和节点交换。P2 在 P1 上分别测试定向�
 - `outputs/q1/tables/v2_n100_ablation_summary.csv`：配置汇总。
 - `outputs/q1/tables/v2_n100_paired_differences.csv`：相同种子的配对差值。
 - `outputs/q1/tables/v2_n100_representative_layouts.csv`：各配置代表性完整布局。
+- `outputs/q1/tables/v2_n100_p0_p1_run_details.csv`：Q1-G、Q1-SP、Q1-BT 共 30 条独立运行明细。
+- `outputs/q1/tables/v2_n100_p0_p1_summary.csv`：上述批次的候选汇总。
+- `outputs/q1/tables/v2_n100_p0_p1_config_snapshot.json`：入口、代码哈希、参数、种子与环境。
+- `outputs/q1/tables/v2_n100_p0_p1_representative_layouts.csv`：每个候选的代表布局坐标。
+- `outputs/q1/tables/v2_n100_p2_run_details.csv`：Q1-BT-D 的 10 条独立运行明细。
+- `outputs/q1/tables/v2_n100_p2_summary.csv`：Q1-BT-D 批次汇总。
+- `outputs/q1/tables/v2_n100_p2_config_snapshot.json`：P2 入口、代码哈希、参数、种子与环境。
+- `outputs/q1/tables/v2_n100_p2_representative_layouts.csv`：P2 最佳运行的完整布局坐标。
 - `outputs/q1/_runtime/`：逐次布局和日志；不进入最终结果目录。
 
 ## 6. 未解决事项
 
-1. Q1 P0 尚未上传，Q1 整体 V2 验收不能闭环。
-2. n200 前仍需由两人共同冻结候选、预算、机器线程、RNG 和非劣判定。
-3. n100 粗筛不构成最终模型选择；任何论文确定数字须等待 V3 的正式比较和独立复核。
+1. n200 前仍需由两人共同冻结候选、预算、机器线程、RNG 和非劣判定。
+2. P2 消融及 n100 正式比较移交 V3；任何论文确定数字须等待 V3 的正式比较和独立复核。

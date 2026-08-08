@@ -1,0 +1,38 @@
+{
+  "code_hash": "49b949a32a9adf778a19163f3fe3fcc9d2c0d7376e769124d52df820c53a3558",
+  "command": "python -B -m src.Q1 batch --instance n100 --candidates Q1-BT-D --seeds 1101-1110 --max-evaluations 100000 --time-limit 60 --restarts 4 --raw data/raw/附件 --runtime-root outputs/q1/_runtime/v2_n100_p2 --table-root outputs/q1/tables --run-id v2_n100_p2",
+  "configs": [
+    {
+      "calibration_samples": null,
+      "candidate": "Q1-BT-D",
+      "config_hash": "d56cc283d14fd972de7e251837503d7bad5b9f00d2bca6e891990077f53c99b7",
+      "directed_moves": true,
+      "fast_sa_c": 100.0,
+      "fast_sa_k": 7,
+      "initial_acceptance": 0.9,
+      "max_evaluations": 100000,
+      "restarts": 4,
+      "state_dedup": true,
+      "time_limit": 60.0
+    }
+  ],
+  "environment": {
+    "implementation": "CPython",
+    "logical_cpu_count": 16,
+    "platform": "Windows-10-10.0.26200-SP0",
+    "python": "3.10.20 | packaged by Anaconda, Inc. | (main, Mar 11 2026, 17:42:35) [MSC v.1942 64 bit (AMD64)]",
+    "rng": "random.Random (CPython seeded Mersenne Twister)"
+  },
+  "seeds": [
+    1101,
+    1102,
+    1103,
+    1104,
+    1105,
+    1106,
+    1107,
+    1108,
+    1109,
+    1110
+  ]
+}

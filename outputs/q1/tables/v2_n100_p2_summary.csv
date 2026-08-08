@@ -1,0 +1,2 @@
+config_id,candidate,runs,legal_runs,status_success,status_timeout,status_no_feasible,status_crash,best_area,median_area,median_evaluations,best_layout_path
+Q1-BT-D,Q1-BT-D,10,10,0,10,0,0,362894.0,448560.5,67170.0,outputs/q1/_runtime/v2_n100_p2/n100/Q1-BT-D/seed_1110/layout.json

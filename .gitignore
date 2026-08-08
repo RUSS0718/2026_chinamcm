@@ -2,3 +2,5 @@
 tmp/pdf/
 tmp/pdfs/
 outputs/q1/_runtime/
+__pycache__/
+*.py[cod]
