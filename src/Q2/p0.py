@@ -14,21 +14,25 @@ from .common import (
     accept,
     assess,
     audit_best,
-    fast_temperature,
-    fixed_outline_shelf_layout,
+    classic_temperature,
     finalize,
     initial_temperature,
+    layout_signature,
+    restart_evaluation_limits,
     search_delta,
+    shelf_layout_with_order,
     square_side,
     validate_config,
 )
 
 
 def _fixed_outline_initialization(
-    instance: Instance, side: float
+    instance: Instance,
+    side: float,
+    preferred_order: list[str] | tuple[str, ...] | None = None,
 ) -> tuple[tuple[str, ...], tuple[str, ...], dict[str, int]] | None:
     """Build a deterministic shelf layout and encode it as a sequence pair."""
-    placement = fixed_outline_shelf_layout(instance, side)
+    placement = shelf_layout_with_order(instance, side, preferred_order)
     if placement is None:
         return None
 
@@ -70,11 +74,13 @@ def search_p0(instance: Instance, config: Q2SearchConfig, seed: int) -> SearchRe
     if config.candidate != "Q2-SP":
         raise ValueError(f"unsupported Q2 P0 candidate: {config.candidate}")
     validate_config(config)
+    if config.sa_schedule != "classic":
+        raise ValueError("Q2-SP is fixed to the classic SA schedule")
     if not instance.blocks:
         return SearchResult("no_feasible", None, error="no HardBlock records")
 
     start = time.perf_counter()
-    rng = random.Random(seed)
+    master_rng = random.Random(seed)
     side = square_side(instance, config.dead_space_ratio)
     names = tuple(instance.blocks)
     best_feasible: Q2Layout | None = None
@@ -84,23 +90,39 @@ def search_p0(instance: Instance, config: Q2SearchConfig, seed: int) -> SearchRe
     first_feasible_time = None
     timed_out = False
     error = None
+    restart_initial_hpwl: list[float] = []
+    restart_initial_legal: list[bool] = []
+    restart_initial_signatures: list[str] = []
+    restart_init_seeds: list[int] = []
+    restart_search_seeds: list[int] = []
 
     try:
-        per_restart = (config.max_evaluations + config.restarts - 1) // config.restarts
+        limits = restart_evaluation_limits(config.max_evaluations, config.restarts)
         for restart in range(config.restarts):
-            evaluation_limit = min(config.max_evaluations, (restart + 1) * per_restart)
+            evaluation_limit = limits[restart]
             if evaluations >= evaluation_limit:
                 break
             if time.perf_counter() - start >= config.time_limit:
                 timed_out = True
                 break
-            initialization = _fixed_outline_initialization(instance, side) if restart == 0 else None
+            init_seed = master_rng.getrandbits(64)
+            search_seed = master_rng.getrandbits(64)
+            init_rng = random.Random(init_seed)
+            search_rng = random.Random(search_seed)
+            restart_init_seeds.append(init_seed)
+            restart_search_seeds.append(search_seed)
+            if config.initialization_mode == "shelf":
+                preferred_order = list(names)
+                init_rng.shuffle(preferred_order)
+                initialization = _fixed_outline_initialization(instance, side, preferred_order)
+            else:
+                initialization = None
             if initialization is None:
                 positive = list(names)
                 negative = list(names)
-                rng.shuffle(positive)
-                rng.shuffle(negative)
-                rotations = {name: rng.choice((0, 90)) for name in names}
+                init_rng.shuffle(positive)
+                init_rng.shuffle(negative)
+                rotations = {name: init_rng.choice((0, 90)) for name in names}
             else:
                 initial_positive, initial_negative, rotations = initialization
                 positive = list(initial_positive)
@@ -111,6 +133,9 @@ def search_p0(instance: Instance, config: Q2SearchConfig, seed: int) -> SearchRe
                 side,
             )
             evaluations += 1
+            restart_initial_hpwl.append(current.hpwl)
+            restart_initial_legal.append(current.legal)
+            restart_initial_signatures.append(layout_signature(current.layout))
             if current.legal:
                 best_feasible = current if best_feasible is None or current.rank < best_feasible.rank else best_feasible
                 if first_feasible_evaluation is None:
@@ -120,6 +145,7 @@ def search_p0(instance: Instance, config: Q2SearchConfig, seed: int) -> SearchRe
                 best_infeasible = current if best_infeasible is None or current.rank < best_infeasible.rank else best_infeasible
 
             calibration = config.calibration_samples or len(names)
+            calibration = min(calibration, max(0, evaluation_limit - evaluations))
             uphill: list[float] = []
             sample = current
             for sample_index in range(calibration):
@@ -127,7 +153,7 @@ def search_p0(instance: Instance, config: Q2SearchConfig, seed: int) -> SearchRe
                     timed_out = time.perf_counter() - start >= config.time_limit
                     break
                 trial_positive, trial_negative, trial_rotations = _mutate(
-                    tuple(positive), tuple(negative), rotations, rng
+                    tuple(positive), tuple(negative), rotations, search_rng
                 )
                 proposal = assess(
                     instance,
@@ -146,6 +172,7 @@ def search_p0(instance: Instance, config: Q2SearchConfig, seed: int) -> SearchRe
                 continue
             avg_delta = sum(uphill) / len(uphill) if uphill else 0.01
             t1 = initial_temperature(avg_delta, config.initial_acceptance)
+            remaining_iterations = max(0, evaluation_limit - evaluations)
             iteration = 0
             while evaluations < evaluation_limit:
                 if time.perf_counter() - start >= config.time_limit:
@@ -153,7 +180,7 @@ def search_p0(instance: Instance, config: Q2SearchConfig, seed: int) -> SearchRe
                     break
                 iteration += 1
                 trial_positive, trial_negative, trial_rotations = _mutate(
-                    tuple(positive), tuple(negative), rotations, rng
+                    tuple(positive), tuple(negative), rotations, search_rng
                 )
                 proposal = assess(
                     instance,
@@ -170,8 +197,13 @@ def search_p0(instance: Instance, config: Q2SearchConfig, seed: int) -> SearchRe
                         best_feasible = proposal
                 elif best_infeasible is None or proposal.rank < best_infeasible.rank:
                     best_infeasible = proposal
-                temperature = fast_temperature(iteration, t1, avg_delta, config.fast_sa_c, config.fast_sa_k)
-                if accept(current, proposal, temperature, 10.0, rng):
+                temperature = classic_temperature(
+                    iteration,
+                    remaining_iterations,
+                    t1,
+                    config.classic_final_temperature_ratio,
+                )
+                if accept(current, proposal, temperature, 10.0, search_rng):
                     positive = list(trial_positive)
                     negative = list(trial_negative)
                     rotations = trial_rotations
@@ -205,4 +237,9 @@ def search_p0(instance: Instance, config: Q2SearchConfig, seed: int) -> SearchRe
         first_feasible_time=first_feasible_time,
         runtime=runtime,
         error=error,
+        restart_initial_hpwl=restart_initial_hpwl,
+        restart_initial_legal=restart_initial_legal,
+        restart_initial_signatures=restart_initial_signatures,
+        restart_init_seeds=restart_init_seeds,
+        restart_search_seeds=restart_search_seeds,
     )

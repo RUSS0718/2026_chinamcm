@@ -19,6 +19,26 @@ from .p1_p2 import search_p1_p2
 
 
 CANDIDATES = ("Q2-SP", "Q2-BT", "Q2-HG")
+REPO_ROOT = Path(__file__).resolve().parents[2]
+CODE_RELATIVE = (
+    "src/Q2/__init__.py",
+    "src/Q2/__main__.py",
+    "src/Q2/common.py",
+    "src/Q2/p0.py",
+    "src/Q2/p1_p2.py",
+    "src/Q2/summarize.py",
+    "src/Q1/p0.py",
+    "src/Q1/p1_p2.py",
+    "src/_internal/parser.py",
+    "src/_internal/evaluator.py",
+    "src/_internal/audit.py",
+    "src/_internal/geometry.py",
+)
+DATA_RELATIVE = (
+    "data/raw/附件/n100.blocks",
+    "data/raw/附件/n100.nets",
+    "data/raw/附件/n100.pl",
+)
 
 
 def _json_dump(path: Path, value: object) -> None:
@@ -26,14 +46,41 @@ def _json_dump(path: Path, value: object) -> None:
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
+def _normalized_sha256(path: Path) -> tuple[int, str]:
+    data = path.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return len(data), hashlib.sha256(data).hexdigest()
+
+
+def _manifest(relative_paths: tuple[str, ...]) -> list[dict[str, object]]:
+    manifest = []
+    for relative in relative_paths:
+        path = REPO_ROOT / Path(relative)
+        if not path.is_file():
+            raise FileNotFoundError(path)
+        byte_count, sha256 = _normalized_sha256(path)
+        manifest.append({"path": relative, "bytes": byte_count, "sha256": sha256})
+    return manifest
+
+
+def _manifest_hash(manifest: list[dict[str, object]]) -> str:
+    payload = json.dumps(manifest, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def _code_manifest() -> list[dict[str, object]]:
+    return _manifest(CODE_RELATIVE)
+
+
+def _data_manifest() -> list[dict[str, object]]:
+    return _manifest(DATA_RELATIVE)
+
+
 def _code_hash() -> str:
-    digest = hashlib.sha256()
-    files = [Path(__file__), Path(__file__).with_name("common.py"), Path(__file__).with_name("p0.py"), Path(__file__).with_name("p1_p2.py")]
-    files += [Path(__file__).parents[1] / "_internal" / name for name in ("parser.py", "evaluator.py", "audit.py", "geometry.py")]
-    for path in files:
-        digest.update(path.as_posix().encode("utf-8"))
-        digest.update(path.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n"))
-    return digest.hexdigest()
+    return _manifest_hash(_code_manifest())
+
+
+def _data_hash() -> str:
+    return _manifest_hash(_data_manifest())
 
 
 def _config_hash(config: Q2SearchConfig) -> str:
@@ -96,6 +143,8 @@ def _config(candidate: str, args: argparse.Namespace) -> Q2SearchConfig:
         candidate=candidate,
         adaptive_constraints=adaptive,
         hypergraph_init=hypergraph,
+        sa_schedule="classic" if candidate == "Q2-SP" else "fast",
+        initialization_mode=args.initialization_mode,
         max_evaluations=args.max_evaluations,
         time_limit=args.time_limit,
         restarts=args.restarts,
@@ -112,7 +161,16 @@ def _layout_dict(result) -> dict:
     return {name: {"x": x, "y": y, "rotation": rotation} for name, (x, y, rotation) in sorted(result.best.layout.items())}
 
 
-def _record(instance_name: str, config_id: str, config: Q2SearchConfig, seed: int, result, code_hash: str, side: float) -> dict:
+def _record(
+    instance_name: str,
+    config_id: str,
+    config: Q2SearchConfig,
+    seed: int,
+    result,
+    code_hash: str,
+    data_hash: str,
+    side: float,
+) -> dict:
     formal = result.formal_metrics
     audit = result.audit_metrics
     placement_width = result.best.packed.width if result.best is not None else None
@@ -125,8 +183,12 @@ def _record(instance_name: str, config_id: str, config: Q2SearchConfig, seed: in
         "candidate": config.candidate,
         "adaptive_constraints": config.adaptive_constraints,
         "hypergraph_init": config.hypergraph_init,
+        "sa_schedule": config.sa_schedule,
+        "classic_final_temperature_ratio": config.classic_final_temperature_ratio,
+        "initialization_mode": config.initialization_mode,
         "seed": seed,
         "code_hash": code_hash,
+        "data_hash": data_hash,
         "config_hash": _config_hash(config),
         "max_evaluations": config.max_evaluations,
         "time_limit": config.time_limit,
@@ -154,6 +216,17 @@ def _record(instance_name: str, config_id: str, config: Q2SearchConfig, seed: in
         "proposals": result.proposals,
         "accepted": result.accepted,
         "restarts_completed": result.restarts_completed,
+        "restart_initial_hpwl": result.restart_initial_hpwl,
+        "restart_initial_legal": result.restart_initial_legal,
+        "restart_initial_signatures": result.restart_initial_signatures,
+        "restart_init_seeds": result.restart_init_seeds,
+        "restart_search_seeds": result.restart_search_seeds,
+        "best_initial_hpwl": min(result.restart_initial_hpwl) if result.restart_initial_hpwl else None,
+        "improvement_from_initial": (
+            float(formal["HPWL"]) - min(result.restart_initial_hpwl)
+            if result.restart_initial_hpwl and formal.get("HPWL") is not None
+            else None
+        ),
         "formal_audit_match": formal == audit,
         "error": result.error or "",
     }
@@ -209,18 +282,32 @@ def run_one(args: argparse.Namespace) -> int:
     config = _config(args.candidate, args)
     side = square_side(instance, config.dead_space_ratio)
     result = _search(instance, config, args.seed)
-    record = _record(args.instance, args.config_id or args.candidate, config, args.seed, result, _code_hash(), side)
+    record = _record(
+        args.instance,
+        args.config_id or args.candidate,
+        config,
+        args.seed,
+        result,
+        _code_hash(),
+        _data_hash(),
+        side,
+    )
     record = _write_run(Path(args.output_root), args.instance, args.config_id or args.candidate, args.seed, config, result, record)
     print(json.dumps(record, ensure_ascii=False, indent=2))
-    return 0 if record["legal"] is True and record["formal_audit_match"] else 1
+    full = record["evaluations"] == record["max_evaluations"] and record["status"] == "success"
+    return 0 if record["legal"] is True and record["formal_audit_match"] and (not args.require_full_evaluations or full) else 1
 
 
 def batch(args: argparse.Namespace) -> int:
     instance = _load_instance(Path(args.raw), args.instance)
     seeds = _parse_seeds(args.seeds)
     candidates = _parse_candidates(args.candidates)
+    if args.config_id is not None and len(candidates) != 1:
+        raise ValueError("--config-id with batch requires exactly one candidate")
     side = square_side(instance)
     code_hash = _code_hash()
+    data_manifest = _data_manifest()
+    data_hash = _manifest_hash(data_manifest)
     records = []
     configs = []
     for candidate in candidates:
@@ -228,14 +315,51 @@ def batch(args: argparse.Namespace) -> int:
         configs.append(config)
         for seed in seeds:
             result = _search(instance, config, seed)
-            records.append(_write_run(Path(args.runtime_root), args.instance, candidate, seed, config, result, _record(args.instance, candidate, config, seed, result, code_hash, side)))
+            config_id = args.config_id or candidate
+            records.append(
+                _write_run(
+                    Path(args.runtime_root),
+                    args.instance,
+                    config_id,
+                    seed,
+                    config,
+                    result,
+                    _record(args.instance, config_id, config, seed, result, code_hash, data_hash, side),
+                )
+            )
     summaries = _summary(records)
     table_root = Path(args.table_root)
     _write_csv(table_root / f"{args.run_id}_run_details.csv", records)
     _write_csv(table_root / f"{args.run_id}_summary.csv", summaries)
-    _json_dump(table_root / f"{args.run_id}_config_snapshot.json", {"command": args.command_text, "code_hash": code_hash, "environment": {"python": sys.version, "implementation": platform.python_implementation(), "platform": platform.platform(), "logical_cpu_count": os.cpu_count()}, "configs": [{**config.as_dict(), "config_hash": _config_hash(config)} for config in configs], "seeds": seeds})
+    _json_dump(
+        table_root / f"{args.run_id}_config_snapshot.json",
+        {
+            "command": args.command_text,
+            "code_hash": code_hash,
+            "code_files": _code_manifest(),
+            "data_hash": data_hash,
+            "data_files": data_manifest,
+            "environment": {
+                "python": sys.version,
+                "implementation": platform.python_implementation(),
+                "platform": platform.platform(),
+                "logical_cpu_count": os.cpu_count(),
+                "execution_mode": "sequential",
+                "processes": 1,
+                "threads": 1,
+                "rng": "random.Random (MT19937)",
+            },
+            "configs": [{**config.as_dict(), "config_hash": _config_hash(config)} for config in configs],
+            "seeds": seeds,
+        },
+    )
     print(json.dumps({"runs": len(records), "summary": summaries}, ensure_ascii=False, indent=2))
-    return 0 if all(record["legal"] is True and record["formal_audit_match"] for record in records) else 1
+    return 0 if all(
+        record["legal"] is True
+        and record["formal_audit_match"]
+        and (not args.require_full_evaluations or (record["status"] == "success" and record["evaluations"] == record["max_evaluations"]))
+        for record in records
+    ) else 1
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -255,11 +379,14 @@ def _parser() -> argparse.ArgumentParser:
             item.add_argument("--runtime-root", default="outputs/q2/_runtime/v2")
             item.add_argument("--table-root", default="outputs/q2/tables")
             item.add_argument("--run-id", default="v2_p0_p1_p2")
+            item.add_argument("--config-id", default=None)
         item.add_argument("--max-evaluations", type=int, default=100_000)
         item.add_argument("--time-limit", type=float, default=60.0)
         item.add_argument("--restarts", type=int, default=4)
         item.add_argument("--adaptive-constraints", type=_on_off, default=None)
         item.add_argument("--hypergraph-init", type=_on_off, default=None)
+        item.add_argument("--initialization-mode", choices=("shelf", "random"), default="shelf")
+        item.add_argument("--require-full-evaluations", action="store_true")
         item.add_argument("--raw", default="data/raw/附件")
         item.set_defaults(handler=run_one if command == "run" else batch)
     return parser

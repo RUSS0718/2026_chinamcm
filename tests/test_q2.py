@@ -8,6 +8,7 @@ import unittest
 
 from src._internal.audit import audit_layout
 from src._internal.parser import parse_instance_files
+from src.Q2.__main__ import _code_hash, _code_manifest
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -53,6 +54,8 @@ def run_candidate(
     instance: str = "tiny",
     max_evaluations: int = 500,
     hypergraph_init: str | None = None,
+    initialization_mode: str = "shelf",
+    adaptive_constraints: str | None = None,
 ) -> dict:
     command = [
             str(PYTHON),
@@ -79,6 +82,10 @@ def run_candidate(
         ]
     if hypergraph_init is not None:
         command.extend(["--hypergraph-init", hypergraph_init])
+    if initialization_mode != "shelf":
+        command.extend(["--initialization-mode", initialization_mode])
+    if adaptive_constraints is not None:
+        command.extend(["--adaptive-constraints", adaptive_constraints])
     completed = subprocess.run(
         command,
         cwd=ROOT,
@@ -151,6 +158,32 @@ class Q2CliTests(unittest.TestCase):
         self.assertTrue(record["legal"])
         self.assertEqual(record["first_feasible_evaluation"], 1)
 
+    def test_n100_p2_on_off_keep_shelf_rows_and_restart_streams(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            raw = next((ROOT / "data" / "raw").glob("*/n100.blocks")).parent
+            off = run_candidate(
+                raw,
+                root / "off",
+                "Q2-HG",
+                instance="n100",
+                max_evaluations=4,
+                hypergraph_init="off",
+            )
+            on = run_candidate(
+                raw,
+                root / "on",
+                "Q2-HG",
+                instance="n100",
+                max_evaluations=4,
+                hypergraph_init="on",
+            )
+        self.assertEqual(off["restart_initial_signatures"], on["restart_initial_signatures"])
+        self.assertEqual(off["restart_init_seeds"], on["restart_init_seeds"])
+        self.assertEqual(off["restart_search_seeds"], on["restart_search_seeds"])
+        self.assertTrue(all(off["restart_initial_legal"]))
+        self.assertTrue(all(on["restart_initial_legal"]))
+
     def test_same_seed_is_reproducible_and_p2_switch_can_be_off(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -166,6 +199,56 @@ class Q2CliTests(unittest.TestCase):
         self.assertEqual(first["evaluations"], second["evaluations"])
         self.assertFalse(off["hypergraph_init"])
         self.assertTrue(off["legal"])
+
+    def test_p0_records_classic_schedule_and_non_worse_initial_shelf(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            raw = Path(tmp) / "raw"
+            write_instance(raw)
+            record = run_candidate(
+                raw,
+                Path(tmp),
+                "Q2-SP",
+                max_evaluations=101,
+            )
+        self.assertEqual(record["sa_schedule"], "classic")
+        self.assertEqual(len(record["restart_initial_hpwl"]), 2)
+        self.assertEqual(len(record["restart_init_seeds"]), 2)
+        self.assertEqual(len(record["restart_search_seeds"]), 2)
+        self.assertLessEqual(record["HPWL"], record["best_initial_hpwl"])
+
+    def test_restart_budgets_sum_exactly_to_requested_evaluations(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            raw = Path(tmp) / "raw"
+            write_instance(raw)
+            record = run_candidate(
+                raw,
+                Path(tmp),
+                "Q2-BT",
+                max_evaluations=11,
+            )
+        self.assertEqual(record["evaluations"], 11)
+        self.assertEqual(record["restarts_completed"], 2)
+        self.assertEqual(len(record["restart_initial_signatures"]), 2)
+
+    def test_p2_on_off_share_restart_seeds_and_shelf_structure(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            raw = root / "raw"
+            write_instance(raw)
+            off = run_candidate(raw, root / "off_out", "Q2-HG", max_evaluations=101, hypergraph_init="off")
+            on = run_candidate(raw, root / "on_out", "Q2-HG", max_evaluations=101, hypergraph_init="on")
+        self.assertEqual(off["restart_init_seeds"], on["restart_init_seeds"])
+        self.assertEqual(off["restart_search_seeds"], on["restart_search_seeds"])
+        self.assertEqual(off["restart_initial_signatures"], on["restart_initial_signatures"])
+        self.assertTrue(all(off["restart_initial_legal"]))
+        self.assertTrue(all(on["restart_initial_legal"]))
+
+    def test_code_manifest_is_relative_and_includes_shared_q1_dependencies(self):
+        paths = {item["path"] for item in _code_manifest()}
+        self.assertIn("src/Q1/p0.py", paths)
+        self.assertIn("src/Q1/p1_p2.py", paths)
+        self.assertTrue(all(":" not in path for path in paths))
+        self.assertEqual(_code_hash(), _code_hash())
 
 
 if __name__ == "__main__":

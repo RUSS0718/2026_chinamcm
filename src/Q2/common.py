@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field, replace
+import hashlib
+import json
 import math
 import random
 
@@ -57,11 +59,64 @@ def fixed_outline_shelf_layout(instance: Instance, side: float) -> dict[str, tup
     return placement
 
 
+def shelf_layout_with_order(
+    instance: Instance,
+    side: float,
+    preferred_order: list[str] | tuple[str, ...] | None = None,
+) -> dict[str, tuple[float, float, int]] | None:
+    """Re-encode the same legal shelf rows with a different within-row order.
+
+    The row membership, rotation and row heights come from the deterministic
+    shelf constructor.  Reordering is therefore a controlled initialization
+    change: it cannot change the set of rows or make the initial placement
+    illegal.
+    """
+    placement = fixed_outline_shelf_layout(instance, side)
+    if placement is None:
+        return None
+    rows: dict[float, list[str]] = {}
+    for name, (_x, y, _rotation) in placement.items():
+        rows.setdefault(y, []).append(name)
+    rank = None
+    if preferred_order is not None:
+        rank = {name: position for position, name in enumerate(preferred_order)}
+    reordered: dict[str, tuple[float, float, int]] = {}
+    for y in sorted(rows):
+        names = rows[y]
+        if rank is None:
+            names = sorted(names, key=lambda name: (placement[name][0], name))
+        else:
+            names = sorted(names, key=lambda name: (rank.get(name, len(rank)), name))
+        x = 0.0
+        for name in names:
+            _old_x, _old_y, rotation = placement[name]
+            block = instance.blocks[name]
+            width = block.width if rotation % 180 == 0 else block.height
+            height = block.height if rotation % 180 == 0 else block.width
+            reordered[name] = (x, y, rotation)
+            x += width
+            if height > 0 and y + height > side + 1e-9:
+                return None
+    return reordered
+
+
+def layout_signature(layout: dict[str, tuple[float, float, int]]) -> str:
+    """Hash row membership, vertical placement and rotations for audit traces."""
+    payload = [
+        [name, round(float(y), 12), int(rotation)]
+        for name, (_x, y, rotation) in sorted(layout.items())
+    ]
+    return hashlib.sha256(json.dumps(payload, separators=(",", ":")).encode("utf-8")).hexdigest()
+
+
 @dataclass(frozen=True)
 class Q2SearchConfig:
     candidate: str = "Q2-BT"
     adaptive_constraints: bool = True
     hypergraph_init: bool = False
+    sa_schedule: str = "fast"
+    classic_final_temperature_ratio: float = 1e-3
+    initialization_mode: str = "shelf"
     max_evaluations: int = 100_000
     time_limit: float = 60.0
     restarts: int = 4
@@ -76,6 +131,9 @@ class Q2SearchConfig:
             "candidate": self.candidate,
             "adaptive_constraints": self.adaptive_constraints,
             "hypergraph_init": self.hypergraph_init,
+            "sa_schedule": self.sa_schedule,
+            "classic_final_temperature_ratio": self.classic_final_temperature_ratio,
+            "initialization_mode": self.initialization_mode,
             "max_evaluations": self.max_evaluations,
             "time_limit": self.time_limit,
             "restarts": self.restarts,
@@ -121,6 +179,11 @@ class SearchResult:
     first_feasible_time: float | None = None
     runtime: float = 0.0
     error: str | None = None
+    restart_initial_hpwl: list[float] = field(default_factory=list)
+    restart_initial_legal: list[bool] = field(default_factory=list)
+    restart_initial_signatures: list[str] = field(default_factory=list)
+    restart_init_seeds: list[int] = field(default_factory=list)
+    restart_search_seeds: list[int] = field(default_factory=list)
 
     @property
     def formal_metrics(self) -> dict:
@@ -136,6 +199,23 @@ def validate_config(config: Q2SearchConfig) -> None:
         raise ValueError("initial_acceptance must be between zero and one")
     if config.fast_sa_c <= 0 or config.fast_sa_k < 1:
         raise ValueError("Fast-SA parameters must be positive")
+    if config.sa_schedule not in {"classic", "fast"}:
+        raise ValueError("sa_schedule must be classic or fast")
+    if not 0 < config.classic_final_temperature_ratio < 1:
+        raise ValueError("classic_final_temperature_ratio must be between zero and one")
+    if config.initialization_mode not in {"shelf", "random"}:
+        raise ValueError("initialization_mode must be shelf or random")
+
+
+def restart_evaluation_limits(max_evaluations: int, restarts: int) -> list[int]:
+    """Return cumulative limits whose per-restart budgets sum exactly."""
+    base, remainder = divmod(max_evaluations, restarts)
+    limits: list[int] = []
+    cumulative = 0
+    for index in range(restarts):
+        cumulative += base + (1 if index < remainder else 0)
+        limits.append(cumulative)
+    return limits
 
 
 def assess(instance: Instance, packed: PackedLayout, side: float) -> Q2Layout:
@@ -208,6 +288,19 @@ def fast_temperature(iteration: int, t1: float, avg_delta: float, c: float, k: i
     if iteration <= k:
         return t1 * avg_delta / max(iteration * c, 1e-12)
     return t1 * avg_delta / iteration
+
+
+def classic_temperature(
+    iteration: int,
+    total_iterations: int,
+    t1: float,
+    final_ratio: float,
+) -> float:
+    """Geometric SA cooling over exactly one restart's remaining budget."""
+    if total_iterations <= 1:
+        return t1
+    exponent = max(0, min(iteration - 1, total_iterations - 1)) / (total_iterations - 1)
+    return t1 * (final_ratio**exponent)
 
 
 def constraint_penalty(config: Q2SearchConfig, iteration: int, has_feasible: bool) -> float:

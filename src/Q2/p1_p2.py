@@ -16,10 +16,12 @@ from .common import (
     audit_best,
     constraint_penalty,
     fast_temperature,
-    fixed_outline_shelf_layout,
     finalize,
     initial_temperature,
+    layout_signature,
+    restart_evaluation_limits,
     search_delta,
+    shelf_layout_with_order,
     square_side,
     validate_config,
 )
@@ -32,7 +34,7 @@ def _random_state(names: tuple[str, ...], rng: random.Random) -> BTreeState:
 def _fixed_outline_state(
     instance: Instance, side: float, preferred_order: list[str] | None = None
 ) -> BTreeState | None:
-    placement = fixed_outline_shelf_layout(instance, side)
+    placement = shelf_layout_with_order(instance, side, preferred_order)
     if placement is None:
         return None
     rows: dict[float, list[str]] = {}
@@ -106,18 +108,45 @@ def _hypergraph_order(instance: Instance, rng: random.Random) -> list[str]:
     return order
 
 
-def _initial_state(instance: Instance, config: Q2SearchConfig, rng: random.Random, side: float, restart: int) -> BTreeState:
+def _initial_state(
+    instance: Instance, config: Q2SearchConfig, rng: random.Random, side: float
+) -> tuple[BTreeState, dict[str, tuple[float, float, int]] | None]:
     names = tuple(instance.blocks)
-    if config.hypergraph_init:
-        fixed = _fixed_outline_state(instance, side, _hypergraph_order(instance, rng))
+    if config.initialization_mode == "shelf":
+        if config.hypergraph_init:
+            preferred_order = _hypergraph_order(instance, rng)
+        else:
+            preferred_order = list(names)
+            rng.shuffle(preferred_order)
+        fixed = _fixed_outline_state(instance, side, preferred_order)
         if fixed is not None:
-            return fixed
-    elif restart == 0:
-        fixed = _fixed_outline_state(instance, side)
-        if fixed is not None:
-            return fixed
+            shelf = shelf_layout_with_order(instance, side, preferred_order)
+            if shelf is not None:
+                return fixed, shelf
     state = _random_state(names, rng)
-    return state
+    return state, None
+
+
+def _shelf_packed(instance: Instance, layout: dict[str, tuple[float, float, int]]) -> PackedLayout:
+    """Build the packed-layout wrapper for a legal fixed-shelf placement.
+
+    The B*-Tree state is retained for subsequent mutations, while the first
+    evaluated layout is the actual shelf placement.  This keeps the P2 ON/OFF
+    initialization comparison scoped to the intended within-row order rather
+    than letting the B*-Tree contour decoder silently change row membership.
+    """
+    right = []
+    top = []
+    for name, (x, y, rotation) in layout.items():
+        block = instance.blocks[name]
+        width, height = (block.width, block.height) if rotation % 180 == 0 else (block.height, block.width)
+        right.append(x + width)
+        top.append(y + height)
+    width = max(right, default=0.0)
+    height = max(top, default=0.0)
+    area = width * height
+    aspect = max(width, height) / min(width, height) if min(width, height) else float("inf")
+    return PackedLayout(layout, width, height, area, aspect)
 
 
 def _mutate(state: BTreeState, rng: random.Random) -> None:
@@ -165,11 +194,13 @@ def search_p1_p2(instance: Instance, config: Q2SearchConfig, seed: int) -> Searc
     if config.candidate not in {"Q2-BT", "Q2-HG"}:
         raise ValueError(f"unsupported Q2 B*-Tree candidate: {config.candidate}")
     validate_config(config)
+    if config.sa_schedule != "fast":
+        raise ValueError("Q2-BT and Q2-HG are fixed to the Fast-SA schedule")
     if not instance.blocks:
         return SearchResult("no_feasible", None, error="no HardBlock records")
 
     start = time.perf_counter()
-    rng = random.Random(seed)
+    master_rng = random.Random(seed)
     side = square_side(instance, config.dead_space_ratio)
     best_feasible: Q2Layout | None = None
     best_infeasible: Q2Layout | None = None
@@ -178,19 +209,34 @@ def search_p1_p2(instance: Instance, config: Q2SearchConfig, seed: int) -> Searc
     first_feasible_time = None
     timed_out = False
     error = None
+    restart_initial_hpwl: list[float] = []
+    restart_initial_legal: list[bool] = []
+    restart_initial_signatures: list[str] = []
+    restart_init_seeds: list[int] = []
+    restart_search_seeds: list[int] = []
 
     try:
-        per_restart = (config.max_evaluations + config.restarts - 1) // config.restarts
+        limits = restart_evaluation_limits(config.max_evaluations, config.restarts)
         for restart in range(config.restarts):
-            evaluation_limit = min(config.max_evaluations, (restart + 1) * per_restart)
+            evaluation_limit = limits[restart]
             if evaluations >= evaluation_limit:
                 break
             if time.perf_counter() - start >= config.time_limit:
                 timed_out = True
                 break
-            state = _initial_state(instance, config, random.Random(rng.randrange(2**63)), side, restart)
-            current = assess(instance, pack_btree(state, instance.blocks), side)
+            init_seed = master_rng.getrandbits(64)
+            search_seed = master_rng.getrandbits(64)
+            init_rng = random.Random(init_seed)
+            search_rng = random.Random(search_seed)
+            restart_init_seeds.append(init_seed)
+            restart_search_seeds.append(search_seed)
+            state, shelf_layout = _initial_state(instance, config, init_rng, side)
+            initial_packed = _shelf_packed(instance, shelf_layout) if shelf_layout is not None else pack_btree(state, instance.blocks)
+            current = assess(instance, initial_packed, side)
             evaluations += 1
+            restart_initial_hpwl.append(current.hpwl)
+            restart_initial_legal.append(current.legal)
+            restart_initial_signatures.append(layout_signature(current.layout))
             if current.legal:
                 best_feasible = current if best_feasible is None or current.rank < best_feasible.rank else best_feasible
                 if first_feasible_evaluation is None:
@@ -200,7 +246,7 @@ def search_p1_p2(instance: Instance, config: Q2SearchConfig, seed: int) -> Searc
                 best_infeasible = current
 
             avg_delta, evaluations, calibration_timeout = _calibrate(
-                instance, state, current, config, rng, side, start, evaluations, evaluation_limit
+                instance, state, current, config, search_rng, side, start, evaluations, evaluation_limit
             )
             if calibration_timeout:
                 timed_out = True
@@ -214,7 +260,7 @@ def search_p1_p2(instance: Instance, config: Q2SearchConfig, seed: int) -> Searc
                     break
                 iteration += 1
                 proposal_state = state.clone()
-                _mutate(proposal_state, rng)
+                _mutate(proposal_state, search_rng)
                 proposal = assess(instance, pack_btree(proposal_state, instance.blocks), side)
                 evaluations += 1
                 proposals += 1
@@ -228,7 +274,7 @@ def search_p1_p2(instance: Instance, config: Q2SearchConfig, seed: int) -> Searc
                     best_infeasible = proposal
                 penalty = constraint_penalty(config, iteration, best_feasible is not None)
                 temperature = fast_temperature(iteration, t1, avg_delta, config.fast_sa_c, config.fast_sa_k)
-                if accept(current, proposal, temperature, penalty, rng):
+                if accept(current, proposal, temperature, penalty, search_rng):
                     state = proposal_state
                     current = proposal
                     accepted_count += 1
@@ -260,4 +306,9 @@ def search_p1_p2(instance: Instance, config: Q2SearchConfig, seed: int) -> Searc
         first_feasible_time=first_feasible_time,
         runtime=runtime,
         error=error,
+        restart_initial_hpwl=restart_initial_hpwl,
+        restart_initial_legal=restart_initial_legal,
+        restart_initial_signatures=restart_initial_signatures,
+        restart_init_seeds=restart_init_seeds,
+        restart_search_seeds=restart_search_seeds,
     )
