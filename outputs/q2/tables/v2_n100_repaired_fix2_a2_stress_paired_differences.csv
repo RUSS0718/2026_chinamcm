@@ -1,0 +1,11 @@
+comparison,seed,baseline_legal,candidate_legal,baseline_HPWL,candidate_HPWL,difference,relative_difference_percent,candidate_better
+P1-RANDOM-minus-A2-BASE-RANDOM,1101,False,False,,,,,
+P1-RANDOM-minus-A2-BASE-RANDOM,1102,False,False,,,,,
+P1-RANDOM-minus-A2-BASE-RANDOM,1103,False,False,,,,,
+P1-RANDOM-minus-A2-BASE-RANDOM,1104,False,True,,291940.5,,,
+P1-RANDOM-minus-A2-BASE-RANDOM,1105,False,False,,,,,
+P1-RANDOM-minus-A2-BASE-RANDOM,1106,False,False,,,,,
+P1-RANDOM-minus-A2-BASE-RANDOM,1107,False,False,,,,,
+P1-RANDOM-minus-A2-BASE-RANDOM,1108,False,False,,,,,
+P1-RANDOM-minus-A2-BASE-RANDOM,1109,False,False,,,,,
+P1-RANDOM-minus-A2-BASE-RANDOM,1110,False,False,,,,,

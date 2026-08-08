@@ -1,0 +1,36 @@
+{
+  "profile": "repaired",
+  "input_tables": [
+    "outputs/q2/tables/v2_n100_repaired_fix2_p0_ground_run_details.csv",
+    "outputs/q2/tables/v2_n100_repaired_fix2_a2_base_run_details.csv",
+    "outputs/q2/tables/v2_n100_repaired_fix2_p1_run_details.csv",
+    "outputs/q2/tables/v2_n100_repaired_fix2_p2_off_run_details.csv",
+    "outputs/q2/tables/v2_n100_repaired_fix2_p2_on_run_details.csv"
+  ],
+  "code_hash": "5182e532feca7ba4337692b112b06f181d6f79ee85596eacf83c9109b14fb709",
+  "data_hash": "6be0918f672ac3bbdf8300aaeddedf4f348a2b1a1ea74f5975cc084ba0b2ec13",
+  "budget": [
+    "30000",
+    "180.0",
+    "4"
+  ],
+  "seeds": [
+    1101,
+    1102,
+    1103,
+    1104,
+    1105,
+    1106,
+    1107,
+    1108,
+    1109,
+    1110
+  ],
+  "scope": "n100 repaired development screening; not final model selection",
+  "comparisons": [
+    "P1-minus-P0",
+    "P1-minus-A2-BASE",
+    "P2-ON-minus-P2-OFF",
+    "P2-OFF-minus-P1"
+  ]
+}

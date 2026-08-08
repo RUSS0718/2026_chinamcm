@@ -1,0 +1,126 @@
+{
+  "code_files": [
+    {
+      "bytes": 53,
+      "path": "src/Q2/__init__.py",
+      "sha256": "d35c903c096f2c4532cc6014f1fa979077fbea5657762640354e8027666046dd"
+    },
+    {
+      "bytes": 16304,
+      "path": "src/Q2/__main__.py",
+      "sha256": "0ebf73db6d48c560756df5d243a36fd153cbd3f7fba614d708a01d84795724a9"
+    },
+    {
+      "bytes": 12003,
+      "path": "src/Q2/common.py",
+      "sha256": "acce6d3e48448e2eae867b6ba2e53b56b028af2de350f40a789c0099b0a5a750"
+    },
+    {
+      "bytes": 10274,
+      "path": "src/Q2/p0.py",
+      "sha256": "bfaf08ea16b30671d37c2ad88f7dda4f4de508d7ae8bfffed42820d8ebd53b85"
+    },
+    {
+      "bytes": 12493,
+      "path": "src/Q2/p1_p2.py",
+      "sha256": "4fe0fd3cb4b035927dc3e59b3a4d94ae3baf13d92d2a22a4adc5094959feb80e"
+    },
+    {
+      "bytes": 15811,
+      "path": "src/Q2/summarize.py",
+      "sha256": "686fe72b8814c1b096d6098ef51cd2521e2643f29cebdacc45a214fb34712b1d"
+    },
+    {
+      "bytes": 9807,
+      "path": "src/Q1/p0.py",
+      "sha256": "10266679bfb2a20c9272e4f628df3619970593c26678c808a7041ec85e8d357d"
+    },
+    {
+      "bytes": 21343,
+      "path": "src/Q1/p1_p2.py",
+      "sha256": "4480edbdfd26a8330e3f6cb2d8036611cc0119a7aee93556f17a36a7f9f8f5bd"
+    },
+    {
+      "bytes": 4905,
+      "path": "src/_internal/parser.py",
+      "sha256": "a03db32940f5af3f7a0f1622d5afc97f6ac3134c470a00538039be2c29be48b4"
+    },
+    {
+      "bytes": 2382,
+      "path": "src/_internal/evaluator.py",
+      "sha256": "9e9b163ad0fb563e3cbcd07da3ad6e44c1625d6371e348cfdd40a6c501b5d927"
+    },
+    {
+      "bytes": 2617,
+      "path": "src/_internal/audit.py",
+      "sha256": "c5b18970ddc807a77646cf920954fe27097c90c2d82b75a38fe68eebd01863ae"
+    },
+    {
+      "bytes": 1484,
+      "path": "src/_internal/geometry.py",
+      "sha256": "cd2c8231c67364aad3febfc54d70b9fa3ebb4e655da95957ff9f43aec943e0cd"
+    }
+  ],
+  "code_hash": "5182e532feca7ba4337692b112b06f181d6f79ee85596eacf83c9109b14fb709",
+  "command": "python -B -m src.Q2 batch --instance n100 --candidates Q2-BT --config-id P1 --adaptive-constraints on --seeds 1101-1110 --max-evaluations 30000 --time-limit 180 --restarts 4 --raw data/raw/附件 --runtime-root outputs/q2/_runtime/v2_n100_repaired_fix2/P1 --table-root outputs/q2/tables --run-id v2_n100_repaired_fix2_p1 --require-full-evaluations",
+  "configs": [
+    {
+      "adaptive_constraints": true,
+      "calibration_samples": null,
+      "candidate": "Q2-BT",
+      "classic_final_temperature_ratio": 0.001,
+      "config_hash": "62c4fc0857968603f5af8a4add05d7825ccbb79cfdfbde340b920a03183d787c",
+      "coordinate_tolerance": 0.0,
+      "dead_space_ratio": 0.15,
+      "fast_sa_c": 100.0,
+      "fast_sa_k": 7,
+      "hypergraph_init": false,
+      "initial_acceptance": 0.9,
+      "initialization_mode": "shelf",
+      "max_evaluations": 30000,
+      "restarts": 4,
+      "sa_schedule": "fast",
+      "time_limit": 180.0
+    }
+  ],
+  "data_files": [
+    {
+      "bytes": 8999,
+      "path": "data/raw/附件/n100.blocks",
+      "sha256": "c66f917c48f3c7ee9624bec8e0dc053eb349d10121d3278d25b09b67a2e94e2b"
+    },
+    {
+      "bytes": 19997,
+      "path": "data/raw/附件/n100.nets",
+      "sha256": "cd86e1b49547f9c76144aa2acef6d643c8fd9222c3a4b8c91a40bb6f7ca42193"
+    },
+    {
+      "bytes": 3818,
+      "path": "data/raw/附件/n100.pl",
+      "sha256": "cb8b03aff82241643ca899aa9759d8aa42bcf085ead64d5011f52c83f836355f"
+    }
+  ],
+  "data_hash": "6be0918f672ac3bbdf8300aaeddedf4f348a2b1a1ea74f5975cc084ba0b2ec13",
+  "environment": {
+    "execution_mode": "sequential",
+    "implementation": "CPython",
+    "logical_cpu_count": 12,
+    "platform": "Windows-10-10.0.22631-SP0",
+    "processes": 1,
+    "python": "3.11.14 | packaged by Anaconda, Inc. | (main, Oct 21 2025, 18:30:03) [MSC v.1929 64 bit (AMD64)]",
+    "rng": "random.Random (MT19937)",
+    "threads": 1
+  },
+  "seeds": [
+    1101,
+    1102,
+    1103,
+    1104,
+    1105,
+    1106,
+    1107,
+    1108,
+    1109,
+    1110
+  ]
+}

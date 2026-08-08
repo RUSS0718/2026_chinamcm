@@ -1,0 +1,2 @@
+config_id,candidate,runs,legal_runs,status_success,status_timeout,status_no_feasible,status_crash,best_HPWL,median_HPWL,median_evaluations,best_layout_path
+A2-BASE-RANDOM,Q2-BT,10,0,0,0,10,0,,,30000.0,

@@ -1,0 +1,2 @@
+config_id,candidate,runs,legal_runs,status_success,status_timeout,status_no_feasible,status_crash,best_HPWL,median_HPWL,median_evaluations,best_layout_path
+P2-OFF,Q2-HG,10,10,10,0,0,0,246188.5,254170.25,30000.0,outputs/q2/_runtime/v2_n100_repaired_fix2/P2-OFF/n100/P2-OFF/seed_1104/layout.json
