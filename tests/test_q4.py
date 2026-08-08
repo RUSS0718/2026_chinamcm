@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from tmp.q4_v2 import build_deliverables
+from scripts.q4_v2 import build_deliverables
 
 from src.Q4 import (
     DEFAULT_MODULES,

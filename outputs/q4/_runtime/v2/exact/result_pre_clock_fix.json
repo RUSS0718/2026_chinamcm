@@ -1,0 +1,259 @@
+{
+  "audit": {
+    "H": 6,
+    "HPWL": 0,
+    "W": 4,
+    "area": 24,
+    "aspect_ratio": 1.5,
+    "dead_space_ratio": 0.0,
+    "deadspace": 0.0,
+    "legal": true,
+    "module_area": 24.0,
+    "rho": 0.0,
+    "square_side": 6
+  },
+  "code_hash": "f5a6d96a289fec7122312257d8ab2ac4f2f85425ae1d328e3cc42efdb76173e6",
+  "code_manifest": [
+    {
+      "bytes": 598,
+      "path": "src/Q4/__init__.py",
+      "sha256": "fb2b9adee946defd3c5232bbd9eb1d87299f99d60e34cd42f9c9f1fcfa17e870"
+    },
+    {
+      "bytes": 4359,
+      "path": "src/Q4/__main__.py",
+      "sha256": "00675478a08b9b9b0eb1576c1fa168575009f74957932a65ac5c2f57678ed296"
+    },
+    {
+      "bytes": 1344,
+      "path": "src/Q4/geometry.py",
+      "sha256": "6b7b123ca2c9ff5b84d6d1d1d9650f1a3a1252db59691204f7170d19bfe7eec2"
+    },
+    {
+      "bytes": 5332,
+      "path": "src/Q4/model.py",
+      "sha256": "29fcd897ff9b90cfbeb19cca403e190edbc441c9336cc7308d19df533d3fa73b"
+    },
+    {
+      "bytes": 5084,
+      "path": "src/Q4/sa.py",
+      "sha256": "c3cd9513b407d770830f0bbc1b084c3f87391bd1db61317eeb7fce7517c6c672"
+    },
+    {
+      "bytes": 8983,
+      "path": "src/Q4/search.py",
+      "sha256": "42607b7ec6e0f7133203b45cd07235a9969f741cb3cc10df7eeafa4885ae1ec7"
+    },
+    {
+      "bytes": 2617,
+      "path": "src/_internal/audit.py",
+      "sha256": "c5b18970ddc807a77646cf920954fe27097c90c2d82b75a38fe68eebd01863ae"
+    }
+  ],
+  "command": "D:\\Anaconda\\envs\\CA-py310\\python.exe -B -m src.Q4 exact --upper-area 36 --time-limit 300 --output outputs/q4/_runtime/v2/exact/result.json",
+  "config": {
+    "grid_step": 1,
+    "rotations": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "search_domain": "integer_translation_grid",
+    "time_limit": 300.0,
+    "upper_area": 36
+  },
+  "config_hash": "ca80f5194d869afed11bf35b4457d347690c684f336ae009ee258190d2661dea",
+  "domain": {
+    "area_lower_bound": 24,
+    "area_upper_bound": 36,
+    "containers_checked": 1,
+    "containers_total": 14,
+    "grid_step": 1,
+    "height_range": [
+      4,
+      9
+    ],
+    "rotations": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "search_domain": "integer_translation_grid",
+    "width_range": [
+      4,
+      9
+    ]
+  },
+  "environment": {
+    "cpu_count": 16,
+    "cwd": "D:\\project\\chinamcm_2026\\2026_chinamcm",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "python": "3.10.20 | packaged by Anaconda, Inc. | (main, Mar 11 2026, 17:42:35) [MSC v.1942 64 bit (AMD64)]"
+  },
+  "formal": {
+    "H": 6,
+    "HPWL": 0,
+    "W": 4,
+    "area": 24,
+    "aspect_ratio": 1.5,
+    "dead_space_ratio": 0.0,
+    "deadspace": 0,
+    "layout": {
+      "b1": {
+        "rotation": 0,
+        "x": 0,
+        "y": 2
+      },
+      "b2": {
+        "rotation": 0,
+        "x": 0,
+        "y": 0
+      },
+      "b3": {
+        "rotation": 90,
+        "x": 2,
+        "y": 0
+      },
+      "b4": {
+        "rotation": 0,
+        "x": 3,
+        "y": 0
+      }
+    },
+    "legal": true,
+    "module_area": 24,
+    "rho": 0.0,
+    "square_side": 6
+  },
+  "formal_audit_match": true,
+  "layout": {
+    "b1": {
+      "rotation": 0,
+      "x": 0,
+      "y": 2
+    },
+    "b2": {
+      "rotation": 0,
+      "x": 0,
+      "y": 0
+    },
+    "b3": {
+      "rotation": 90,
+      "x": 2,
+      "y": 0
+    },
+    "b4": {
+      "rotation": 0,
+      "x": 3,
+      "y": 0
+    }
+  },
+  "mode": "exact",
+  "problem": "Q4",
+  "result": {
+    "audit": {
+      "H": 6,
+      "HPWL": 0,
+      "W": 4,
+      "area": 24,
+      "aspect_ratio": 1.5,
+      "dead_space_ratio": 0.0,
+      "deadspace": 0.0,
+      "legal": true,
+      "module_area": 24.0,
+      "rho": 0.0,
+      "square_side": 6
+    },
+    "complete": true,
+    "containers_checked": 1,
+    "domain": {
+      "area_lower_bound": 24,
+      "area_upper_bound": 36,
+      "containers_checked": 1,
+      "containers_total": 14,
+      "grid_step": 1,
+      "height_range": [
+        4,
+        9
+      ],
+      "rotations": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "search_domain": "integer_translation_grid",
+      "width_range": [
+        4,
+        9
+      ]
+    },
+    "domain_upper_area": 36,
+    "evaluation": {
+      "H": 6,
+      "HPWL": 0,
+      "W": 4,
+      "area": 24,
+      "aspect_ratio": 1.5,
+      "dead_space_ratio": 0.0,
+      "deadspace": 0,
+      "layout": {
+        "b1": {
+          "rotation": 0,
+          "x": 0,
+          "y": 2
+        },
+        "b2": {
+          "rotation": 0,
+          "x": 0,
+          "y": 0
+        },
+        "b3": {
+          "rotation": 90,
+          "x": 2,
+          "y": 0
+        },
+        "b4": {
+          "rotation": 0,
+          "x": 3,
+          "y": 0
+        }
+      },
+      "legal": true,
+      "module_area": 24,
+      "rho": 0.0,
+      "square_side": 6
+    },
+    "formal_audit_match": true,
+    "layout": {
+      "b1": {
+        "rotation": 0,
+        "x": 0,
+        "y": 2
+      },
+      "b2": {
+        "rotation": 0,
+        "x": 0,
+        "y": 0
+      },
+      "b3": {
+        "rotation": 90,
+        "x": 2,
+        "y": 0
+      },
+      "b4": {
+        "rotation": 0,
+        "x": 3,
+        "y": 0
+      }
+    },
+    "lower_bound": 24,
+    "placements_tested": 741,
+    "runtime": 0.0,
+    "status": "optimal",
+    "upper_bound": 24
+  },
+  "status": "optimal"
+}
