@@ -1,9 +1,9 @@
 # 2026 华数杯数学建模仓库
 
-> Q3 V2 n100：代码已整合到 HEAD `6655048`，当前 `_code_hash=144fa968a824ac6f943c9f547f54506bfe683c4e14befce0780c3cfc917a3b87`。旧 n100 产物使用整合前 `bc42b101f2ed299627044a5cd195e25528f3bf56b42bdbdb85318b9e2483fad7`，仅作历史记录；BIN、LIN、CONT-R 的整合后全量重跑待执行。Q3 状态为 `REVIEWING`，旧结果不得用于 Q4 或最终结论；真实入口 `python -B -m src.Q3` 已实现。
+> V2 本轮执行基线为 HEAD `5b4042aff79ac6e3134998adc93eb679895309c0`，Q3 追溯修复后的 `_code_hash=a3971eefa77bc2cdaecd9fa0f59e85fc37668df57d6587d2217ec3f416ae8215`。BIN、LIN、CONT-R 已按冻结协议全量重跑；旧 hash `144fa968a824ac6f943c9f547f54506bfe683c4e14befce0780c3cfc917a3b87` 的首次 BIN 仅作 superseded 追溯证据。Q3 状态仍为 `REVIEWING`；真实入口为 `D:\Anaconda\envs\CA-py310\python.exe -B -m src.Q3`。
 
 本仓库按“原始数据 → 可复现处理数据 → 分问题建模 → 正式结果 → 论文材料”组织。
-当前已完成第 0 轮共享解析/评价/审计和 Q1-Q4 的 V1 问题分析；Q1 已完成 Q1-G、Q1-SP、Q1-BT、Q1-BT-D 的 V2 n100 批次（共 40 条运行记录），P2 消融留待 V3。Q2 已完成修复后的 P0/P1/P2 n100 主组（50 条）与随机初始化压力组（20 条）；P0 已满足可信独立参考基线的技术门槛，但状态仍为 `REVIEWING`，正式选型留待 n200。`requirements.txt` 尚未记录实际依赖；Q1 V2 结果已通过复核，状态为 `VERIFIED`，但不是最终结果。
+当前已完成第 0 轮共享解析/评价/审计和 Q1-Q4 的 V1 问题分析；Q1 已完成 Q1-G、Q1-SP、Q1-BT、Q1-BT-D 的 V2 n100 批次（共 40 条运行记录），P2 消融留待 V3。Q2 已完成修复后的 P0/P1/P2 n100 主组（50 条）与随机初始化压力组（20 条）；P0 已满足可信独立参考基线的技术门槛，但状态仍为 `REVIEWING`，正式选型留待 n200。Q3 三候选与 Q4 精确/SA 两路线已完成 V2 正式运行和 handoff；`requirements.txt` 已记录 Q4 绘图依赖 `matplotlib==3.10.9`。Q1 V2 结果已通过既有人工复核，状态为 `VERIFIED`，但不是最终结果。
 
 ## 目录结构
 
@@ -33,8 +33,8 @@
 │   ├── guidelines/             # 建模与写作规范目录，当前为空
 │   ├── q1/                     # 问题一论文材料，当前为空
 │   ├── q2/                     # 问题二论文手阶段交接清单
-│   ├── q3/                     # 问题三论文材料，当前为空
-│   └── q4/                     # 问题四论文材料，当前为 V1 占位说明
+│   ├── q3/                     # 问题三论文材料；V2 handoff 见 paper/q3/
+│   └── q4/                     # 问题四论文材料；V2 handoff 见 paper/q4/
 ├── tmp/
 │   └── pdfs/                   # 本地临时 PDF 目录，当前为空
 ├── AGENTS.md                   # Agent 必须遵守的稳定执行规则
