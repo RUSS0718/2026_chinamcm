@@ -1,0 +1,63 @@
+{
+  "instances": [
+    {
+      "declared_blocks": 100,
+      "declared_terminals": 334,
+      "excluded_rows": 0,
+      "exclusion_reasons": [],
+      "four_vertex_rectangles": true,
+      "instance": "n100",
+      "max_height": 67,
+      "max_width": 67,
+      "min_height": 16,
+      "min_width": 16,
+      "parsed_blocks": 100,
+      "positive_dimensions": true,
+      "processed_rows": 100,
+      "sha256_lf_normalized": "c66f917c48f3c7ee9624bec8e0dc053eb349d10121d3278d25b09b67a2e94e2b",
+      "source": "data/raw/附件/n100.blocks",
+      "total_module_area": 179501,
+      "unique_names": true
+    },
+    {
+      "declared_blocks": 200,
+      "declared_terminals": 564,
+      "excluded_rows": 0,
+      "exclusion_reasons": [],
+      "four_vertex_rectangles": true,
+      "instance": "n200",
+      "max_height": 48,
+      "max_width": 48,
+      "min_height": 12,
+      "min_width": 12,
+      "parsed_blocks": 200,
+      "positive_dimensions": true,
+      "processed_rows": 200,
+      "sha256_lf_normalized": "bed652bf55c2034b04a1c1bbe97ad617e027c11736bf069727a63baf575720ef",
+      "source": "data/raw/附件/n200.blocks",
+      "total_module_area": 175696,
+      "unique_names": true
+    },
+    {
+      "declared_blocks": 300,
+      "declared_terminals": 569,
+      "excluded_rows": 0,
+      "exclusion_reasons": [],
+      "four_vertex_rectangles": true,
+      "instance": "n300",
+      "max_height": 48,
+      "max_width": 48,
+      "min_height": 12,
+      "min_width": 12,
+      "parsed_blocks": 300,
+      "positive_dimensions": true,
+      "processed_rows": 300,
+      "sha256_lf_normalized": "88ca80814070d9578c7ccd31182ff31ab026a1a1ea9da5fd0e0342d26327bc82",
+      "source": "data/raw/附件/n300.blocks",
+      "total_module_area": 273170,
+      "unique_names": true
+    }
+  ],
+  "q1_uses_only_blocks": true,
+  "source_of_truth": "data/raw/附件/*.blocks"
+}

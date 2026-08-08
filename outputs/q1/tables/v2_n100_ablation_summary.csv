@@ -1,0 +1,5 @@
+config_id,candidate,directed_moves,state_dedup,runs,legal_runs,status_success,status_timeout,status_no_feasible,status_crash,best_area,best_aspect_ratio,median_area,q1_area,q3_area,median_aspect_ratio,median_runtime,median_evaluations,best_layout_path
+P1,Q1-BT,False,False,10,10,0,10,0,0,190557.0,2.4480286738351253,194764.5,192401.0,197121.0,2.996078431372549,60.00029855000321,87245.5,outputs/q1/_runtime/v2_n100/n100/P1/seed_1107/layout.json
+P2-directed-only,Q1-BT-D,True,False,10,10,0,10,0,0,371910.0,3.5869565217391304,444369.0,418698.0,470535.75,4.428062875635691,60.00038400001358,83214.5,outputs/q1/_runtime/v2_n100/n100/P2-directed-only/seed_1110/layout.json
+P2-dedup-only,Q1-BT-D,False,True,10,10,0,10,0,0,189329.0,2.8223938223938223,196536.5,196003.5,197435.0,2.831349002451664,60.000368050066754,84747.5,outputs/q1/_runtime/v2_n100/n100/P2-dedup-only/seed_1104/layout.json
+P2,Q1-BT-D,True,True,10,10,0,10,0,0,362894.0,3.5,448560.5,413101.5,470535.75,4.428062875635691,60.00019210006576,81945.0,outputs/q1/_runtime/v2_n100/n100/P2/seed_1110/layout.json
