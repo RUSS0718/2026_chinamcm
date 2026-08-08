@@ -1,0 +1,2 @@
+config_id,candidate,runs,legal_runs,status_success,status_timeout,status_no_feasible,status_crash,best_HPWL,median_HPWL,median_evaluations,best_layout_path
+Q2-BT,Q2-BT,10,10,7,3,0,0,256205.5,263293.5,30000.0,outputs/q2/_runtime/v2_n100_p1_current/n100/Q2-BT/seed_2108/layout.json
