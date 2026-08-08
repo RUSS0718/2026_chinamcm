@@ -1,95 +1,102 @@
 # Q2 V2 论文手交接清单
 
 - 问题：Q2
-- 阶段：V2 n100 开发粗筛
-- 当前状态：REVIEWING
+- 阶段：V2 `n100` 修复验收
+- 当前状态：`REVIEWING`
 - 更新日期：2026-08-08
-- 主责建模师：蔡乔夕（P1/P2）、钟江铭（P0 接入）
-- 交叉复核：钟江铭（待人工签字）
+- 实现负责人：蔡（P1/P2）；钟江铭（P0 接入与交叉复核）
+- 论文手交叉复核：钟江铭，待人工签字
 
-本文件是论文手接收 Q2 V2 材料的唯一入口。论文手可据此起草方法和开发结果段落，但不得把本阶段数字写成 n200 正式选型、最终模型或竞赛最终结论。
+本清单是 Q2 V2 修复材料的唯一论文交接入口。当前数字只能用于方法章节草稿、开发记录和待复核清单，不得写成 n200 正式选型、最终模型或竞赛最终结论。
 
 ## 交接物索引
 
-| 交接物 | 文件 | 用途 |
+| 材料 | 文件 | 用途 |
 |---|---|---|
 | V1 问题分析 | [`outputs/q2/reports/v1_problem_analysis.md`](../../outputs/q2/reports/v1_problem_analysis.md) | 目标、候选、约束和回退路线 |
-| V2 模型与运行报告 | [`outputs/q2/reports/v2_model_report.md`](../../outputs/q2/reports/v2_model_report.md) | 公式、实现、实际协议、开发结果和风险 |
-| 四配置汇总 | [`outputs/q2/tables/v2_n100_current_summary.csv`](../../outputs/q2/tables/v2_n100_current_summary.csv) | P0、P1、P2-OFF、P2-ON 汇总数字 |
-| 配对差值 | [`outputs/q2/tables/v2_n100_current_paired_differences.csv`](../../outputs/q2/tables/v2_n100_current_paired_differences.csv) | P1-P0、P2-ON-P2-OFF 的逐 seed 差值 |
-| 完整运行明细 | [`outputs/q2/tables/v2_n100_current_run_details.csv`](../../outputs/q2/tables/v2_n100_current_run_details.csv) | 40 条运行状态、参数、指标和路径 |
-| 比较快照 | [`outputs/q2/tables/v2_n100_current_comparison_snapshot.json`](../../outputs/q2/tables/v2_n100_current_comparison_snapshot.json) | 代码哈希、预算、种子和输入表 |
-| 建模入口 | [`src/Q2/__main__.py`](../../src/Q2/__main__.py) | 单次与批量运行 |
-| 汇总入口 | [`src/Q2/summarize.py`](../../src/Q2/summarize.py) | 从四份冻结明细重建交接表 |
-| Q2 测试 | [`tests/test_q2.py`](../../tests/test_q2.py) | 轮廓、HPWL、审计、初始化和可复现性 |
+| V2 修复报告 | [`outputs/q2/reports/v2_model_report.md`](../../outputs/q2/reports/v2_model_report.md) | 公式、实现、协议、结果和风险 |
+| 主组明细（50 条） | [`outputs/q2/tables/v2_n100_repaired_fix2_run_details.csv`](../../outputs/q2/tables/v2_n100_repaired_fix2_run_details.csv) | 五组 × 十个 seed 的完整记录 |
+| 主组汇总 | [`outputs/q2/tables/v2_n100_repaired_fix2_summary.csv`](../../outputs/q2/tables/v2_n100_repaired_fix2_summary.csv) | 合法率、状态、HPWL、IQR、预算和运行时间 |
+| 主组配对差值 | [`outputs/q2/tables/v2_n100_repaired_fix2_paired_differences.csv`](../../outputs/q2/tables/v2_n100_repaired_fix2_paired_differences.csv) | `P1-P0`、`P1-A2-BASE`、`P2-ON-P2-OFF` |
+| 主组比较快照 | [`outputs/q2/tables/v2_n100_repaired_fix2_comparison_snapshot.json`](../../outputs/q2/tables/v2_n100_repaired_fix2_comparison_snapshot.json) | 代码/数据哈希、预算、种子和配置 |
+| 随机压力明细（20 条） | [`outputs/q2/tables/v2_n100_repaired_fix2_a2_stress_run_details.csv`](../../outputs/q2/tables/v2_n100_repaired_fix2_a2_stress_run_details.csv) | A2/P1 随机初始化诊断 |
+| 随机压力汇总 | [`outputs/q2/tables/v2_n100_repaired_fix2_a2_stress_summary.csv`](../../outputs/q2/tables/v2_n100_repaired_fix2_a2_stress_summary.csv) | 合法率、`no_feasible` 和首次合法评价 |
+| 运行入口 | [`src/Q2/__main__.py`](../../src/Q2/__main__.py) | 单次/批量运行与快照 |
+| 汇总入口 | [`src/Q2/summarize.py`](../../src/Q2/summarize.py) | 五组主实验和两组压力实验的门槛检查 |
+| Q2 测试 | [`tests/test_q2.py`](../../tests/test_q2.py) | SA、预算、初始化消融和哈希覆盖 |
 
 ## 可直接转写的方法口径
 
-设模块总面积为 `A_B`，题面死区比例为 `d=0.15`，固定正方形边长为
+模块总面积为 `A_B`，死区比例固定为 `d=0.15`，固定正方形轮廓边长为
 
 ```text
 L = sqrt(A_B * (1 + d)).
 ```
 
-轮廓为 `(0,0,L,L)`。模块可以旋转 0/90 度，边界接触合法，正面积重叠非法。模块引脚位于旋转后矩形中心，Terminal 使用 `.pl` 中的绝对坐标，不随轮廓变化。
+模块允许 `0/90` 度旋转；边界接触合法，正面积重叠非法。引脚为旋转后模块矩形中心，Terminal 采用 `.pl` 的绝对坐标。网络 HPWL 为各网络 x/y 半周长之和。
 
-单个网络的半周长线长为
+搜索轨迹可以临时接受不可行状态；最佳解保存采用严格的可行性优先：先比较合法性，再在合法解中比较 HPWL。正式评价和独立审计分别复算最终布局。
 
-```text
-HPWL_net = (max x_pin - min x_pin) + (max y_pin - min y_pin),
-HPWL = sum_net HPWL_net.
-```
+P0-GROUND 使用独立 Sequence Pair 与经典几何 SA。四个 restart 都从合法 shelf 编码，只随机化已有行内次序；前 100 个邻域样本标定初温到接受率 `0.9`，样本计入 `30000` 次评价预算；降温为 `T(k)=T0*(10^-3)^(k/max(N-1,1))`，固定罚强度 `10.0`。P0 的角色是可信独立参考基线，不是 ground truth 或精确最优。
 
-搜索采用严格可行性优先：不可行布局之间比较轮廓溢出；进入合法域后比较 HPWL。最终候选由共享评价器和独立审计分别复算。
+主实验配置如下：
 
-## 符号、参数与单位
+| 配置 | 候选 | 自适应约束 | 超图初始化 | 初始化 |
+|---|---|---:|---:|---|
+| P0-GROUND | Q2-SP/classic-SA | OFF | OFF | shelf |
+| A2-BASE | Q2-BT/Fast-SA | OFF | OFF | shelf |
+| P1 | Q2-BT/Fast-SA | ON | OFF | shelf |
+| P2-OFF | Q2-HG/Fast-SA | ON | OFF | shelf |
+| P2-ON | Q2-HG/Fast-SA | ON | ON | shelf |
 
-| 符号/字段 | 含义 | 单位/方向 |
-|---|---|---|
-| `A_B` / `module_area` | 模块总面积 | 坐标单位² |
-| `d` / `dead_space_ratio` | `deadspace/module_area` | 无量纲；本阶段固定 0.15 |
-| `rho` | `deadspace/area=d/(1+d)` | 无量纲；本阶段为 0.15/1.15 |
-| `L` / `outline_side` | 固定正方形边长 | 坐标单位 |
-| `HPWL` | 所有网络 HPWL 之和 | 坐标单位；越小越好 |
-| `first_feasible_evaluation` | 首次得到合法解时的累计评价次数 | 次；越小越好 |
-| `runtime` | 单次墙钟时间 | 秒 |
+P2-OFF 只使用中性行内顺序，P2-ON 只将该顺序换成当前超图顺序；合法 shelf 几何直接作为第一评价，B*-Tree 状态只用于后续搜索。两者的行成员、旋转、`init_seed`、`search_seed` 保持一致。P1 与 P2-OFF 的确定性字段和最终布局逐 seed 一致，是本轮组件隔离的硬门槛。
 
-冻结开发协议：实例 `n100`，种子 `2101-2110`，每次最多 30000 次评价、60 秒、4 次重启；优化器代码哈希见比较快照。
+## 协议快照
 
-## 当前可引用的开发观察
+- 实例：`n100`
+- seeds：`1101–1110`
+- 每次评价预算：`30000`
+- 时间安全上限：`180 s`
+- restart：`4`
+- 顺序：单进程、单线程、顺序运行
+- RNG：`random.Random`（MT19937）
+- fix2 全部 70 条运行代码哈希：`5182e532feca7ba4337692b112b06f181d6f79ee85596eacf83c9109b14fb709`
+- n100 数据哈希：`6be0918f672ac3bbdf8300aaeddedf4f348a2b1a1ea74f5975cc084ba0b2ec13`
 
-以下数字只能标注为“n100 开发粗筛”：
+代码快照使用仓库相对路径、LF 规范字节，覆盖 Q2、Q1 Sequence Pair/B*-Tree、解析器、评价器、审计器和几何模块；fix2 的 70 条运行使用同一代码哈希，每个配置快照另存逐文件 SHA-256 和运行环境。
 
-- 四个配置均为 10/10 合法，正式评价与独立审计均为 10/10 一致。
-- P0、P1、P2-OFF、P2-ON 的中位 HPWL 分别为 `297261.0`、`263293.5`、`263293.5`、`248082.75`。
-- P1 在 10/10 个配对 seed 上低于 P0，配对差值中位数为 `-33967.5`，相对差值中位数为 `-11.4268%`。
-- P2-ON 在 10/10 个配对 seed 上低于 P2-OFF，配对差值中位数为 `-15541.25`，相对差值中位数为 `-6.0178%`，合法率未下降。
+## 当前可引用的 n100 开发观察
 
-## 数字追溯
+五个主组均为 10/10 合法、10/10 正式评价与审计一致、10/10 完成 30000 次评价：
 
-| 数字 | 直接来源 | 运行证据 |
-|---|---|---|
-| 四配置合法率、最好值和中位数 | `v2_n100_current_summary.csv` | `v2_n100_current_run_details.csv` 对应 40 条记录 |
-| P1-P0 配对差值 | `v2_n100_current_paired_differences.csv` 的 `P1-minus-P0` | P0/P1 当前批次的逐 seed 布局与日志 |
-| P2 ON/OFF 配对差值 | 同表的 `P2-ON-minus-P2-OFF` | P2-OFF/P2-ON 当前批次的逐 seed 布局与日志 |
-| 代码哈希、种子、预算 | `v2_n100_current_comparison_snapshot.json` | 四份 `*_current_config_snapshot.json` |
+| 配置 | 最好 HPWL | 中位 HPWL | IQR | 中位运行时间/s |
+|---|---:|---:|---:|---:|
+| P0-GROUND | 288250.0 | 291242.75 | 1505.625 | 146.5522 |
+| A2-BASE | 247846.0 | 253640.75 | 7956.75 | 77.6709 |
+| P1 | 246188.5 | 254170.25 | 6568.875 | 78.4244 |
+| P2-OFF | 246188.5 | 254170.25 | 6568.875 | 77.7416 |
+| P2-ON | 245513.0 | 249481.0 | 5036.0 | 76.5186 |
+
+配对中位差值为：`P1-P0=-36271.25`（10/10 seed 更低）、`P1-A2-BASE=-275.25`（6/10 更低）、`P2-ON-P2-OFF=-5427.25`（8/10 更低）。P1 与 P2-OFF 的差值逐 seed 全为 `0.0`。
+
+随机初始化压力组必须一并保留：`A2-BASE-RANDOM` 为 0/10 合法、10/10 `no_feasible`；`P1-RANDOM` 为 1/10 合法，其余 9 次 `no_feasible`，唯一合法 seed 1104 的首次合法评价为 6439。压力结果只说明初始化风险，不是生产候选排名。
 
 ## 论文中暂时禁止的表述
 
-- 不得写“P2 是最终模型”“P2 已通过正式选型”或“P2 总体显著优于 P1/P0”。
-- 不得把 n100 数字写入最终摘要、最终结论或 n200/n300 结果表。
-- 不得把 `timeout` 写成失败或不可行；P0 十次 timeout 均保留了合法布局。
-- 不得忽略成对并行运行对墙钟吞吐的影响；正式时间比较须等待冻结的 n200 顺序运行协议。
+- “P0 是 ground truth、全局最优或精确最优”；
+- “P1/P2 已通过最终选型”或“P2 总体显著优于 P1”；
+- 将 n100 开发观察写入最终摘要、最终结论或 n200/n300 结果表；
+- 把 `no_feasible` 或 `timeout` 改写成数学不可行证明；
+- 把本轮 P2 描述成包含 Terminal 空间牵引或局部精确修复。
 
-## 需要论文手确认的事项
+## 交叉复核清单
 
-1. Q2 方法章节是否采用“P0 独立基线—P1 稳健主干—P2 超图软初始化”的叙述顺序。
-2. n100 开发观察是否只放入“模型开发/初步实验”，并明确标记 `REVIEWING`。
-3. 正式结果图和统计检验留到 n200/V3 后制作，本阶段不提前绘制论文正式图。
-4. Q3 若复用 P2，必须注明 Q2 当前只在 `d=0.15` 验证，不能外推到更小死区边界。
+1. 钟江铭复核 P0 seed 1101–1110 的布局、HPWL、评价数、接受数、初始 HPWL 和四个 restart 记录。
+2. 逐 seed 检查 P1/P2-OFF 的布局、正式评价、独立审计、种子轨迹完全相同。
+3. 检查所有 70 条布局的共享评价器和独立审计结果，确认压力组失败状态被保留。
+4. 确认全量 `unittest` 19/19 通过，并在 `REVIEWING` 状态下核对报告、汇总表、快照和代码入口参数一致。
+5. n200 前另行冻结主预算、机器/线程、顺序运行方式和 RNG；本轮不运行 n200/n300。
 
-## 下一阶段
+P0 seed `1101`、`1102` 已在 `tmp/v2_n100_p0_determinism_fix2_20260808/` 临时目录使用最终代码完整复跑；布局、HPWL、评价/接受轨迹和 restart 种子字段逐 seed 一致，运行时间与路径不参与比较。
 
-- 由交叉复核人核对公式、配置、40 条明细和两组配对差值并签字；
-- 冻结 n200 的主预算、顺序运行方式、机器/线程与候选；
-- n200 正式比较通过后，才决定 Q2 最终采用 P1 或 P2，并更新论文确定数字。
+完成人工复核后，若任何公式、参数、数据、代码哈希或关键数字发生变化，必须退回 `REVIEWING` 并重跑受影响的实验。

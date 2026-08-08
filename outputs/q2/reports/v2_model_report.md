@@ -1,99 +1,155 @@
-# Q2 V2：固定轮廓实现与候选入口
+# Q2 V2：P0 独立参考基线与 P1/P2 n100 修复验收报告
 
-- 状态：REVIEWING
+- 阶段：`REVIEWING`
 - 更新：2026-08-08
-- 实现目录：`src/Q2/`
-- 公共入口：`python -B -m src.Q2 run`、`python -B -m src.Q2 batch`
-- 本阶段只报告 n100 开发粗筛观察，不作 n200 正式选型或最终模型结论，不迁移文件到 `outputs/q2/final/`。
+- 当前负责人：蔡已完成 P1/P2 实现；钟江铭负责 P0 接入与交叉复核
+- 范围：仅 Q2 V2 的 `n100` 修复验收；不运行 `n200/n300`，不标记 `VERIFIED/FINAL`
 
-## 已冻结口径
+本报告记录修复后的可复现实验材料。P0-GROUND 是独立的 Sequence Pair + 经典 SA 参考基线，目标是提供可信的比较地面，不是数学意义上的 ground truth、精确最优解或最终模型。
 
-设模块总面积为 `A_B`，题面死区比例固定为 `d=0.15`：
+## 1. 固定问题定义
+
+模块总面积记为 `A_B`，题面死区比例固定为 `d=0.15`，因此
 
 ```text
 L = sqrt(A_B * (1 + d))
 rho = d / (1 + d)
 ```
 
-轮廓固定为 `(0, 0, L, L)`。模块可以旋转 0/90 度；边界接触合法；正面积重叠不合法。模块引脚取旋转后矩形中心，`.pl` 中的 Terminal 坐标保持绝对坐标并直接计入网络 HPWL：
+固定轮廓为 `(0, 0, L, L)`。模块允许 `0/90` 度旋转；边界接触合法，正面积重叠不合法。模块引脚取旋转后矩形中心，Terminal 使用 `.pl` 中的绝对坐标并直接参与 HPWL：
 
 ```text
-HPWL = sum_net ((max x_pin - min x_pin) + (max y_pin - min y_pin))
+HPWL_net = (max x_pin - min x_pin) + (max y_pin - min y_pin)
+HPWL = sum_net HPWL_net
 ```
 
-搜索内层利用 B*-Tree contour 或 Sequence Pair 解码的无重叠性质快速计算轮廓溢出和 HPWL；每次运行的最终候选仍由共享 `evaluate` 和独立 `audit_layout` 复算。浮点口径不额外放宽，坐标容差记录为 `0.0`。
+搜索轨迹允许临时接受不可行状态；最佳解保存采用严格的“合法优先、合法解中 HPWL 最小”规则。正式评价和独立 `audit_layout` 都必须重新计算同一布局。
 
-## 候选实现
+## 2. 修复后的候选定义
 
-| 候选 | 实现 | 开关 |
-|---|---|---|
-| Q2-SP（P0） | 独立 Sequence Pair + Fast-SA；首个 restart 使用固定轮廓 shelf 初始化再编码为 Sequence Pair | `adaptive_constraints` 默认 OFF |
-| Q2-BT（P1） | 复用 Q1 `BTreeState`、contour 解码和旋转/移动/交换邻域；固定轮廓可行性优先 | `adaptive_constraints` 默认 ON |
-| Q2-HG（P2） | P1 上增加网络超图连接度的软初始化 | `hypergraph_init` 默认 ON，可显式 OFF 做消融 |
+| 配置 | 候选/SA | 自适应约束 | 超图初始化 | 初始化 |
+|---|---|---:|---:|---|
+| P0-GROUND | Q2-SP / classic SA | OFF | OFF | 合法 shelf |
+| A2-BASE | Q2-BT / Fast-SA | OFF | OFF | 合法 shelf |
+| P1 | Q2-BT / Fast-SA | ON | OFF | 合法 shelf |
+| P2-OFF | Q2-HG / Fast-SA | ON | OFF | 合法 shelf |
+| P2-ON | Q2-HG / Fast-SA | ON | ON | 合法 shelf |
 
-可行性优先规则为：不可行状态之间只比较轮廓溢出；合法状态之间才比较 HPWL；最终选型仍需统一预算、多种子和独立复核。
+另有两个只用于诊断初始化脆弱性的压力组：`A2-BASE-RANDOM`、`P1-RANDOM`。生产候选不采用随机初始布局。
 
-## 结果记录
+### P0-GROUND 的协议
 
-单次运行写入 `layout.json` 和 `events.jsonl`，记录：候选、开关、随机种子、代码/配置哈希、轮廓边长、实际布局宽高、边界溢出、合法性、HPWL、首次合法解评价次数/时间、运行时间、评价次数、状态和错误信息。`batch` 另外写入运行明细、汇总和配置快照 CSV/JSON。
+- 四个 restart 都从合法 shelf 编码为独立 Sequence Pair；只在保持行成员、旋转和容量不变的条件下随机化行内顺序。
+- 每个 restart 派生独立的 `init_seed` 与 `search_seed`。
+- 前 100 个邻域样本用于把初温标定到初始接受率 `0.9`，这些评价计入总预算。
+- 其余搜索使用经典几何降温：`T(k)=T0*(10^-3)^(k/max(N-1,1))`，固定罚强度为 `10.0`。
+- `sa_schedule=classic` 被强制记录；Q2-SP 不能误配 Fast-SA。
 
-## 实际验证
+P1/P2 的消融只改变一个组件：合法 shelf 几何直接作为每个 restart 的第一评价，B*-Tree 状态只用于后续搜索；P2-OFF 使用中性行内顺序，P2-ON 仅替换为超图顺序。两组的行成员、旋转、restart 子种子和搜索随机流逐 seed 一致；P1 与 P2-OFF 的确定性字段和最终布局也逐 seed 完全一致。
 
-使用工作区绑定 Python 运行：
+## 3. 运行协议与可追溯性
+
+- 实例：`n100`
+- 种子：`1101–1110`，每组恰好 10 个唯一 seed
+- 每次最多 `30000` 次评价，安全上限 `180 s`
+- 四次 restart，单进程、单线程、顺序运行
+- RNG：`random.Random`（MT19937）
+- 新结果目录：`outputs/q2/_runtime/v2_n100_repaired_fix2/`
+- 旧 `v2_n100_current_*` 和旧 `2101–2110` 结果原样保留，仅作为历史开发证据，不用于组件归因
+
+fix2 的 70 条运行（五个主组和两组压力组）使用同一代码哈希：
 
 ```text
-C:\Users\CQX\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe -B -m unittest discover -s tests -v
+5182e532feca7ba4337692b112b06f181d6f79ee85596eacf83c9109b14fb709
 ```
 
-当前结果：14 个测试全部通过，其中包括 Q2 三个候选的固定轮廓、独立审计、Terminal/HPWL 一致性、同 seed 可复现性、P0/P1 固定轮廓初始化，以及 P2 初始化开关 OFF/ON 不破坏 n100 可行性。
 
-P0、P1 和 P2-ON 在 `n100`、`max-evaluations=1` 的回归门槛中均由固定轮廓初始化直接得到合法布局；该事实只证明可行域入口稳定，不构成性能结论。
-
-## n100 开发粗筛
-
-冻结协议如下：
-
-- 实例：`n100`；种子：`2101-2110`；
-- 每次最多 `30000` 次评价、`60 s`、`4` 次重启；
-- 优化器代码哈希：`fac6f6f1cd9dc87cfcf4b3a2aa7efd2f72b589c68f28562029218338dd395f4e`；
-- 输入完整性与哈希沿用 `data/processed/round0_audit.json`；
-- P0/P1 以及 P2-OFF/P2-ON 分别以成对并行进程运行。并行会影响墙钟吞吐，因此运行时间和 P0/P1 有效评价次数只能作为开发参考；P2 OFF/ON 均完成 30000 次评价，配对 HPWL 可直接比较。
-
-| 配置 | 合法/总数 | success/timeout/no_feasible/crash | 最好 HPWL | 中位 HPWL | 中位首次合法评价 | 中位评价数 | 中位运行时间/s |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| P0：Q2-SP | 10/10 | 0/10/0/0 | 296924.5 | 297261.0 | 1 | 19193 | 60.0012 |
-| P1：Q2-BT | 10/10 | 7/3/0/0 | 256205.5 | 263293.5 | 1 | 30000 | 49.3426 |
-| P2-OFF：Q2-HG，初始化关闭 | 10/10 | 10/0/0/0 | 256205.5 | 263293.5 | 1 | 30000 | 53.2089 |
-| P2-ON：Q2-HG，初始化开启 | 10/10 | 10/0/0/0 | 241764.5 | 248082.75 | 1 | 30000 | 50.1392 |
-
-开发观察：
-
-- P1 相对 P0 在 10/10 个配对种子上 HPWL 更低；`P1-P0` 差值中位数为 `-33967.5`，配对相对差值中位数为 `-11.4268%`。
-- P2-ON 相对 P2-OFF 在 10/10 个配对种子上 HPWL 更低，且合法率未下降；`ON-OFF` 差值中位数为 `-15541.25`，配对相对差值中位数为 `-6.0178%`。
-- 以上只支持“P1、P2 可进入 n200 正式协议”的开发决策；不证明总体优越性，也不替代 n200 选型和 n300 留出验证。
-
-可复现汇总入口：
+数据哈希（n100 三个原始输入，LF 规范字节）：
 
 ```text
-python -B -m src.Q2.summarize --p0 outputs/q2/tables/v2_n100_p0_current_run_details.csv --p1 outputs/q2/tables/v2_n100_p1_current_run_details.csv --p2-off outputs/q2/tables/v2_n100_p2_off_current_run_details.csv --p2-on outputs/q2/tables/v2_n100_p2_on_current_run_details.csv --output-root outputs/q2/tables --run-id v2_n100_current
+6be0918f672ac3bbdf8300aaeddedf4f348a2b1a1ea74f5975cc084ba0b2ec13
 ```
 
-核心输出：
+代码快照按仓库相对路径记录 Q2 源码、Q1 Sequence Pair/B*-Tree 依赖、解析器、评价器、审计器和几何模块；配置快照同时记录逐文件 SHA-256、Python/平台、执行方式、候选参数和数据文件 SHA-256。
 
-- `outputs/q2/tables/v2_n100_current_run_details.csv`：40 条完整运行记录；
-- `outputs/q2/tables/v2_n100_current_summary.csv`：四配置汇总；
-- `outputs/q2/tables/v2_n100_current_paired_differences.csv`：P1-P0 与 P2-ON-P2-OFF 配对差值；
-- `outputs/q2/tables/v2_n100_current_comparison_snapshot.json`：输入表、代码哈希、预算和种子快照。
+## 4. 主实验结果
 
-## 开发故障与修复记录
+所有主组均完成 10/10 次、每次 30000 次评价；正式评价与独立审计逐行一致。
 
-- 初版 P1 使用随机 complete B*-Tree，四重启分段后每个 restart 只有约 7500 次评价，seed 2101 在 30000 次总预算下未找到合法解；历史失败记录保留在本地带 `smoke` 的开发批次中，不纳入本阶段提交范围。
-- 修复为共享合法 shelf 几何、分别编码为 Sequence Pair 与 B*-Tree 后，P0/P1 的首次合法评价均稳定为 1。
-- 初版 P2-ON 直接用超图顺序替换 complete tree 标签，seed 2101 出现 `no_feasible`；随后限制为合法 shelf 同一行内的超图软排序，保持行内模块集合、旋转和总宽不变。修复后才重新运行当前代码哈希下的全部 P0/P1/P2 批次。
+| 配置 | 合法 | audit 一致 | 完整预算 | 状态 | 最好 HPWL | 中位 HPWL | IQR | 中位首次合法评价 | 中位运行时间/s | 中位相对初始改进 |
+|---|---:|---:|---:|---|---:|---:|---:|---:|---:|---:|
+| P0-GROUND | 10/10 | 10/10 | 10/10 | success 10/10 | 288250.0 | 291242.75 | 1505.625 | 1 | 146.9346 | 0.0 |
+| A2-BASE | 10/10 | 10/10 | 10/10 | success 10/10 | 247846.0 | 253640.75 | 7956.75 | 1 | 77.6709 | -37644.25 |
+| P1 | 10/10 | 10/10 | 10/10 | success 10/10 | 246188.5 | 254170.25 | 6568.875 | 1 | 78.4244 | -36271.25 |
+| P2-OFF | 10/10 | 10/10 | 10/10 | success 10/10 | 246188.5 | 254170.25 | 6568.875 | 1 | 77.7416 | -36271.25 |
+| P2-ON | 10/10 | 10/10 | 10/10 | success 10/10 | 245513.0 | 249481.0 | 5036.0 | 1 | 76.5186 | -13343.0 |
 
-## 未完成与风险
+这里的“相对初始改进”按最终 HPWL 减去该 seed 的最佳初始 shelf HPWL 记录；P0 中位数为 `0.0` 不表示搜索无效，而表示经典 SA 的合法 shelf 已是该批次保存规则下的最佳值。
 
-- n100 已完成开发粗筛，但尚未执行 n200 正式选型和 n300 留出验证，因此不能写成最终模型性能结论。
-- P0 十次均触发 60 秒上限，且有效评价次数低于 P1；n200 协议需要明确以墙钟时间还是评价次数作为主预算，并避免并行资源竞争污染时间比较。
-- Q2-HG 目前只有软初始化，未实现高风险的局部精确修复；这是有意保留的范围边界。
-- 阶段状态仍为 `REVIEWING`，需要交叉复核人确认参数、运行预算和正式结果表后才能进入 `VERIFIED`。
+配对差值（候选减基线，HPWL 越小越好）如下：
+
+| 配对 | 候选更好 seed 数 | 中位差值 | 中位相对差值 |
+|---|---:|---:|---:|
+| `P1-P0` | 10/10 | -36271.25 | -12.48816% |
+| `P1-A2-BASE` | 6/10 | -275.25 | -0.10665% |
+| `P2-ON-P2-OFF` | 8/10 | -5427.25 | -2.14274% |
+| `P2-OFF-P1` | 10/10 完全相同 | 0.0 | 0.0% |
+
+这些是 n100 开发观察，不是统计显著性或总体优越性证明。P1 与 A2-BASE 只有 6/10 seed 更好，P2-ON 有 8/10 seed 更好。
+
+## 5. 随机初始化压力实验
+
+| 配置 | 合法 | audit 一致 | 完整预算 | 状态 | 首次合法评价 |
+|---|---:|---:|---:|---|---|
+| A2-BASE-RANDOM | 0/10 | 10/10 | 0/10 | `no_feasible` 10/10 | 无 |
+| P1-RANDOM | 1/10 | 10/10 | 1/10 | success 1、`no_feasible` 9 | seed 1104：6439 |
+
+随机压力组保留了 20 条失败/成功明细，但不进入生产候选排序。它说明随机初始 B*-Tree 在本预算下可能无法稳定进入合法域，也说明 shelf 初始化是本轮协议的一部分，而不是可被忽略的实现细节。
+
+## 6. 产物与复现入口
+
+主组 50 条明细、汇总、配对差值和比较快照：
+
+- `outputs/q2/tables/v2_n100_repaired_fix2_run_details.csv`
+- `outputs/q2/tables/v2_n100_repaired_fix2_summary.csv`
+- `outputs/q2/tables/v2_n100_repaired_fix2_paired_differences.csv`
+- `outputs/q2/tables/v2_n100_repaired_fix2_comparison_snapshot.json`
+
+压力组：
+
+- `outputs/q2/tables/v2_n100_repaired_fix2_a2_stress_run_details.csv`
+- `outputs/q2/tables/v2_n100_repaired_fix2_a2_stress_summary.csv`
+- `outputs/q2/tables/v2_n100_repaired_fix2_a2_stress_paired_differences.csv`
+
+五个主组和两组压力实验的配置快照、布局和事件日志分别位于 `outputs/q2/_runtime/v2_n100_repaired_fix2/`；此前批次和第一次工具超时留下的部分批次均保留，没有覆盖或删除。
+
+典型主组命令（只替换 `--candidate/--config-id/--runtime-root/--run-id`）：
+
+```text
+python -B -m src.Q2 batch --instance n100 --candidates Q2-BT --config-id P1 --adaptive-constraints on --seeds 1101-1110 --max-evaluations 30000 --time-limit 180 --restarts 4 --raw data/raw/附件 --runtime-root outputs/q2/_runtime/v2_n100_repaired_fix2/P1 --table-root outputs/q2/tables --run-id v2_n100_repaired_fix2_p1 --require-full-evaluations
+```
+
+汇总入口：
+
+```text
+python -B -m src.Q2.summarize --p0 outputs/q2/tables/v2_n100_repaired_fix2_p0_ground_run_details.csv --a2-base outputs/q2/tables/v2_n100_repaired_fix2_a2_base_run_details.csv --p1 outputs/q2/tables/v2_n100_repaired_fix2_p1_run_details.csv --p2-off outputs/q2/tables/v2_n100_repaired_fix2_p2_off_run_details.csv --p2-on outputs/q2/tables/v2_n100_repaired_fix2_p2_on_run_details.csv --a2-base-random outputs/q2/tables/v2_n100_repaired_fix2_a2_base_random_run_details.csv --p1-random outputs/q2/tables/v2_n100_repaired_fix2_p1_random_run_details.csv --output-root outputs/q2/tables --run-id v2_n100_repaired_fix2 --seeds 1101-1110
+```
+
+## 7. 已完成验收与后续计划
+
+- P0-GROUND：10/10 合法、10/10 审计一致、10/10 完整 30000 评价，且每个 seed 的最终 HPWL 不高于最佳初始 shelf；已满足“可信独立参考基线”的技术门槛。
+- P1/P2：P1 与 P2-OFF 逐 seed 完全一致；P2-ON/OFF 的 shelf 行成员、旋转、restart 子种子和搜索随机流逐 seed 一致，只允许行内顺序不同。
+- 70 条布局已用共享评价器和独立审计逐条复核；全量 `unittest` 通过 19/19。
+
+### 后续人工复核
+
+1. 钟江铭完成 P0 接入复核，并逐 seed 复核 P0 的布局、HPWL、评价次数、接受数和 restart 记录。
+2. 交叉复核 P1/P2 的配置快照，确认 P1 与 P2-OFF 的确定性字段和最终布局逐 seed 相同。
+3. 在人工作证前保持阶段为 `REVIEWING`；不得把 P0 写成 ground truth、全局最优或最终模型。
+4. n200 前重新冻结主预算、顺序运行机器/线程和 RNG；n200/n300 不属于本批次，当前没有运行证据。
+
+只有完成上述人工交叉复核并重新冻结受影响的协议后，才可以进入下一阶段。任何关键公式、参数、代码或数据变化都必须退回 `REVIEWING` 并重跑受影响的验证。
+
+## 8. P0 临时确定性复跑
+
+在临时目录 `tmp/v2_n100_p0_determinism_fix2_20260808/` 复跑的 P0 seed `1101` 和 `1102` 均完成 30000 次评价、状态为 `success`、正式评价与独立审计一致，并使用最终代码哈希 `5182e532…`。与正式 P0 批次逐 seed 比较时，布局、HPWL、评价次数、proposal/accepted、四个 restart 初始记录、`init_seed/search_seed` 和初始改进字段一致；运行时间和临时路径不参与确定性判定。
