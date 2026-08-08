@@ -1,4 +1,4 @@
-"""Question 1 B*-Tree packing and Fast-SA search.
+"""Question 1 P1/P2 B*-Tree packing and Fast-SA search.
 
 The optimizer proposes rectangle layouts; the shared evaluator and the
 independent audit remain the authority for the final metrics.  This module
@@ -13,9 +13,9 @@ import random
 import time
 from typing import Iterable
 
-from .audit import audit_layout
-from .evaluator import evaluate
-from .parser import Block, Instance
+from .._internal.audit import audit_layout
+from .._internal.evaluator import evaluate
+from .._internal.parser import Block, Instance
 
 
 def _rotated_size(block: Block, rotation: int) -> tuple[float, float]:
