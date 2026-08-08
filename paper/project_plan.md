@@ -26,7 +26,7 @@ V1：各报告说明目标、接口、候选、开关与回退。进入某问 n1
 
 ## 本阶段验证记录
 
-主 Agent 使用 bundled Python 实际执行 `validate.py paper/diagrams/v1_technical_route.drawio --score`，结果为 `0 error(s), 0 warning(s)`。随后使用 `D:\Program Files\draw.io\draw.io.exe` 31.1.8 导出预览 PNG，完成两轮视觉检查并修正 `第0轮 -> Q4` 的误导性路由；正式导出 `v1_technical_route.drawio.png`（嵌入 XML）和 `v1_technical_route.svg`，最终 PNG 已完成像素检查，无标签裁切、节点重叠或错误连线。2026-08-08 又实际执行 6 项第 0 轮基础测试和审计入口，纠正 `area/module_area` 语义，确认 Q1/Q3 题面口径，并复现三实例规范哈希与解析计数。
+主 Agent 使用 bundled Python 实际执行 `validate.py paper/diagrams/v1_technical_route.drawio --score`，结果为 `0 error(s), 0 warning(s)`。随后使用 `D:\Program Files\draw.io\draw.io.exe` 31.1.8 导出预览 PNG，完成两轮视觉检查并修正 `第0轮 -> Q4` 的误导性路由；正式导出 `v1_technical_route.drawio.png`（嵌入 XML）和 `v1_technical_route.svg`，最终 PNG 已完成像素检查，无标签裁切、节点重叠或错误连线。2026-08-08 又实际执行 6 项第 0 轮基础测试和审计入口，纠正 `area/module_area` 语义，确认 Q1/Q3 题面口径，并复现三实例规范哈希与解析计数。同日完成 Q3 开发骨架修补；当前 25 项 Q3 专项测试和 44 项全量测试均输出 `OK`，真实入口可调用。Q3 代码/测试已验收，但整合后 BIN、LIN、CONT-R 的 n100 结果待全量重跑，状态为 `REVIEWING`；旧 n100 结果不构成 Q4 输入、n200 正式选型或最终结论。
 
 ## 协作确认与资料边界
 

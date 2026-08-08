@@ -184,6 +184,9 @@ class SearchResult:
     restart_initial_signatures: list[str] = field(default_factory=list)
     restart_init_seeds: list[int] = field(default_factory=list)
     restart_search_seeds: list[int] = field(default_factory=list)
+    # Kept only for Q3 continuous-compression warm starts.  It is intentionally
+    # not serialized by the Q2 CLI, whose public layout artifact remains stable.
+    best_state: object | None = None
 
     @property
     def formal_metrics(self) -> dict:

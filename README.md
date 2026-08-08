@@ -1,5 +1,7 @@
 # 2026 华数杯数学建模仓库
 
+> Q3 V2 n100：代码已整合到 HEAD `6655048`，当前 `_code_hash=144fa968a824ac6f943c9f547f54506bfe683c4e14befce0780c3cfc917a3b87`。旧 n100 产物使用整合前 `bc42b101f2ed299627044a5cd195e25528f3bf56b42bdbdb85318b9e2483fad7`，仅作历史记录；BIN、LIN、CONT-R 的整合后全量重跑待执行。Q3 状态为 `REVIEWING`，旧结果不得用于 Q4 或最终结论；真实入口 `python -B -m src.Q3` 已实现。
+
 本仓库按“原始数据 → 可复现处理数据 → 分问题建模 → 正式结果 → 论文材料”组织。
 当前已完成第 0 轮共享解析/评价/审计和 Q1-Q4 的 V1 问题分析；Q1 已完成 Q1-G、Q1-SP、Q1-BT、Q1-BT-D 的 V2 n100 批次（共 40 条运行记录），P2 消融留待 V3。Q2 已完成修复后的 P0/P1/P2 n100 主组（50 条）与随机初始化压力组（20 条）；P0 已满足可信独立参考基线的技术门槛，但状态仍为 `REVIEWING`，正式选型留待 n200。`requirements.txt` 尚未记录实际依赖；Q1 V2 结果已通过复核，状态为 `VERIFIED`，但不是最终结果。
 
@@ -15,7 +17,7 @@
 │   ├── _internal/              # 第 0 轮共享解析、几何、评价与独立审计
 │   ├── Q2/                     # 问题二 P0/P1/P2 候选与统一实验入口
 │   ├── q2.py                   # 问题二兼容包装入口
-│   ├── q3.py                   # 问题三占位入口
+│   ├── q3.py                   # 问题三兼容入口；真实入口为 src/Q3/
 │   └── （Q4 入口待 V2 几何口径冻结后建立）
 ├── outputs/
 │   ├── q1/
@@ -43,7 +45,7 @@
 ## 约定
 
 - `data/raw/` 中的文件视为只读输入；清洗和特征结果写入 `data/processed/`。
-- `python -m src.Q1` 是 Q1 V2 的统一入口；Q2 V2 使用 `python -B -m src.Q2 run` 或 `python -B -m src.Q2 batch`，汇总使用 `python -B -m src.Q2.summarize`；`src/q2.py` 和 `src/q3.py` 仍是兼容/占位入口。真实流程确定后，每问最终保留一个统一入口。
+- `python -m src.Q1` 是 Q1 V2 的统一入口；Q2 V2 使用 `python -B -m src.Q2 run` 或 `python -B -m src.Q2 batch`，汇总使用 `python -B -m src.Q2.summarize`；Q3 真实入口为 `python -B -m src.Q3`，`src/q2.py` 和 `src/q3.py` 保留为兼容包装。真实流程确定后，每问最终保留一个统一入口。
 - `src/_internal/` 只保留第 0 轮共享解析、几何、评价与独立审计；Q1 候选实现位于 `src/Q1/`。
 - `outputs/qN/` 只保存可追溯的正式结果。运行日志、缓存和临时中间文件统一放在 `_runtime/`，不提交 Git。
 - `paper/qN/` 保存能够进入论文的口径、公式、结果解释和局限；不把未经验证的实验结论写成正式结果。

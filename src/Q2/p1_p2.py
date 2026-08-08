@@ -109,9 +109,18 @@ def _hypergraph_order(instance: Instance, rng: random.Random) -> list[str]:
 
 
 def _initial_state(
-    instance: Instance, config: Q2SearchConfig, rng: random.Random, side: float
+    instance: Instance,
+    config: Q2SearchConfig,
+    rng: random.Random,
+    side: float,
+    restart: int,
+    initial_state: BTreeState | None = None,
 ) -> tuple[BTreeState, dict[str, tuple[float, float, int]] | None]:
     names = tuple(instance.blocks)
+    if restart == 0 and initial_state is not None:
+        if set(initial_state.labels) != set(names):
+            raise ValueError("warm-start state does not match instance blocks")
+        return initial_state.clone(), None
     if config.initialization_mode == "shelf":
         if config.hypergraph_init:
             preferred_order = _hypergraph_order(instance, rng)
@@ -190,7 +199,12 @@ def _calibrate(
     return average, evaluations, timed_out
 
 
-def search_p1_p2(instance: Instance, config: Q2SearchConfig, seed: int) -> SearchResult:
+def search_p1_p2(
+    instance: Instance,
+    config: Q2SearchConfig,
+    seed: int,
+    initial_state: BTreeState | None = None,
+) -> SearchResult:
     if config.candidate not in {"Q2-BT", "Q2-HG"}:
         raise ValueError(f"unsupported Q2 B*-Tree candidate: {config.candidate}")
     validate_config(config)
@@ -204,6 +218,8 @@ def search_p1_p2(instance: Instance, config: Q2SearchConfig, seed: int) -> Searc
     side = square_side(instance, config.dead_space_ratio)
     best_feasible: Q2Layout | None = None
     best_infeasible: Q2Layout | None = None
+    best_feasible_state: BTreeState | None = None
+    best_infeasible_state: BTreeState | None = None
     evaluations = proposals = accepted_count = restarts_completed = 0
     first_feasible_evaluation = None
     first_feasible_time = None
@@ -230,7 +246,7 @@ def search_p1_p2(instance: Instance, config: Q2SearchConfig, seed: int) -> Searc
             search_rng = random.Random(search_seed)
             restart_init_seeds.append(init_seed)
             restart_search_seeds.append(search_seed)
-            state, shelf_layout = _initial_state(instance, config, init_rng, side)
+            state, shelf_layout = _initial_state(instance, config, init_rng, side, restart, initial_state)
             initial_packed = _shelf_packed(instance, shelf_layout) if shelf_layout is not None else pack_btree(state, instance.blocks)
             current = assess(instance, initial_packed, side)
             evaluations += 1
@@ -238,12 +254,15 @@ def search_p1_p2(instance: Instance, config: Q2SearchConfig, seed: int) -> Searc
             restart_initial_legal.append(current.legal)
             restart_initial_signatures.append(layout_signature(current.layout))
             if current.legal:
-                best_feasible = current if best_feasible is None or current.rank < best_feasible.rank else best_feasible
+                if best_feasible is None or current.rank < best_feasible.rank:
+                    best_feasible = current
+                    best_feasible_state = state.clone()
                 if first_feasible_evaluation is None:
                     first_feasible_evaluation = evaluations
                     first_feasible_time = time.perf_counter() - start
             elif best_infeasible is None or current.rank < best_infeasible.rank:
                 best_infeasible = current
+                best_infeasible_state = state.clone()
 
             avg_delta, evaluations, calibration_timeout = _calibrate(
                 instance, state, current, config, search_rng, side, start, evaluations, evaluation_limit
@@ -270,8 +289,10 @@ def search_p1_p2(instance: Instance, config: Q2SearchConfig, seed: int) -> Searc
                         first_feasible_time = time.perf_counter() - start
                     if best_feasible is None or proposal.rank < best_feasible.rank:
                         best_feasible = proposal
+                        best_feasible_state = proposal_state.clone()
                 elif best_infeasible is None or proposal.rank < best_infeasible.rank:
                     best_infeasible = proposal
+                    best_infeasible_state = proposal_state.clone()
                 penalty = constraint_penalty(config, iteration, best_feasible is not None)
                 temperature = fast_temperature(iteration, t1, avg_delta, config.fast_sa_c, config.fast_sa_k)
                 if accept(current, proposal, temperature, penalty, search_rng):
@@ -311,4 +332,5 @@ def search_p1_p2(instance: Instance, config: Q2SearchConfig, seed: int) -> Searc
         restart_initial_signatures=restart_initial_signatures,
         restart_init_seeds=restart_init_seeds,
         restart_search_seeds=restart_search_seeds,
+        best_state=best_feasible_state or best_infeasible_state,
     )
