@@ -6,8 +6,12 @@ import argparse
 import csv
 import hashlib
 import json
+import os
+import platform
 from pathlib import Path
+import subprocess
 import sys
+import time
 
 from .._internal.parser import parse_instance_files
 from .common import CANDIDATES, INNER_CANDIDATES, Q3SearchConfig, outline_side
@@ -157,6 +161,7 @@ def _config_from_args(args: argparse.Namespace) -> Q3SearchConfig:
 
 
 def main(argv: list[str] | None = None) -> int:
+    started = time.perf_counter()
     parser = argparse.ArgumentParser(description="Q3 minimum-dead-space search")
     parser.add_argument("--instance", default="n100")
     parser.add_argument("--candidate", choices=CANDIDATES, default="Q3-BIN")
@@ -183,6 +188,16 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--table-root", default="outputs/q3/tables")
     parser.add_argument("--run-id", default=None)
     args = parser.parse_args(argv)
+    actual_argv = list(sys.argv[1:] if argv is None else argv)
+    actual_command = subprocess.list2cmdline(
+        [sys.executable, "-B", "-m", "src.Q3", *actual_argv]
+    )
+    environment = {
+        "python": sys.version,
+        "platform": platform.platform(),
+        "cwd": str(Path.cwd()),
+        "cpu_count": os.cpu_count(),
+    }
 
     config = _config_from_args(args)
     instance = _load_instance(Path(args.raw), args.instance)
@@ -229,9 +244,8 @@ def main(argv: list[str] | None = None) -> int:
                 "formal_metrics": final_best.result.formal_metrics,
                 "audit_metrics": final_best.result.audit_metrics,
                 "runtime_metadata": {
-                    "command": "python -B -m src.Q3 "
-                    + " ".join(sys.argv[1:] if argv is None else argv),
-                    "python": sys.version,
+                    "command": actual_command,
+                    "environment": environment,
                 },
             },
         )
@@ -239,6 +253,7 @@ def main(argv: list[str] | None = None) -> int:
     result_payload = result.as_dict(config)
     if result_payload["final_best"] is not None:
         result_payload["final_best"]["layout_path"] = layout_path
+    runtime_seconds = time.perf_counter() - started
     payload = {
         "instance": args.instance,
         "problem": "Q3",
@@ -247,7 +262,9 @@ def main(argv: list[str] | None = None) -> int:
         "config_hash": config_hash,
         "status": status,
         "layout_path": layout_path,
-        "command": "python -B -m src.Q3 " + " ".join(sys.argv[1:] if argv is None else argv),
+        "command": actual_command,
+        "environment": environment,
+        "runtime_seconds": runtime_seconds,
         **result_payload,
     }
     _write_json(runtime_dir / "result.json", payload)

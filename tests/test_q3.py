@@ -577,6 +577,28 @@ def run_cli(
 
 
 class Q3CliTests(unittest.TestCase):
+    def test_cli_records_reproducible_command_environment_and_runtime(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            raw = root / "raw"
+            write_tiny_instance(raw)
+            command = cli_command(raw, root, run_id="trace-contract")
+            completed = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, check=False)
+            self.assertEqual(completed.returncode, 0, completed.stderr or completed.stdout)
+            payload = json.loads(completed.stdout)
+            expected_command = subprocess.list2cmdline(
+                [sys.executable, "-B", "-m", "src.Q3", *command[4:]]
+            )
+            self.assertEqual(payload["command"], expected_command)
+            self.assertGreaterEqual(payload["runtime_seconds"], 0)
+            self.assertEqual(
+                set(payload["environment"]), {"python", "platform", "cwd", "cpu_count"}
+            )
+            layout_payload = json.loads(Path(payload["layout_path"]).read_text(encoding="utf-8"))
+        metadata = layout_payload["runtime_metadata"]
+        self.assertEqual(metadata["command"], expected_command)
+        self.assertEqual(metadata["environment"], payload["environment"])
+
     def test_compatibility_script_cli_help(self):
         completed = subprocess.run(
             [
