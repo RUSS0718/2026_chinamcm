@@ -1,0 +1,605 @@
+{
+  "audit_metrics": {
+    "H": 437.2282756181261,
+    "HPWL": 248106.5,
+    "W": 437.2282756181261,
+    "area": 191168.56500000003,
+    "aspect_ratio": 1.0,
+    "dead_space_ratio": 0.06500000000000017,
+    "deadspace": 11667.565000000031,
+    "legal": true,
+    "module_area": 179501.0,
+    "rho": 0.06103286384976541,
+    "square_side": 437.2282756181261
+  },
+  "config": {
+    "adaptive_constraints": true,
+    "candidate": "Q3-LIN",
+    "continuous_compression": false,
+    "decision_rule": "robust",
+    "final_max_evaluations": 30000,
+    "final_restarts": 4,
+    "final_seeds": [
+      1101,
+      1102,
+      1103,
+      1104,
+      1105,
+      1106,
+      1107,
+      1108,
+      1109,
+      1110
+    ],
+    "final_time_limit": 60.0,
+    "hypergraph_init": true,
+    "inner_candidate": "Q2-HG",
+    "lower_ratio": 0.0,
+    "max_evaluations": 30000,
+    "precision": 0.005,
+    "restarts": 4,
+    "robust_min_success_rate": 0.8,
+    "seeds": [
+      1101,
+      1102,
+      1103,
+      1104,
+      1105,
+      1106,
+      1107,
+      1108,
+      1109,
+      1110
+    ],
+    "time_limit": 60.0,
+    "upper_ratio": 0.15,
+    "workers": 5
+  },
+  "formal_metrics": {
+    "H": 437.2282756181261,
+    "HPWL": 248106.5,
+    "W": 437.2282756181261,
+    "area": 191168.56500000003,
+    "aspect_ratio": 1.0,
+    "dead_space_ratio": 0.06500000000000017,
+    "deadspace": 11667.565000000031,
+    "legal": true,
+    "module_area": 179501.0,
+    "rho": 0.06103286384976541,
+    "square_side": 437.2282756181261
+  },
+  "layout": {
+    "b0": {
+      "rotation": 0,
+      "x": 345.0,
+      "y": 400.0
+    },
+    "b1": {
+      "rotation": 0,
+      "x": 298.0,
+      "y": 241.0
+    },
+    "b10": {
+      "rotation": 90,
+      "x": 0.0,
+      "y": 396.0
+    },
+    "b11": {
+      "rotation": 90,
+      "x": 50.0,
+      "y": 112.0
+    },
+    "b12": {
+      "rotation": 0,
+      "x": 57.0,
+      "y": 312.0
+    },
+    "b13": {
+      "rotation": 90,
+      "x": 358.0,
+      "y": 61.0
+    },
+    "b14": {
+      "rotation": 0,
+      "x": 253.0,
+      "y": 158.0
+    },
+    "b15": {
+      "rotation": 90,
+      "x": 312.0,
+      "y": 0.0
+    },
+    "b16": {
+      "rotation": 90,
+      "x": 380.0,
+      "y": 331.0
+    },
+    "b17": {
+      "rotation": 90,
+      "x": 220.0,
+      "y": 111.0
+    },
+    "b18": {
+      "rotation": 90,
+      "x": 0.0,
+      "y": 53.0
+    },
+    "b19": {
+      "rotation": 90,
+      "x": 297.0,
+      "y": 313.0
+    },
+    "b2": {
+      "rotation": 0,
+      "x": 49.0,
+      "y": 275.0
+    },
+    "b20": {
+      "rotation": 90,
+      "x": 416.0,
+      "y": 112.0
+    },
+    "b21": {
+      "rotation": 0,
+      "x": 165.0,
+      "y": 61.0
+    },
+    "b22": {
+      "rotation": 0,
+      "x": 0.0,
+      "y": 275.0
+    },
+    "b23": {
+      "rotation": 90,
+      "x": 227.0,
+      "y": 346.0
+    },
+    "b24": {
+      "rotation": 0,
+      "x": 338.0,
+      "y": 278.0
+    },
+    "b25": {
+      "rotation": 0,
+      "x": 109.0,
+      "y": 111.0
+    },
+    "b26": {
+      "rotation": 0,
+      "x": 316.0,
+      "y": 159.0
+    },
+    "b27": {
+      "rotation": 90,
+      "x": 347.0,
+      "y": 306.0
+    },
+    "b28": {
+      "rotation": 90,
+      "x": 387.0,
+      "y": 199.0
+    },
+    "b29": {
+      "rotation": 90,
+      "x": 81.0,
+      "y": 340.0
+    },
+    "b3": {
+      "rotation": 90,
+      "x": 0.0,
+      "y": 238.0
+    },
+    "b30": {
+      "rotation": 0,
+      "x": 412.0,
+      "y": 303.0
+    },
+    "b31": {
+      "rotation": 90,
+      "x": 196.0,
+      "y": 314.0
+    },
+    "b32": {
+      "rotation": 90,
+      "x": 178.0,
+      "y": 200.0
+    },
+    "b33": {
+      "rotation": 90,
+      "x": 268.0,
+      "y": 369.0
+    },
+    "b34": {
+      "rotation": 90,
+      "x": 198.0,
+      "y": 388.0
+    },
+    "b35": {
+      "rotation": 90,
+      "x": 158.0,
+      "y": 313.0
+    },
+    "b36": {
+      "rotation": 90,
+      "x": 231.0,
+      "y": 201.0
+    },
+    "b37": {
+      "rotation": 90,
+      "x": 285.0,
+      "y": 391.0
+    },
+    "b38": {
+      "rotation": 90,
+      "x": 276.0,
+      "y": 346.0
+    },
+    "b39": {
+      "rotation": 0,
+      "x": 51.0,
+      "y": 57.0
+    },
+    "b4": {
+      "rotation": 90,
+      "x": 43.0,
+      "y": 367.0
+    },
+    "b40": {
+      "rotation": 90,
+      "x": 198.0,
+      "y": 340.0
+    },
+    "b41": {
+      "rotation": 90,
+      "x": 143.0,
+      "y": 344.0
+    },
+    "b42": {
+      "rotation": 0,
+      "x": 0.0,
+      "y": 0.0
+    },
+    "b43": {
+      "rotation": 0,
+      "x": 0.0,
+      "y": 192.0
+    },
+    "b44": {
+      "rotation": 0,
+      "x": 351.0,
+      "y": 112.0
+    },
+    "b45": {
+      "rotation": 90,
+      "x": 93.0,
+      "y": 389.0
+    },
+    "b46": {
+      "rotation": 0,
+      "x": 62.0,
+      "y": 367.0
+    },
+    "b47": {
+      "rotation": 0,
+      "x": 152.0,
+      "y": 280.0
+    },
+    "b48": {
+      "rotation": 0,
+      "x": 0.0,
+      "y": 309.0
+    },
+    "b49": {
+      "rotation": 90,
+      "x": 286.0,
+      "y": 111.0
+    },
+    "b5": {
+      "rotation": 90,
+      "x": 129.0,
+      "y": 200.0
+    },
+    "b50": {
+      "rotation": 0,
+      "x": 230.0,
+      "y": 314.0
+    },
+    "b51": {
+      "rotation": 90,
+      "x": 241.0,
+      "y": 240.0
+    },
+    "b52": {
+      "rotation": 0,
+      "x": 98.0,
+      "y": 151.0
+    },
+    "b53": {
+      "rotation": 0,
+      "x": 0.0,
+      "y": 374.0
+    },
+    "b54": {
+      "rotation": 90,
+      "x": 137.0,
+      "y": 388.0
+    },
+    "b55": {
+      "rotation": 90,
+      "x": 217.0,
+      "y": 280.0
+    },
+    "b56": {
+      "rotation": 90,
+      "x": 26.0,
+      "y": 414.0
+    },
+    "b57": {
+      "rotation": 90,
+      "x": 333.0,
+      "y": 344.0
+    },
+    "b58": {
+      "rotation": 0,
+      "x": 67.0,
+      "y": 235.0
+    },
+    "b59": {
+      "rotation": 90,
+      "x": 389.0,
+      "y": 367.0
+    },
+    "b6": {
+      "rotation": 0,
+      "x": 118.0,
+      "y": 313.0
+    },
+    "b60": {
+      "rotation": 0,
+      "x": 101.0,
+      "y": 364.0
+    },
+    "b61": {
+      "rotation": 0,
+      "x": 252.0,
+      "y": 391.0
+    },
+    "b62": {
+      "rotation": 0,
+      "x": 208.0,
+      "y": 366.0
+    },
+    "b63": {
+      "rotation": 90,
+      "x": 342.0,
+      "y": 199.0
+    },
+    "b64": {
+      "rotation": 0,
+      "x": 0.0,
+      "y": 101.0
+    },
+    "b65": {
+      "rotation": 90,
+      "x": 62.0,
+      "y": 0.0
+    },
+    "b66": {
+      "rotation": 0,
+      "x": 118.0,
+      "y": 0.0
+    },
+    "b67": {
+      "rotation": 0,
+      "x": 298.0,
+      "y": 201.0
+    },
+    "b68": {
+      "rotation": 90,
+      "x": 295.0,
+      "y": 59.0
+    },
+    "b69": {
+      "rotation": 0,
+      "x": 27.0,
+      "y": 340.0
+    },
+    "b7": {
+      "rotation": 90,
+      "x": 147.0,
+      "y": 406.0
+    },
+    "b70": {
+      "rotation": 90,
+      "x": 152.0,
+      "y": 158.0
+    },
+    "b71": {
+      "rotation": 0,
+      "x": 303.0,
+      "y": 369.0
+    },
+    "b72": {
+      "rotation": 0,
+      "x": 185.0,
+      "y": 0.0
+    },
+    "b73": {
+      "rotation": 90,
+      "x": 364.0,
+      "y": 0.0
+    },
+    "b74": {
+      "rotation": 0,
+      "x": 0.0,
+      "y": 148.0
+    },
+    "b75": {
+      "rotation": 90,
+      "x": 389.0,
+      "y": 417.0
+    },
+    "b76": {
+      "rotation": 0,
+      "x": 367.0,
+      "y": 367.0
+    },
+    "b77": {
+      "rotation": 0,
+      "x": 246.0,
+      "y": 0.0
+    },
+    "b78": {
+      "rotation": 0,
+      "x": 383.0,
+      "y": 271.0
+    },
+    "b79": {
+      "rotation": 0,
+      "x": 38.0,
+      "y": 151.0
+    },
+    "b8": {
+      "rotation": 90,
+      "x": 103.0,
+      "y": 61.0
+    },
+    "b80": {
+      "rotation": 90,
+      "x": 89.0,
+      "y": 412.0
+    },
+    "b81": {
+      "rotation": 90,
+      "x": 102.0,
+      "y": 272.0
+    },
+    "b82": {
+      "rotation": 90,
+      "x": 163.0,
+      "y": 111.0
+    },
+    "b83": {
+      "rotation": 90,
+      "x": 169.0,
+      "y": 243.0
+    },
+    "b84": {
+      "rotation": 0,
+      "x": 249.0,
+      "y": 415.0
+    },
+    "b85": {
+      "rotation": 90,
+      "x": 363.0,
+      "y": 238.0
+    },
+    "b86": {
+      "rotation": 0,
+      "x": 185.0,
+      "y": 243.0
+    },
+    "b87": {
+      "rotation": 90,
+      "x": 85.0,
+      "y": 196.0
+    },
+    "b88": {
+      "rotation": 90,
+      "x": 61.0,
+      "y": 192.0
+    },
+    "b89": {
+      "rotation": 90,
+      "x": 0.0,
+      "y": 336.0
+    },
+    "b9": {
+      "rotation": 90,
+      "x": 52.0,
+      "y": 396.0
+    },
+    "b90": {
+      "rotation": 0,
+      "x": 388.0,
+      "y": 238.0
+    },
+    "b91": {
+      "rotation": 0,
+      "x": 113.0,
+      "y": 239.0
+    },
+    "b92": {
+      "rotation": 0,
+      "x": 0.0,
+      "y": 414.0
+    },
+    "b93": {
+      "rotation": 0,
+      "x": 273.0,
+      "y": 278.0
+    },
+    "b94": {
+      "rotation": 90,
+      "x": 194.0,
+      "y": 158.0
+    },
+    "b95": {
+      "rotation": 90,
+      "x": 415.0,
+      "y": 61.0
+    },
+    "b96": {
+      "rotation": 90,
+      "x": 371.0,
+      "y": 159.0
+    },
+    "b97": {
+      "rotation": 90,
+      "x": 141.0,
+      "y": 371.0
+    },
+    "b98": {
+      "rotation": 90,
+      "x": 187.0,
+      "y": 415.0
+    },
+    "b99": {
+      "rotation": 90,
+      "x": 229.0,
+      "y": 61.0
+    }
+  },
+  "record": {
+    "accepted": 1473,
+    "candidate": "Q3-LIN",
+    "code_hash": "a3971eefa77bc2cdaecd9fa0f59e85fc37668df57d6587d2217ec3f416ae8215",
+    "config_hash": "6d43b5af6cd886a44776f53e8cb57a547f4c1d49d07985a39cb47672563483b1",
+    "error": "",
+    "evaluations": 22727,
+    "formal_audit_match": true,
+    "inner_candidate": "Q2-HG",
+    "instance": "n100",
+    "layout_path": "outputs/q3/_runtime/v2_n100/n100/v2_n100_q3_lin/layout.json",
+    "legal": true,
+    "mode": "final_cold",
+    "outline_side": 437.2282756181261,
+    "problem": "Q3",
+    "proposals": 22323,
+    "restarts_completed": 4,
+    "run_id": "v2_n100_q3_lin",
+    "runtime": 60.002380400008406,
+    "seed": 1110,
+    "selected_ratio": 0.065,
+    "status": "timeout"
+  },
+  "runtime_metadata": {
+    "command": "D:\\Anaconda\\envs\\CA-py310\\python.exe -B -m src.Q3 --instance n100 --candidate Q3-LIN --inner-candidate Q2-HG --lower-ratio 0 --upper-ratio 0.15 --precision 0.005 --robust-min-success-rate 0.8 --decision-rule robust --seeds 1101-1110 --max-evaluations 30000 --time-limit 60 --restarts 4 --workers 5 --adaptive-constraints on --hypergraph-init on --continuous-compression off --final-seeds 1101-1110 --final-max-evaluations 30000 --final-time-limit 60 --final-restarts 4 --raw data/raw/附件 --runtime-root outputs/q3/_runtime/v2_n100 --table-root outputs/q3/tables --run-id v2_n100_q3_lin",
+    "environment": {
+      "cpu_count": 16,
+      "cwd": "D:\\project\\chinamcm_2026\\2026_chinamcm",
+      "platform": "Windows-10-10.0.26200-SP0",
+      "python": "3.10.20 | packaged by Anaconda, Inc. | (main, Mar 11 2026, 17:42:35) [MSC v.1942 64 bit (AMD64)]"
+    }
+  }
+}
