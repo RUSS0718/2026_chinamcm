@@ -121,4 +121,3 @@ D:\miniconda3\envs\causal_paper\python.exe -B -m src.v3 summary --problem q3 --i
 - Q3 的阈值实际尝试次数随路线而定，正式总耗时不能从 n100 或 Q2 单次记录直接外推；运行中不得因为某路线暂时领先而改变后续路线的注册配置。
 - 正式运行失败或中断时保留已有 marker/失败状态，不自动补种子、不覆盖旧尝试；如需重跑，使用新的 `--attempt` 后缀并重新核对 manifest。
 - 正式结果完成后仍需建模负责人和交叉复核人检查；本文件和协议保持 `REVIEWING`，不自动升级到 `VERIFIED` 或 `FINAL`。
-
