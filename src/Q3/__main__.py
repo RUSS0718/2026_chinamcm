@@ -229,7 +229,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--runtime-root", default="outputs/q3/_runtime/v2")
     parser.add_argument("--table-root", default="outputs/q3/tables")
     parser.add_argument("--run-id", default=None)
+    parser.add_argument("--stop-submissions-after", type=float, default=None, help=argparse.SUPPRESS)
+    parser.add_argument("--hard-stop-after", type=float, default=None, help=argparse.SUPPRESS)
     args = parser.parse_args(argv)
+    if (args.stop_submissions_after is None) != (args.hard_stop_after is None):
+        parser.error("stop-submissions-after and hard-stop-after must be provided together")
+    if args.stop_submissions_after is not None and not (
+        0 < args.stop_submissions_after < args.hard_stop_after
+    ):
+        parser.error("require 0 < stop-submissions-after < hard-stop-after")
     actual_argv = list(sys.argv[1:] if argv is None else argv)
     actual_command = subprocess.list2cmdline(
         [sys.executable, "-B", "-m", "src.Q3", *actual_argv]
@@ -262,7 +270,21 @@ def main(argv: list[str] | None = None) -> int:
         "final_seeds": list(config.final_seeds),
     })
     try:
-        result = solve_q3(instance, config, progress_callback=progress)
+        result = solve_q3(
+            instance,
+            config,
+            progress_callback=progress,
+            submission_deadline=(
+                started + args.stop_submissions_after
+                if args.stop_submissions_after is not None
+                else None
+            ),
+            hard_deadline=(
+                started + args.hard_stop_after
+                if args.hard_stop_after is not None
+                else None
+            ),
+        )
     except BaseException as exc:
         progress({
             "event": "run_error",
@@ -274,14 +296,26 @@ def main(argv: list[str] | None = None) -> int:
         progress.close()
         raise
     final_best = result.final_best
-    status = final_best.result.status if final_best is not None else "no_feasible"
+    status = (
+        "partial_time_limit"
+        if not result.execution_complete and result.stop_reason in {
+            "submission_deadline_reached",
+            "hard_deadline_reached",
+        }
+        else "partial_stopped"
+        if not result.execution_complete
+        else final_best.result.status
+        if final_best is not None
+        else "no_feasible"
+    )
     progress({
-        "event": "run_complete",
+        "event": "run_complete" if result.execution_complete else "run_stopped",
         "candidate": config.candidate,
         "phase": "run",
         "run_id": run_id,
         "status": status,
         "selected_ratio": result.selected_ratio,
+        "stop_reason": result.stop_reason,
         "progress_error": progress.error,
     })
     progress.close()
@@ -354,6 +388,8 @@ def main(argv: list[str] | None = None) -> int:
     _write_csv(Path(args.table_root) / f"{run_id}_attempts.csv", _attempt_rows(result, config, layout_path))
     _write_json(Path(args.table_root) / f"{run_id}_config_snapshot.json", payload)
     print(json.dumps(payload, ensure_ascii=False, indent=2))
+    if not result.execution_complete:
+        return 2
     return 0 if result.final_best is not None else 1
 
 

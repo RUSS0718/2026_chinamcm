@@ -5,6 +5,7 @@ from pathlib import Path
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
 from unittest.mock import patch
 
@@ -356,6 +357,126 @@ class Q3SearchTests(unittest.TestCase):
     def test_workers_must_be_positive(self):
         with self.assertRaisesRegex(ValueError, "workers"):
             validate_config(Q3SearchConfig(workers=0))
+
+    def test_registered_deadline_stops_before_submitting_new_seed(self):
+        instance = next(tiny_instance())
+        config = Q3SearchConfig(
+            candidate="Q3-BIN",
+            inner_candidate="Q2-BT",
+            seeds=(1, 2),
+            final_seeds=(11, 12),
+            max_evaluations=1,
+            time_limit=1.0,
+            restarts=1,
+            final_max_evaluations=1,
+            final_time_limit=1.0,
+            final_restarts=1,
+            workers=1,
+        )
+        now = time.perf_counter()
+        result = search.solve_q3(
+            instance,
+            config,
+            submission_deadline=now - 1.0,
+            hard_deadline=now + 10.0,
+        )
+
+        self.assertFalse(result.execution_complete)
+        self.assertEqual(result.stop_reason, "submission_deadline_reached")
+        self.assertEqual(len(result.attempts), 1)
+        self.assertEqual(result.attempts[0].cold_attempts, [])
+        self.assertEqual(result.final_attempts, [])
+        self.assertIsNone(result.d_best)
+        self.assertIsNone(result.d_robust)
+
+    def test_registered_control_stops_after_crash_without_new_seed(self):
+        instance = next(tiny_instance())
+        config = Q3SearchConfig(
+            candidate="Q3-BIN",
+            inner_candidate="Q2-BT",
+            seeds=(1, 2, 3),
+            final_seeds=(11,),
+            max_evaluations=1,
+            time_limit=1.0,
+            restarts=1,
+            final_max_evaluations=1,
+            final_time_limit=1.0,
+            final_restarts=1,
+            workers=1,
+        )
+        now = time.perf_counter()
+        with patch.object(search, "_run_inner", return_value=FakeResult(False, status="crash")):
+            result = search.solve_q3(
+                instance,
+                config,
+                submission_deadline=now + 10.0,
+                hard_deadline=now + 20.0,
+            )
+
+        self.assertFalse(result.execution_complete)
+        self.assertEqual(result.stop_reason, "crash_seed_1")
+        self.assertEqual([item.seed for item in result.attempts[0].cold_attempts], [1])
+        self.assertEqual(result.final_attempts, [])
+
+    def test_registered_control_does_not_treat_no_feasible_as_a_stop_error(self):
+        instance = next(tiny_instance())
+        config = Q3SearchConfig(
+            candidate="Q3-BIN",
+            inner_candidate="Q2-BT",
+            seeds=(1, 2),
+            final_seeds=(11,),
+            max_evaluations=1,
+            time_limit=1.0,
+            restarts=1,
+            final_max_evaluations=1,
+            final_time_limit=1.0,
+            final_restarts=1,
+            workers=1,
+        )
+        no_feasible = FakeResult(False, status="no_feasible")
+        no_feasible._formal_metrics = {"legal": False}
+        no_feasible.audit_metrics = {"legal": False}
+        now = time.perf_counter()
+        with patch.object(search, "_run_inner", return_value=no_feasible):
+            result = search.solve_q3(
+                instance,
+                config,
+                submission_deadline=now + 10.0,
+                hard_deadline=now + 20.0,
+            )
+
+        self.assertTrue(result.execution_complete)
+        self.assertIsNone(result.stop_reason)
+        self.assertEqual([item.seed for item in result.attempts[0].cold_attempts], [1, 2])
+        self.assertEqual([item.result.status for item in result.attempts[0].cold_attempts], ["no_feasible", "no_feasible"])
+
+    def test_registered_control_stops_after_formal_audit_mismatch(self):
+        instance = next(tiny_instance())
+        config = Q3SearchConfig(
+            candidate="Q3-BIN",
+            inner_candidate="Q2-BT",
+            seeds=(1, 2),
+            final_seeds=(11,),
+            max_evaluations=1,
+            time_limit=1.0,
+            restarts=1,
+            final_max_evaluations=1,
+            final_time_limit=1.0,
+            final_restarts=1,
+            workers=1,
+        )
+        now = time.perf_counter()
+        with patch.object(search, "_run_inner", return_value=FakeResult(True, hpwl=1.0)):
+            result = search.solve_q3(
+                instance,
+                config,
+                submission_deadline=now + 10.0,
+                hard_deadline=now + 20.0,
+            )
+
+        self.assertFalse(result.execution_complete)
+        self.assertEqual(result.stop_reason, "formal_audit_mismatch_seed_1")
+        self.assertEqual([item.seed for item in result.attempts[0].cold_attempts], [1])
 
     def test_workers_one_keeps_cold_seed_order(self):
         instance = next(tiny_instance())

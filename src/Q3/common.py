@@ -154,6 +154,8 @@ class Q3Result:
     d_robust: float | None
     selected_ratio: float | None
     final_attempts: list[SeedAttempt] = field(default_factory=list)
+    execution_complete: bool = True
+    stop_reason: str | None = None
 
     @property
     def final_best(self) -> SeedAttempt | None:
@@ -173,6 +175,8 @@ class Q3Result:
             "attempts": [attempt.as_dict(config.robust_min_success_rate) for attempt in self.attempts],
             "final_attempts": [attempt.as_dict() for attempt in self.final_attempts],
             "final_best": self.final_best.as_dict() if self.final_best else None,
+            "execution_complete": self.execution_complete,
+            "stop_reason": self.stop_reason,
         }
 
 
