@@ -1,4 +1,4 @@
-# Q1 V3 n200 论文交接草案（REVIEWING）
+# Q1 V3 论文交接（VERIFIED）
 
 ## 证据包
 
@@ -19,4 +19,6 @@
 
 ## 需要复核的偏差与限制
 
-所有 140 个 marker 均未记录 `first_feasible_evaluation`。结果以 `not_recorded_protocol_deviation` 明确记录，不能补写或推断该指标。运行与分析 hashes 分层保存；shared manifest 后续变化不得改写运行时快照。本文为 `REVIEWING` 草案，不标记 `VERIFIED`/`FINAL`，也不涵盖 Q2、Q3、Q4 或 n300。
+所有 140 个 n200 marker 均未记录 `first_feasible_evaluation`。结果以 `not_recorded_protocol_deviation` 明确记录，不能补写或推断该指标。运行与分析 hashes 分层保存；shared manifest 后续变化不得改写运行时快照。2026-08-09，人工复核人（用户）接受该偏差以及 n300 独立留出报告，批准本交接为 `VERIFIED`，但不是 `FINAL`，也不涵盖 Q2、Q3 或 Q4。
+
+论文图：[`v3_final_layouts.png`](../../outputs/q1/figures/v3_final_layouts.png)与[`v3_model_comparison.png`](../../outputs/q1/figures/v3_model_comparison.png)。

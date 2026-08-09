@@ -1,4 +1,4 @@
-# Q1 V3 n200 正式汇总（REVIEWING）
+# Q1 V3 n200 正式汇总（VERIFIED）
 
 ## 运行范围与证据来源
 
@@ -37,4 +37,6 @@
 
 ## 协议偏差与阶段边界
 
-140 条 marker 均未记录 `first_feasible_evaluation`；汇总将其明确标为 `not_recorded_protocol_deviation`，顶层 `protocol_deviations` 记录 7 个配置，未将缺失值推断为 1 或其他数值。当前阶段仍为 `REVIEWING`，不得标记 `VERIFIED` 或 `FINAL`。Q2、Q3、Q4、n300 未运行。
+140 条 marker 均未记录 `first_feasible_evaluation`；汇总将其明确标为 `not_recorded_protocol_deviation`，顶层 `protocol_deviations` 记录 7 个配置，未将缺失值推断为 1 或其他数值。2026-08-09，人工复核人（用户）明确接受该协议偏差、运行/分析 hash 分层和机械选型边界，批准本阶段为 `VERIFIED`，但不是 `FINAL`。n300 留出验证见独立报告。
+
+论文图：[代表布局](../figures/v3_final_layouts.png)与[模型比较](../figures/v3_model_comparison.png)；对应源数据为 `v3_figure_layout_sources.csv` 与 `v3_figure_model_comparison.csv`。
