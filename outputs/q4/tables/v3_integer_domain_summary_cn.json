@@ -16,7 +16,8 @@
   "哈希": {
     "执行代码": "51df5eac273ea439410170bda7198b38ed3c360bad647679442303aea02f7db3",
     "执行runner": "8a156193b83a7d13fa40d0b708809626162dd9ce0ba39a42c6572ffae7a9c8d8",
-    "分析runner": "17965f265464e1acd72667e2edd0e4d4c44c7c7b51e4ad5f295cc1aeb257e277",
+    "汇总生成runner": "17965f265464e1acd72667e2edd0e4d4c44c7c7b51e4ad5f295cc1aeb257e277",
+    "当前合并runner": "cdba59be5cbf10dabceb37eb98f4dc686ed5f2362b2c906e96f2eed6bea901d2",
     "配置": "6153919d92e2740f8e07ffd59c13a958680dc0f32d0fc3995195d5b1db034ed4",
     "数据": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
   },

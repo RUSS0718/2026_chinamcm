@@ -228,7 +228,7 @@ def build_specs(root: Path = ROOT, output_root: str = "outputs") -> dict[str, Fr
             {name: q2_code_hash() for name in q2_configs},
             {name: q2_config_hash(config) for name, config in q2_configs.items()},
             manifest_hash(q2_data), COLD_SEEDS, {"max_evaluations": 30_000, "time_limit": 180.0, "restarts": 4},
-            1, 1, 1, "random.Random (CPython MT19937)", common_stop, str(Path(output_root) / "q2" / "_runtime" / "v3_n200"), q2_v3_baseline="B",
+            4, 1, 4, "random.Random (CPython MT19937)", common_stop, str(Path(output_root) / "q2" / "_runtime" / "v3_n200"), q2_v3_baseline="B",
         ),
         "q3": FreezeSpec(
             "q3", "n200", Q3_CANDIDATES,
@@ -908,7 +908,12 @@ def _execute_parallel(todo: Sequence[tuple[int, CommandPlan]], workers: int, cwd
 
 
 def execute_plan(plans: Sequence[CommandPlan], *, execute: bool = False, cwd: Path = ROOT) -> list[dict[str, Any]]:
-    """Run isolated commands only with explicit consent; never overwrite records."""
+    """Run isolated commands only with explicit consent; never overwrite records.
+
+    Q1 keeps its registered global seed concurrency.  Q2 runs candidates in
+    registered order and only parallelizes independent seeds inside one
+    candidate, stopping before the next candidate on any invalid run marker.
+    """
     registered = tuple(plans)
     seen_markers: set[Path] = set()
     skipped: dict[int, dict[str, Any]] = {}
@@ -926,13 +931,32 @@ def execute_plan(plans: Sequence[CommandPlan], *, execute: bool = False, cwd: Pa
     if not execute:
         return [skipped.get(index, {"index": index, "status": "planned", "command": list(plan.command),
                                      "marker": plan.marker.as_posix()}) for index, plan in enumerate(registered)]
+    problem = ""
     workers = 1
-    if todo and registered[0].fingerprint:
+    if registered and registered[0].fingerprint:
         environment = registered[0].fingerprint.get("environment", {})
-        if registered[0].fingerprint.get("problem") in {"q1", "q4"}:
+        problem = str(registered[0].fingerprint.get("problem", "")).lower()
+        if problem in {"q1", "q2", "q4"}:
             workers = max(1, int(environment.get("workers", 1)))
     results: list[dict[str, Any]] = list(skipped.values())
-    if workers > 1 and len(todo) > 1:
+    if problem == "q2":
+        groups: list[tuple[str, list[tuple[int, CommandPlan]]]] = []
+        for index, plan in todo:
+            config_id = str((plan.fingerprint or {}).get("config_id"))
+            if groups and groups[-1][0] == config_id:
+                groups[-1][1].append((index, plan))
+            else:
+                groups.append((config_id, [(index, plan)]))
+        for config_id, group in groups:
+            if workers > 1 and len(group) > 1:
+                group_results = _execute_parallel(group, workers, cwd)
+            else:
+                group_results = [_execute_one(index, plan, cwd) for index, plan in group]
+            results.extend(group_results)
+            failures = [item for item in group_results if str(item.get("status", "")).startswith("failed_")]
+            if failures:
+                raise FreezeError(f"Q2 candidate {config_id} produced invalid output; stopping subsequent candidates")
+    elif workers > 1 and len(todo) > 1:
         results.extend(_execute_parallel(todo, workers, cwd))
     else:
         results.extend(_execute_one(index, plan, cwd) for index, plan in todo)

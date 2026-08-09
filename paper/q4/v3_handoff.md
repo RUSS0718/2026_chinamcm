@@ -12,7 +12,7 @@ Exact 紧包围盒目标面积：G- 在两个声明域均为 24，G0 在两个�
 
 不可变执行快照为 `outputs/q4/tables/v3_integer_domain_execution_manifest.json`：execution code `51df5eac273ea439410170bda7198b38ed3c360bad647679442303aea02f7db3`，execution runner `8a156193b83a7d13fa40d0b708809626162dd9ce0ba39a42c6572ffae7a9c8d8`，config `6153919d92e2740f8e07ffd59c13a958680dc0f32d0fc3995195d5b1db034ed4`，data `4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945`。正式命令是 `D:\Anaconda\envs\CA-py310\python.exe -B -m src.v3 run --problem q4 --execute`，base commit 为 `ad1495f8f08ec863850d4291484e355bbd403a13`。
 
-正式运行后修复了汇总 CLI 的 join 缺口：marker 不含 `config_id` 时，汇总仅在完整 sidecar/marker 验真通过后从注册 plan fingerprint 注入。当前分析 runner 为 `17965f265464e1acd72667e2edd0e4d4c44c7c7b51e4ad5f295cc1aeb257e277`；它不追溯修改执行快照或 runtime marker。
+正式运行后修复了汇总 CLI 的 join 缺口：marker 不含 `config_id` 时，汇总仅在完整 sidecar/marker 验真通过后从注册 plan fingerprint 注入。生成本汇总的分析 runner 为 `17965f265464e1acd72667e2edd0e4d4c44c7c7b51e4ad5f295cc1aeb257e277`；合并 Q2 后当前分析 runner 为 `cdba59be5cbf10dabceb37eb98f4dc686ed5f2362b2c906e96f2eed6bea901d2`。两者都不追溯修改执行快照或 runtime marker。
 
 ## 论文口径与限制
 

@@ -1,0 +1,282 @@
+{
+  "attempt_root": "E:/2026_chinamcm/outputs/q2/_runtime/v3_n200",
+  "discovered_runs": 60,
+  "mechanical_decision": {
+    "better_hpwl": false,
+    "checkpoint_better": false,
+    "decision": "selected",
+    "first_feasible": true,
+    "hard_gate": true,
+    "hpwl": true,
+    "legal": true,
+    "p2_same_budget": "supports_p2",
+    "rankings": [
+      {
+        "config_id": "P1",
+        "eligible": true,
+        "legal_rate": 1.0,
+        "median_HPWL": 504410.5,
+        "rank": 1
+      },
+      {
+        "config_id": "P2",
+        "eligible": true,
+        "legal_rate": 1.0,
+        "median_HPWL": 505079.0,
+        "rank": 2
+      },
+      {
+        "config_id": "P0",
+        "eligible": true,
+        "legal_rate": 1.0,
+        "median_HPWL": 543792.0,
+        "rank": 3
+      }
+    ],
+    "selected": "P1"
+  },
+  "missing_runs": 0,
+  "pairwise": {
+    "P1_vs_P2": [
+      {
+        "baseline": "P1",
+        "baseline_value": 495106.0,
+        "candidate": "P2",
+        "candidate_value": 504282.0,
+        "difference_candidate_minus_baseline": 9176.0,
+        "seed": 2201
+      },
+      {
+        "baseline": "P1",
+        "baseline_value": 518536.5,
+        "candidate": "P2",
+        "candidate_value": 503525.5,
+        "difference_candidate_minus_baseline": -15011.0,
+        "seed": 2202
+      },
+      {
+        "baseline": "P1",
+        "baseline_value": 513966.0,
+        "candidate": "P2",
+        "candidate_value": 512567.0,
+        "difference_candidate_minus_baseline": -1399.0,
+        "seed": 2203
+      },
+      {
+        "baseline": "P1",
+        "baseline_value": 502559.5,
+        "candidate": "P2",
+        "candidate_value": 510548.5,
+        "difference_candidate_minus_baseline": 7989.0,
+        "seed": 2204
+      },
+      {
+        "baseline": "P1",
+        "baseline_value": 501249.5,
+        "candidate": "P2",
+        "candidate_value": 515803.0,
+        "difference_candidate_minus_baseline": 14553.5,
+        "seed": 2205
+      },
+      {
+        "baseline": "P1",
+        "baseline_value": 488061.5,
+        "candidate": "P2",
+        "candidate_value": 505577.0,
+        "difference_candidate_minus_baseline": 17515.5,
+        "seed": 2206
+      },
+      {
+        "baseline": "P1",
+        "baseline_value": 512224.0,
+        "candidate": "P2",
+        "candidate_value": 504104.0,
+        "difference_candidate_minus_baseline": -8120.0,
+        "seed": 2207
+      },
+      {
+        "baseline": "P1",
+        "baseline_value": 502813.0,
+        "candidate": "P2",
+        "candidate_value": 501930.0,
+        "difference_candidate_minus_baseline": -883.0,
+        "seed": 2208
+      },
+      {
+        "baseline": "P1",
+        "baseline_value": 498511.5,
+        "candidate": "P2",
+        "candidate_value": 508984.0,
+        "difference_candidate_minus_baseline": 10472.5,
+        "seed": 2209
+      },
+      {
+        "baseline": "P1",
+        "baseline_value": 487309.5,
+        "candidate": "P2",
+        "candidate_value": 511064.5,
+        "difference_candidate_minus_baseline": 23755.0,
+        "seed": 2210
+      },
+      {
+        "baseline": "P1",
+        "baseline_value": 502403.0,
+        "candidate": "P2",
+        "candidate_value": 502312.0,
+        "difference_candidate_minus_baseline": -91.0,
+        "seed": 2211
+      },
+      {
+        "baseline": "P1",
+        "baseline_value": 503521.5,
+        "candidate": "P2",
+        "candidate_value": 504581.0,
+        "difference_candidate_minus_baseline": 1059.5,
+        "seed": 2212
+      },
+      {
+        "baseline": "P1",
+        "baseline_value": 519752.0,
+        "candidate": "P2",
+        "candidate_value": 501353.0,
+        "difference_candidate_minus_baseline": -18399.0,
+        "seed": 2213
+      },
+      {
+        "baseline": "P1",
+        "baseline_value": 521899.0,
+        "candidate": "P2",
+        "candidate_value": 501901.0,
+        "difference_candidate_minus_baseline": -19998.0,
+        "seed": 2214
+      },
+      {
+        "baseline": "P1",
+        "baseline_value": 516056.5,
+        "candidate": "P2",
+        "candidate_value": 503767.0,
+        "difference_candidate_minus_baseline": -12289.5,
+        "seed": 2215
+      },
+      {
+        "baseline": "P1",
+        "baseline_value": 505299.5,
+        "candidate": "P2",
+        "candidate_value": 515909.5,
+        "difference_candidate_minus_baseline": 10610.0,
+        "seed": 2216
+      },
+      {
+        "baseline": "P1",
+        "baseline_value": 510590.5,
+        "candidate": "P2",
+        "candidate_value": 507312.5,
+        "difference_candidate_minus_baseline": -3278.0,
+        "seed": 2217
+      },
+      {
+        "baseline": "P1",
+        "baseline_value": 495815.0,
+        "candidate": "P2",
+        "candidate_value": 505880.5,
+        "difference_candidate_minus_baseline": 10065.5,
+        "seed": 2218
+      },
+      {
+        "baseline": "P1",
+        "baseline_value": 509672.0,
+        "candidate": "P2",
+        "candidate_value": 510879.5,
+        "difference_candidate_minus_baseline": 1207.5,
+        "seed": 2219
+      },
+      {
+        "baseline": "P1",
+        "baseline_value": 508717.0,
+        "candidate": "P2",
+        "candidate_value": 495154.5,
+        "difference_candidate_minus_baseline": -13562.5,
+        "seed": 2220
+      }
+    ]
+  },
+  "problem": "q2",
+  "registered_runs": 60,
+  "summary": [
+    {
+      "audit_match_runs": 20,
+      "checkpoint_median_best_so_far_HPWL": {
+        "100": null,
+        "25": 547508.75,
+        "50": null,
+        "75": null
+      },
+      "checkpoint_status": "missing",
+      "config_id": "P0",
+      "iqr_HPWL": 4703.625,
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "median_HPWL": 543792.0,
+      "median_first_feasible_evaluation": 1.0,
+      "missing_runs": 0,
+      "p90_HPWL": 549110.65,
+      "problem": "Q2",
+      "registered_runs": 20,
+      "runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 0,
+      "status_timeout": 20
+    },
+    {
+      "audit_match_runs": 20,
+      "checkpoint_median_best_so_far_HPWL": {
+        "100": null,
+        "25": 517748.5,
+        "50": 510131.25,
+        "75": 504410.5
+      },
+      "checkpoint_status": "missing",
+      "config_id": "P1",
+      "iqr_HPWL": 12094.5,
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "median_HPWL": 504410.5,
+      "median_first_feasible_evaluation": 1.0,
+      "missing_runs": 0,
+      "p90_HPWL": 518658.05,
+      "problem": "Q2",
+      "registered_runs": 20,
+      "runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 0,
+      "status_timeout": 20
+    },
+    {
+      "audit_match_runs": 20,
+      "checkpoint_median_best_so_far_HPWL": {
+        "100": null,
+        "25": 511880.0,
+        "50": 507432.25,
+        "75": 505079.0
+      },
+      "checkpoint_status": "missing",
+      "config_id": "P2",
+      "iqr_HPWL": 7409.125,
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "median_HPWL": 505079.0,
+      "median_first_feasible_evaluation": 1.0,
+      "missing_runs": 0,
+      "p90_HPWL": 512890.6,
+      "problem": "Q2",
+      "registered_runs": 20,
+      "runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 0,
+      "status_timeout": 20
+    }
+  ]
+}
