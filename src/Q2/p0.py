@@ -15,6 +15,8 @@ from .common import (
     assess,
     audit_best,
     classic_temperature,
+    checkpoint_targets,
+    record_checkpoint,
     finalize,
     initial_temperature,
     layout_signature,
@@ -95,6 +97,9 @@ def search_p0(instance: Instance, config: Q2SearchConfig, seed: int) -> SearchRe
     restart_initial_signatures: list[str] = []
     restart_init_seeds: list[int] = []
     restart_search_seeds: list[int] = []
+    checkpoint_targets_by_percent = checkpoint_targets(config.max_evaluations)
+    checkpoint_evaluations: dict[int, int] = {}
+    checkpoint_best_hpwl: dict[int, float | None] = {}
 
     try:
         limits = restart_evaluation_limits(config.max_evaluations, config.restarts)
@@ -143,6 +148,10 @@ def search_p0(instance: Instance, config: Q2SearchConfig, seed: int) -> SearchRe
                     first_feasible_time = time.perf_counter() - start
             else:
                 best_infeasible = current if best_infeasible is None or current.rank < best_infeasible.rank else best_infeasible
+            record_checkpoint(
+                checkpoint_targets_by_percent, evaluations, best_feasible,
+                checkpoint_evaluations, checkpoint_best_hpwl,
+            )
 
             calibration = config.calibration_samples or len(names)
             calibration = min(calibration, max(0, evaluation_limit - evaluations))
@@ -161,6 +170,10 @@ def search_p0(instance: Instance, config: Q2SearchConfig, seed: int) -> SearchRe
                     side,
                 )
                 evaluations += 1
+                record_checkpoint(
+                    checkpoint_targets_by_percent, evaluations, best_feasible,
+                    checkpoint_evaluations, checkpoint_best_hpwl,
+                )
                 delta = search_delta(sample, proposal, 10.0)
                 if delta > 0:
                     uphill.append(delta)
@@ -197,6 +210,10 @@ def search_p0(instance: Instance, config: Q2SearchConfig, seed: int) -> SearchRe
                         best_feasible = proposal
                 elif best_infeasible is None or proposal.rank < best_infeasible.rank:
                     best_infeasible = proposal
+                record_checkpoint(
+                    checkpoint_targets_by_percent, evaluations, best_feasible,
+                    checkpoint_evaluations, checkpoint_best_hpwl,
+                )
                 temperature = classic_temperature(
                     iteration,
                     remaining_iterations,
@@ -242,4 +259,6 @@ def search_p0(instance: Instance, config: Q2SearchConfig, seed: int) -> SearchRe
         restart_initial_signatures=restart_initial_signatures,
         restart_init_seeds=restart_init_seeds,
         restart_search_seeds=restart_search_seeds,
+        checkpoint_evaluations=checkpoint_evaluations,
+        checkpoint_best_hpwl=checkpoint_best_hpwl,
     )

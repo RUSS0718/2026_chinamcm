@@ -77,6 +77,20 @@ def _code_hash() -> str:
     return digest.hexdigest()
 
 
+def _data_hash(raw_dir: Path, instance_name: str) -> str:
+    root = Path.cwd().resolve()
+    rows = []
+    for suffix in (".blocks", ".nets", ".pl"):
+        path = raw_dir / f"{instance_name}{suffix}"
+        data = path.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+        try:
+            relative = path.resolve().relative_to(root).as_posix()
+        except ValueError:
+            relative = path.as_posix()
+        rows.append({"bytes": len(data), "path": relative, "sha256": hashlib.sha256(data).hexdigest()})
+    return hashlib.sha256(json.dumps(rows, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
+
+
 def _config_hash(config: Q3SearchConfig) -> str:
     return hashlib.sha256(json.dumps(config.as_dict(), sort_keys=True).encode("utf-8")).hexdigest()
 
@@ -203,6 +217,7 @@ def main(argv: list[str] | None = None) -> int:
     instance = _load_instance(Path(args.raw), args.instance)
     code_hash = _code_hash()
     config_hash = _config_hash(config)
+    data_hash = _data_hash(Path(args.raw), args.instance)
     run_id = args.run_id or f"v2_{args.candidate.lower()}_{args.instance}_{config_hash}"
     result = solve_q3(instance, config)
     final_best = result.final_best
@@ -232,6 +247,7 @@ def main(argv: list[str] | None = None) -> int:
             "formal_audit_match": final_best.result.formal_metrics == final_best.result.audit_metrics,
             "config_hash": config_hash,
             "code_hash": code_hash,
+            "data_hash": data_hash,
             "layout_path": layout_path,
             "error": final_best.result.error or "",
         }
@@ -260,6 +276,7 @@ def main(argv: list[str] | None = None) -> int:
         "run_id": run_id,
         "code_hash": code_hash,
         "config_hash": config_hash,
+        "data_hash": data_hash,
         "status": status,
         "layout_path": layout_path,
         "command": actual_command,

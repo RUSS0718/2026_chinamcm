@@ -29,6 +29,10 @@ def _normalized_file_bytes(path: Path) -> bytes:
     return path.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
 
 
+def _data_hash(raw_dir: Path, instance_name: str) -> str:
+    return hashlib.sha256(_normalized_file_bytes(raw_dir / f"{instance_name}.blocks")).hexdigest()
+
+
 def _code_hash() -> str:
     files = (
         Path(__file__),
@@ -117,7 +121,7 @@ def _layout_dict(result: SearchResult) -> dict:
     return {name: {"x": x, "y": y, "rotation": rotation} for name, (x, y, rotation) in sorted(result.best.layout.items())}
 
 
-def _run_record(instance_name: str, config_id: str, config: Q1SearchConfig, seed: int, result: SearchResult, code_hash: str) -> dict:
+def _run_record(instance_name: str, config_id: str, config: Q1SearchConfig, seed: int, result: SearchResult, code_hash: str, data_hash: str) -> dict:
     formal = result.formal_metrics
     audit = result.audit_metrics
     return {
@@ -129,6 +133,7 @@ def _run_record(instance_name: str, config_id: str, config: Q1SearchConfig, seed
         "state_dedup": config.state_dedup,
         "seed": seed,
         "code_hash": code_hash,
+        "data_hash": data_hash,
         "config_hash": _config_hash(config),
         "max_evaluations": config.max_evaluations,
         "time_limit": config.time_limit,
@@ -223,7 +228,7 @@ def run_one(args: argparse.Namespace) -> int:
     instance = _load_instance(Path(args.raw), args.instance)
     config = _config(args.candidate, args)
     result = _search(instance, config, args.seed)
-    record = _run_record(args.instance, args.config_id or args.candidate, config, args.seed, result, _code_hash())
+    record = _run_record(args.instance, args.config_id or args.candidate, config, args.seed, result, _code_hash(), _data_hash(Path(args.raw), args.instance))
     record = _write_single_run(Path(args.output_root), args.instance, args.config_id or args.candidate, args.seed, config, result, record)
     print(json.dumps(record, ensure_ascii=False, indent=2))
     return 0 if result.status in {"success", "timeout"} and result.formal_metrics.get("legal") is True else 1
@@ -234,6 +239,7 @@ def batch(args: argparse.Namespace) -> int:
     seeds = _parse_seeds(args.seeds)
     candidates = _parse_candidates(args.candidates)
     code_hash = _code_hash()
+    data_hash = _data_hash(Path(args.raw), args.instance)
     runtime_root = Path(args.runtime_root)
     records = []
     configs = []
@@ -242,7 +248,7 @@ def batch(args: argparse.Namespace) -> int:
         configs.append(config)
         for seed in seeds:
             result = _search(instance, config, seed)
-            record = _run_record(args.instance, candidate, config, seed, result, code_hash)
+            record = _run_record(args.instance, candidate, config, seed, result, code_hash, data_hash)
             records.append(_write_single_run(runtime_root, args.instance, candidate, seed, config, result, record))
     table_root = Path(args.table_root)
     prefix = args.run_id

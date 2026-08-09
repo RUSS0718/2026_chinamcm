@@ -141,10 +141,7 @@ def _threshold_search(instance: Instance, config: Q3SearchConfig) -> list[Thresh
     upper = attempt(config.upper_ratio)
     if config.candidate == "Q3-LIN":
         for ratio in _ratios_linear(config)[1:]:
-            current = attempt(ratio)
-            if _decision(current, config):
-                continue
-            break
+            attempt(ratio)
         return attempts
 
     if not _decision(upper, config):

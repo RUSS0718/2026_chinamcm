@@ -230,6 +230,17 @@ class Q2CliTests(unittest.TestCase):
         self.assertEqual(record["restarts_completed"], 2)
         self.assertEqual(len(record["restart_initial_signatures"]), 2)
 
+    def test_checkpoints_are_fixed_positions_monotone_and_match_final(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            raw = Path(tmp) / "raw"
+            write_instance(raw)
+            record = run_candidate(raw, Path(tmp) / "out", "Q2-BT", max_evaluations=20)
+        self.assertEqual(record["checkpoint_evaluations"], {"25": 5, "50": 10, "75": 15, "100": 20})
+        values = [record["checkpoint_best_hpwl"][str(point)] for point in (25, 50, 75, 100)]
+        self.assertTrue(all(value is not None for value in values))
+        self.assertTrue(all(left >= right for left, right in zip(values, values[1:])))
+        self.assertEqual(values[-1], record["HPWL"])
+
     def test_p2_on_off_share_restart_seeds_and_shelf_structure(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

@@ -210,10 +210,10 @@ class Q3SearchTests(unittest.TestCase):
         linear_ratios = [attempt.dead_space_ratio for attempt in linear]
         binary_ratios = [attempt.dead_space_ratio for attempt in binary]
         self.assertNotEqual(linear_ratios, binary_ratios)
-        self.assertEqual(linear_ratios, [0.4, 0.35, 0.3, 0.25, 0.2, 0.15, 0.1])
+        self.assertEqual(linear_ratios, [round(0.4 - 0.05 * index, 12) for index in range(9)])
         self.assertEqual(binary_ratios, [0.4, 0.0, 0.2, 0.1, 0.15])
 
-    def test_linear_n100_stops_at_first_failed_adjacent_ratio(self):
+    def test_linear_scans_every_registered_ratio_after_failure(self):
         instance = next(tiny_instance())
         config = Q3SearchConfig(
             candidate="Q3-LIN",
@@ -242,7 +242,7 @@ class Q3SearchTests(unittest.TestCase):
             attempts = search._threshold_search(instance, config)
 
         ratios = [attempt.dead_space_ratio for attempt in attempts]
-        self.assertEqual(ratios, [0.15, 0.145, 0.14, 0.135])
+        self.assertEqual(ratios, [round(0.15 - 0.005 * index, 12) for index in range(31)])
         self.assertEqual(attempts[-1].success_rate, 0.0)
         self.assertFalse(search._decision(attempts[-1], config))
 

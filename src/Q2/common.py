@@ -187,6 +187,9 @@ class SearchResult:
     # Kept only for Q3 continuous-compression warm starts.  It is intentionally
     # not serialized by the Q2 CLI, whose public layout artifact remains stable.
     best_state: object | None = None
+    # Solver incumbent (accepted-state search) best-so-far at fixed points of one trajectory.
+    checkpoint_evaluations: dict[int, int] = field(default_factory=dict)
+    checkpoint_best_hpwl: dict[int, float | None] = field(default_factory=dict)
 
     @property
     def formal_metrics(self) -> dict:
@@ -208,6 +211,27 @@ def validate_config(config: Q2SearchConfig) -> None:
         raise ValueError("classic_final_temperature_ratio must be between zero and one")
     if config.initialization_mode not in {"shelf", "random"}:
         raise ValueError("initialization_mode must be shelf or random")
+
+
+def checkpoint_targets(max_evaluations: int) -> dict[int, int]:
+    """Return fixed trajectory checkpoints (ceil percentage of the budget)."""
+    if max_evaluations <= 0:
+        raise ValueError("max_evaluations must be positive")
+    return {percentage: max(1, (max_evaluations * percentage + 99) // 100) for percentage in (25, 50, 75, 100)}
+
+
+def record_checkpoint(
+    targets: dict[int, int],
+    evaluations: int,
+    best_feasible: Q2Layout | None,
+    checkpoint_evaluations: dict[int, int],
+    checkpoint_best_hpwl: dict[int, float | None],
+) -> None:
+    """Record solver-incumbent best-so-far; calibration only estimates temperature."""
+    for percentage, target in targets.items():
+        if percentage not in checkpoint_evaluations and evaluations >= target:
+            checkpoint_evaluations[percentage] = target
+            checkpoint_best_hpwl[percentage] = best_feasible.hpwl if best_feasible is not None else None
 
 
 def restart_evaluation_limits(max_evaluations: int, restarts: int) -> list[int]:

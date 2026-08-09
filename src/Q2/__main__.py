@@ -221,6 +221,8 @@ def _record(
         "restart_initial_signatures": result.restart_initial_signatures,
         "restart_init_seeds": result.restart_init_seeds,
         "restart_search_seeds": result.restart_search_seeds,
+        "checkpoint_evaluations": result.checkpoint_evaluations,
+        "checkpoint_best_hpwl": result.checkpoint_best_hpwl,
         "best_initial_hpwl": min(result.restart_initial_hpwl) if result.restart_initial_hpwl else None,
         "improvement_from_initial": (
             float(formal["HPWL"]) - min(result.restart_initial_hpwl)

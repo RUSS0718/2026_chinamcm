@@ -15,6 +15,8 @@ from .common import (
     assess,
     audit_best,
     constraint_penalty,
+    checkpoint_targets,
+    record_checkpoint,
     fast_temperature,
     finalize,
     initial_temperature,
@@ -230,6 +232,9 @@ def search_p1_p2(
     restart_initial_signatures: list[str] = []
     restart_init_seeds: list[int] = []
     restart_search_seeds: list[int] = []
+    checkpoint_targets_by_percent = checkpoint_targets(config.max_evaluations)
+    checkpoint_evaluations: dict[int, int] = {}
+    checkpoint_best_hpwl: dict[int, float | None] = {}
 
     try:
         limits = restart_evaluation_limits(config.max_evaluations, config.restarts)
@@ -263,9 +268,17 @@ def search_p1_p2(
             elif best_infeasible is None or current.rank < best_infeasible.rank:
                 best_infeasible = current
                 best_infeasible_state = state.clone()
+            record_checkpoint(
+                checkpoint_targets_by_percent, evaluations, best_feasible,
+                checkpoint_evaluations, checkpoint_best_hpwl,
+            )
 
             avg_delta, evaluations, calibration_timeout = _calibrate(
                 instance, state, current, config, search_rng, side, start, evaluations, evaluation_limit
+            )
+            record_checkpoint(
+                checkpoint_targets_by_percent, evaluations, best_feasible,
+                checkpoint_evaluations, checkpoint_best_hpwl,
             )
             if calibration_timeout:
                 timed_out = True
@@ -293,6 +306,10 @@ def search_p1_p2(
                 elif best_infeasible is None or proposal.rank < best_infeasible.rank:
                     best_infeasible = proposal
                     best_infeasible_state = proposal_state.clone()
+                record_checkpoint(
+                    checkpoint_targets_by_percent, evaluations, best_feasible,
+                    checkpoint_evaluations, checkpoint_best_hpwl,
+                )
                 penalty = constraint_penalty(config, iteration, best_feasible is not None)
                 temperature = fast_temperature(iteration, t1, avg_delta, config.fast_sa_c, config.fast_sa_k)
                 if accept(current, proposal, temperature, penalty, search_rng):
@@ -333,4 +350,6 @@ def search_p1_p2(
         restart_init_seeds=restart_init_seeds,
         restart_search_seeds=restart_search_seeds,
         best_state=best_feasible_state or best_infeasible_state,
+        checkpoint_evaluations=checkpoint_evaluations,
+        checkpoint_best_hpwl=checkpoint_best_hpwl,
     )
