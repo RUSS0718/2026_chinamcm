@@ -37,10 +37,12 @@ from src.v3 import (
 
 
 class V3ProtocolTests(unittest.TestCase):
-    def test_outer_workers_are_frozen_q1_only(self):
+    def test_outer_workers_are_frozen_by_problem(self):
         specs = build_specs()
         self.assertEqual(specs["q1"].workers, 8)
-        self.assertEqual(specs["q2"].workers, 1)
+        self.assertEqual(specs["q2"].processes, 4)
+        self.assertEqual(specs["q2"].threads, 1)
+        self.assertEqual(specs["q2"].workers, 4)
         self.assertEqual(specs["q3"].workers, 5)  # Q3 inner cold-seed workers; outer route execution stays serial.
 
     def test_q1_execution_manifest_is_immutable_run_snapshot(self):

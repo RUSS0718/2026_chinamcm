@@ -34,11 +34,7 @@ CODE_RELATIVE = (
     "src/_internal/audit.py",
     "src/_internal/geometry.py",
 )
-DATA_RELATIVE = (
-    "data/raw/附件/n100.blocks",
-    "data/raw/附件/n100.nets",
-    "data/raw/附件/n100.pl",
-)
+DATA_SUFFIXES = (".blocks", ".nets", ".pl")
 
 
 def _json_dump(path: Path, value: object) -> None:
@@ -71,16 +67,29 @@ def _code_manifest() -> list[dict[str, object]]:
     return _manifest(CODE_RELATIVE)
 
 
-def _data_manifest() -> list[dict[str, object]]:
-    return _manifest(DATA_RELATIVE)
+def _data_manifest(raw_dir: Path | None = None, instance_name: str = "n100") -> list[dict[str, object]]:
+    """Hash the three files for the instance that is actually being run."""
+    data_root = (REPO_ROOT / "data" / "raw" / "附件") if raw_dir is None else Path(raw_dir)
+    rows = []
+    for suffix in DATA_SUFFIXES:
+        path = data_root / f"{instance_name}{suffix}"
+        if not path.is_file():
+            raise FileNotFoundError(path)
+        data = path.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+        try:
+            display_path = path.resolve().relative_to(REPO_ROOT).as_posix()
+        except ValueError:
+            display_path = path.as_posix()
+        rows.append({"path": display_path, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()})
+    return rows
 
 
 def _code_hash() -> str:
     return _manifest_hash(_code_manifest())
 
 
-def _data_hash() -> str:
-    return _manifest_hash(_data_manifest())
+def _data_hash(raw_dir: Path | None = None, instance_name: str = "n100") -> str:
+    return _manifest_hash(_data_manifest(raw_dir, instance_name))
 
 
 def _config_hash(config: Q2SearchConfig) -> str:
@@ -291,7 +300,7 @@ def run_one(args: argparse.Namespace) -> int:
         args.seed,
         result,
         _code_hash(),
-        _data_hash(),
+        _data_hash(Path(args.raw), args.instance),
         side,
     )
     record = _write_run(Path(args.output_root), args.instance, args.config_id or args.candidate, args.seed, config, result, record)
@@ -308,7 +317,7 @@ def batch(args: argparse.Namespace) -> int:
         raise ValueError("--config-id with batch requires exactly one candidate")
     side = square_side(instance)
     code_hash = _code_hash()
-    data_manifest = _data_manifest()
+    data_manifest = _data_manifest(Path(args.raw), args.instance)
     data_hash = _manifest_hash(data_manifest)
     records = []
     configs = []

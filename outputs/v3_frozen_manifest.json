@@ -1,1 +1,2212 @@
-{"q1":{"code_files":[{"bytes":72532,"path":"src/v3.py","sha256":"a26b2992fc35a1bb0490cbf60c3f04d3deffdd7418c4e8611f6de5ba44295263"},{"bytes":43,"path":"src/Q1/__init__.py","sha256":"039ddd56ea3b86c76dde82441012d67780c3d144d47e5a7b8729c76692a4ddee"},{"bytes":13655,"path":"src/Q1/__main__.py","sha256":"405d19d62b39bb6f85840995e43c689590058114acfbca66abd3d719b61419d1"},{"bytes":9807,"path":"src/Q1/p0.py","sha256":"10266679bfb2a20c9272e4f628df3619970593c26678c808a7041ec85e8d357d"},{"bytes":21343,"path":"src/Q1/p1_p2.py","sha256":"4480edbdfd26a8330e3f6cb2d8036611cc0119a7aee93556f17a36a7f9f8f5bd"},{"bytes":4905,"path":"src/_internal/parser.py","sha256":"a03db32940f5af3f7a0f1622d5afc97f6ac3134c470a00538039be2c29be48b4"},{"bytes":2382,"path":"src/_internal/evaluator.py","sha256":"9e9b163ad0fb563e3cbcd07da3ad6e44c1625d6371e348cfdd40a6c501b5d927"},{"bytes":2617,"path":"src/_internal/audit.py","sha256":"c5b18970ddc807a77646cf920954fe27097c90c2d82b75a38fe68eebd01863ae"},{"bytes":1484,"path":"src/_internal/geometry.py","sha256":"cd2c8231c67364aad3febfc54d70b9fa3ebb4e655da95957ff9f43aec943e0cd"}],"code_manifest_hash":"cf20b1d19a0ed2a75494e8065479b88f8262890dba5f9898aa734b29a1561b6c","commands":[{"auxiliary_suffixes":[],"command":["D:\\Anaconda\\envs\\CA-py310\\python.exe","-B","-m","src.Q1","run","--instance","n200","--candidate","Q1-G","--seed","<registered-seed>","--max-evaluations","100000","--time-limit","180.0","--restarts","4","--raw","data/raw/附件","--output-root","D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q1\\_runtime\\v3_n200","--config-id","Q1-G"],"config_id":"Q1-G","final_seed_set":[],"seed_set":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220]},{"auxiliary_suffixes":[],"command":["D:\\Anaconda\\envs\\CA-py310\\python.exe","-B","-m","src.Q1","run","--instance","n200","--candidate","Q1-SP","--seed","<registered-seed>","--max-evaluations","100000","--time-limit","180.0","--restarts","4","--raw","data/raw/附件","--output-root","D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q1\\_runtime\\v3_n200","--config-id","Q1-SP"],"config_id":"Q1-SP","final_seed_set":[],"seed_set":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220]},{"auxiliary_suffixes":[],"command":["D:\\Anaconda\\envs\\CA-py310\\python.exe","-B","-m","src.Q1","run","--instance","n200","--candidate","Q1-BT","--seed","<registered-seed>","--max-evaluations","100000","--time-limit","180.0","--restarts","4","--raw","data/raw/附件","--output-root","D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q1\\_runtime\\v3_n200","--config-id","Q1-BT"],"config_id":"Q1-BT","final_seed_set":[],"seed_set":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220]},{"auxiliary_suffixes":[],"command":["D:\\Anaconda\\envs\\CA-py310\\python.exe","-B","-m","src.Q1","run","--instance","n200","--candidate","Q1-BT-D","--seed","<registered-seed>","--max-evaluations","100000","--time-limit","180.0","--restarts","4","--raw","data/raw/附件","--output-root","D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q1\\_runtime\\v3_n200","--config-id","Q1-BT-D","--directed-moves","on","--state-dedup","on"],"config_id":"Q1-BT-D","final_seed_set":[],"seed_set":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220]},{"auxiliary_suffixes":[],"command":["D:\\Anaconda\\envs\\CA-py310\\python.exe","-B","-m","src.Q1","run","--instance","n200","--candidate","Q1-BT","--seed","<registered-seed>","--max-evaluations","100000","--time-limit","180.0","--restarts","4","--raw","data/raw/附件","--output-root","D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q1\\_runtime\\v3_n200","--config-id","Q1-BT-directed-only","--directed-moves","on"],"config_id":"Q1-BT-directed-only","final_seed_set":[],"seed_set":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220]},{"auxiliary_suffixes":[],"command":["D:\\Anaconda\\envs\\CA-py310\\python.exe","-B","-m","src.Q1","run","--instance","n200","--candidate","Q1-BT","--seed","<registered-seed>","--max-evaluations","100000","--time-limit","180.0","--restarts","4","--raw","data/raw/附件","--output-root","D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q1\\_runtime\\v3_n200","--config-id","Q1-BT-dedup-only","--state-dedup","on"],"config_id":"Q1-BT-dedup-only","final_seed_set":[],"seed_set":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220]},{"auxiliary_suffixes":[],"command":["D:\\Anaconda\\envs\\CA-py310\\python.exe","-B","-m","src.Q1","run","--instance","n200","--candidate","Q1-BT","--seed","<registered-seed>","--max-evaluations","100000","--time-limit","180.0","--restarts","4","--raw","data/raw/附件","--output-root","D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q1\\_runtime\\v3_n200","--config-id","Q1-BT-both","--directed-moves","on","--state-dedup","on"],"config_id":"Q1-BT-both","final_seed_set":[],"seed_set":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220]}],"configs":{"Q1-BT":{"calibration_samples":null,"candidate":"Q1-BT","directed_moves":false,"fast_sa_c":100.0,"fast_sa_k":7,"initial_acceptance":0.9,"max_evaluations":100000,"restarts":4,"state_dedup":false,"time_limit":180.0},"Q1-BT-D":{"calibration_samples":null,"candidate":"Q1-BT-D","directed_moves":true,"fast_sa_c":100.0,"fast_sa_k":7,"initial_acceptance":0.9,"max_evaluations":100000,"restarts":4,"state_dedup":true,"time_limit":180.0},"Q1-BT-both":{"calibration_samples":null,"candidate":"Q1-BT","directed_moves":true,"fast_sa_c":100.0,"fast_sa_k":7,"initial_acceptance":0.9,"max_evaluations":100000,"restarts":4,"state_dedup":true,"time_limit":180.0},"Q1-BT-dedup-only":{"calibration_samples":null,"candidate":"Q1-BT","directed_moves":false,"fast_sa_c":100.0,"fast_sa_k":7,"initial_acceptance":0.9,"max_evaluations":100000,"restarts":4,"state_dedup":true,"time_limit":180.0},"Q1-BT-directed-only":{"calibration_samples":null,"candidate":"Q1-BT","directed_moves":true,"fast_sa_c":100.0,"fast_sa_k":7,"initial_acceptance":0.9,"max_evaluations":100000,"restarts":4,"state_dedup":false,"time_limit":180.0},"Q1-G":{"calibration_samples":null,"candidate":"Q1-G","directed_moves":false,"fast_sa_c":100.0,"fast_sa_k":7,"initial_acceptance":0.9,"max_evaluations":100000,"restarts":4,"state_dedup":false,"time_limit":180.0},"Q1-SP":{"calibration_samples":null,"candidate":"Q1-SP","directed_moves":false,"fast_sa_c":100.0,"fast_sa_k":7,"initial_acceptance":0.9,"max_evaluations":100000,"restarts":4,"state_dedup":false,"time_limit":180.0}},"data_files":[{"bytes":16719,"path":"data/raw/附件/n200.blocks","sha256":"bed652bf55c2034b04a1c1bbe97ad617e027c11736bf069727a63baf575720ef"}],"data_manifest_hash":"3a2163164076de80c6721e0486cfd20b16190ae83e28d4e4c10f7260abe252cc","environment":{"implementation":"CPython","logical_cpu_count":16,"mkl_num_threads":"1","omp_num_threads":"1","openblas_num_threads":"1","os":"Windows","platform":"Windows-10-10.0.26200-SP0","processes":1,"python_executable":"D:\\Anaconda\\envs\\CA-py310\\python.exe","python_version":"3.10.20","rng":"random.Random (CPython MT19937)","threads":1,"workers":8},"spec":{"budgets":{"max_evaluations":100000,"restarts":4,"time_limit":180.0},"candidates":["Q1-G","Q1-SP","Q1-BT","Q1-BT-D"],"code_hashes":{"Q1-BT":"3191e8fa3cfd8aaa7948395b9026ff11bb50871a09425b05f1d85c6a8a6a5aaa","Q1-BT-D":"3191e8fa3cfd8aaa7948395b9026ff11bb50871a09425b05f1d85c6a8a6a5aaa","Q1-BT-both":"3191e8fa3cfd8aaa7948395b9026ff11bb50871a09425b05f1d85c6a8a6a5aaa","Q1-BT-dedup-only":"3191e8fa3cfd8aaa7948395b9026ff11bb50871a09425b05f1d85c6a8a6a5aaa","Q1-BT-directed-only":"3191e8fa3cfd8aaa7948395b9026ff11bb50871a09425b05f1d85c6a8a6a5aaa","Q1-G":"3191e8fa3cfd8aaa7948395b9026ff11bb50871a09425b05f1d85c6a8a6a5aaa","Q1-SP":"3191e8fa3cfd8aaa7948395b9026ff11bb50871a09425b05f1d85c6a8a6a5aaa"},"config_hashes":{"Q1-BT":"21710a897788c7b5b1cb80917bb03da9d86b258a6531c066e2462c93a28c7dab","Q1-BT-D":"7eadc36f5e9f024a1f3829860b7a5ed0926bff8720189300ffaea4b152e95570","Q1-BT-both":"f0b3d4a9137999f51b507ddac15db33a0d9deb6af4c24c6b02a1ceb34628f8ea","Q1-BT-dedup-only":"242f588a676cd70a119d01e680b053be532e4a21ecce786a6adb3f39c4d33f58","Q1-BT-directed-only":"476976eeb4f3eb7fe333ae0406058b40d931c962dcad0df8cbe86ba5d1d28e17","Q1-G":"4c11f9694e3449c03d25bc33769f3520608fc5ac417967aadb773404a6aa4412","Q1-SP":"23759db27eb4b66fada058141c85ff43d1d2f5334ec9f1437658df4f05602c9b"},"data_hash":"bed652bf55c2034b04a1c1bbe97ad617e027c11736bf069727a63baf575720ef","final_seeds":[],"instance":"n200","output_root":"outputs\\q1\\_runtime\\v3_n200","problem":"q1","processes":1,"q2_v3_baseline":null,"rng":"random.Random (CPython MT19937)","seeds":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220],"stop_conditions":["max_evaluations","wall_clock","uncaught_exception","preserve_failure_status"],"threads":1,"workers":8}},"q2":{"code_files":[{"bytes":72532,"path":"src/v3.py","sha256":"a26b2992fc35a1bb0490cbf60c3f04d3deffdd7418c4e8611f6de5ba44295263"},{"bytes":53,"path":"src/Q2/__init__.py","sha256":"d35c903c096f2c4532cc6014f1fa979077fbea5657762640354e8027666046dd"},{"bytes":16430,"path":"src/Q2/__main__.py","sha256":"c59a435bdb67e9a70adb9230fd44670edfde14b2ca0cca8eaf0d3eff220fabb6"},{"bytes":13387,"path":"src/Q2/common.py","sha256":"c3af3011c6cc634e3106dc6ec4e02fd956ec04d36c0ee5b433ed2c9ac59dafa1"},{"bytes":11187,"path":"src/Q2/p0.py","sha256":"27dfa5a67f6bf02b02e177180c2801663a8a16a56282e9759d144d57af4653d4"},{"bytes":14191,"path":"src/Q2/p1_p2.py","sha256":"cad0162119e11b14e66aa0177efcaed5e9a7f63e7b0764465300b28093873314"},{"bytes":15811,"path":"src/Q2/summarize.py","sha256":"686fe72b8814c1b096d6098ef51cd2521e2643f29cebdacc45a214fb34712b1d"},{"bytes":9807,"path":"src/Q1/p0.py","sha256":"10266679bfb2a20c9272e4f628df3619970593c26678c808a7041ec85e8d357d"},{"bytes":21343,"path":"src/Q1/p1_p2.py","sha256":"4480edbdfd26a8330e3f6cb2d8036611cc0119a7aee93556f17a36a7f9f8f5bd"},{"bytes":4905,"path":"src/_internal/parser.py","sha256":"a03db32940f5af3f7a0f1622d5afc97f6ac3134c470a00538039be2c29be48b4"},{"bytes":2382,"path":"src/_internal/evaluator.py","sha256":"9e9b163ad0fb563e3cbcd07da3ad6e44c1625d6371e348cfdd40a6c501b5d927"},{"bytes":2617,"path":"src/_internal/audit.py","sha256":"c5b18970ddc807a77646cf920954fe27097c90c2d82b75a38fe68eebd01863ae"},{"bytes":1484,"path":"src/_internal/geometry.py","sha256":"cd2c8231c67364aad3febfc54d70b9fa3ebb4e655da95957ff9f43aec943e0cd"}],"code_manifest_hash":"d4b911635f9355f29f380fdbf2415e624195f3d4907bae9d9bc7f77c1b92b3a0","commands":[{"auxiliary_suffixes":[],"command":["D:\\Anaconda\\envs\\CA-py310\\python.exe","-B","-m","src.Q2","run","--instance","n200","--candidate","Q2-SP","--seed","<registered-seed>","--max-evaluations","30000","--time-limit","180.0","--restarts","4","--adaptive-constraints","off","--hypergraph-init","off","--initialization-mode","shelf","--raw","data/raw/附件","--output-root","D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q2\\_runtime\\v3_n200","--config-id","P0"],"config_id":"P0","final_seed_set":[],"seed_set":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220]},{"auxiliary_suffixes":[],"command":["D:\\Anaconda\\envs\\CA-py310\\python.exe","-B","-m","src.Q2","run","--instance","n200","--candidate","Q2-BT","--seed","<registered-seed>","--max-evaluations","30000","--time-limit","180.0","--restarts","4","--adaptive-constraints","on","--hypergraph-init","off","--initialization-mode","shelf","--raw","data/raw/附件","--output-root","D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q2\\_runtime\\v3_n200","--config-id","P1"],"config_id":"P1","final_seed_set":[],"seed_set":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220]},{"auxiliary_suffixes":[],"command":["D:\\Anaconda\\envs\\CA-py310\\python.exe","-B","-m","src.Q2","run","--instance","n200","--candidate","Q2-HG","--seed","<registered-seed>","--max-evaluations","30000","--time-limit","180.0","--restarts","4","--adaptive-constraints","on","--hypergraph-init","on","--initialization-mode","shelf","--raw","data/raw/附件","--output-root","D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q2\\_runtime\\v3_n200","--config-id","P2"],"config_id":"P2","final_seed_set":[],"seed_set":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220]}],"configs":{"P0":{"adaptive_constraints":false,"calibration_samples":null,"candidate":"Q2-SP","classic_final_temperature_ratio":0.001,"coordinate_tolerance":0.0,"dead_space_ratio":0.15,"fast_sa_c":100.0,"fast_sa_k":7,"hypergraph_init":false,"initial_acceptance":0.9,"initialization_mode":"shelf","max_evaluations":30000,"restarts":4,"sa_schedule":"classic","time_limit":180.0},"P1":{"adaptive_constraints":true,"calibration_samples":null,"candidate":"Q2-BT","classic_final_temperature_ratio":0.001,"coordinate_tolerance":0.0,"dead_space_ratio":0.15,"fast_sa_c":100.0,"fast_sa_k":7,"hypergraph_init":false,"initial_acceptance":0.9,"initialization_mode":"shelf","max_evaluations":30000,"restarts":4,"sa_schedule":"fast","time_limit":180.0},"P2":{"adaptive_constraints":true,"calibration_samples":null,"candidate":"Q2-HG","classic_final_temperature_ratio":0.001,"coordinate_tolerance":0.0,"dead_space_ratio":0.15,"fast_sa_c":100.0,"fast_sa_k":7,"hypergraph_init":true,"initial_acceptance":0.9,"initialization_mode":"shelf","max_evaluations":30000,"restarts":4,"sa_schedule":"fast","time_limit":180.0}},"data_files":[{"bytes":16719,"path":"data/raw/附件/n200.blocks","sha256":"bed652bf55c2034b04a1c1bbe97ad617e027c11736bf069727a63baf575720ef"},{"bytes":38414,"path":"data/raw/附件/n200.nets","sha256":"8867f3f167845d88623a5cadba68f7a19fe343278779538e7804c5ac0c5940a2"},{"bytes":6512,"path":"data/raw/附件/n200.pl","sha256":"0400507fcb07124e01f6cdb86c5e71cdce1bbbb871030651f5583a2f66ec3589"}],"data_manifest_hash":"475e63eefda4a1592adaddb9596e92595f6ef6d5404ae0fd1e826d367bd056a7","environment":{"implementation":"CPython","logical_cpu_count":16,"mkl_num_threads":"1","omp_num_threads":"1","openblas_num_threads":"1","os":"Windows","platform":"Windows-10-10.0.26200-SP0","processes":1,"python_executable":"D:\\Anaconda\\envs\\CA-py310\\python.exe","python_version":"3.10.20","rng":"random.Random (CPython MT19937)","threads":1,"workers":1},"spec":{"budgets":{"max_evaluations":30000,"restarts":4,"time_limit":180.0},"candidates":["P0","P1","P2"],"code_hashes":{"P0":"bd3ed1f896b81fa3317c2e7f5eaf9d6051976483693f75288b6b3636d1dd004b","P1":"bd3ed1f896b81fa3317c2e7f5eaf9d6051976483693f75288b6b3636d1dd004b","P2":"bd3ed1f896b81fa3317c2e7f5eaf9d6051976483693f75288b6b3636d1dd004b"},"config_hashes":{"P0":"b4e9c046a28d9fa5da81c71344c61710653c902f72dda0acf23a769324dcee06","P1":"62c4fc0857968603f5af8a4add05d7825ccbb79cfdfbde340b920a03183d787c","P2":"53cc3b06b1f09685c2b904c24fe7e462cb8e2ab5f94334409e1229dad3f0fb17"},"data_hash":"475e63eefda4a1592adaddb9596e92595f6ef6d5404ae0fd1e826d367bd056a7","final_seeds":[],"instance":"n200","output_root":"outputs\\q2\\_runtime\\v3_n200","problem":"q2","processes":1,"q2_v3_baseline":"B","rng":"random.Random (CPython MT19937)","seeds":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220],"stop_conditions":["max_evaluations","wall_clock","uncaught_exception","preserve_failure_status"],"threads":1,"workers":1}},"q3":{"code_files":[{"bytes":72532,"path":"src/v3.py","sha256":"a26b2992fc35a1bb0490cbf60c3f04d3deffdd7418c4e8611f6de5ba44295263"},{"bytes":44,"path":"src/Q3/__init__.py","sha256":"2800ceed9dab81125eceb923c64be6200a8775fc09fb07926010c2f1170439c6"},{"bytes":11859,"path":"src/Q3/__main__.py","sha256":"f3adf101ca72a37579d6356112b90b59b6235006ce42699d75a3df766ca1e829"},{"bytes":8678,"path":"src/Q3/common.py","sha256":"589ba3a4b1f50e36b239154300be3574f6d126c75402593f66cdf3b654988daa"},{"bytes":7307,"path":"src/Q3/search.py","sha256":"83be29382cd2e7e8ba11efa8cc98971dd7de7876a859d21b6f995799bf574d8d"},{"bytes":53,"path":"src/Q2/__init__.py","sha256":"d35c903c096f2c4532cc6014f1fa979077fbea5657762640354e8027666046dd"},{"bytes":16430,"path":"src/Q2/__main__.py","sha256":"c59a435bdb67e9a70adb9230fd44670edfde14b2ca0cca8eaf0d3eff220fabb6"},{"bytes":13387,"path":"src/Q2/common.py","sha256":"c3af3011c6cc634e3106dc6ec4e02fd956ec04d36c0ee5b433ed2c9ac59dafa1"},{"bytes":11187,"path":"src/Q2/p0.py","sha256":"27dfa5a67f6bf02b02e177180c2801663a8a16a56282e9759d144d57af4653d4"},{"bytes":14191,"path":"src/Q2/p1_p2.py","sha256":"cad0162119e11b14e66aa0177efcaed5e9a7f63e7b0764465300b28093873314"},{"bytes":15811,"path":"src/Q2/summarize.py","sha256":"686fe72b8814c1b096d6098ef51cd2521e2643f29cebdacc45a214fb34712b1d"},{"bytes":9807,"path":"src/Q1/p0.py","sha256":"10266679bfb2a20c9272e4f628df3619970593c26678c808a7041ec85e8d357d"},{"bytes":21343,"path":"src/Q1/p1_p2.py","sha256":"4480edbdfd26a8330e3f6cb2d8036611cc0119a7aee93556f17a36a7f9f8f5bd"},{"bytes":4905,"path":"src/_internal/parser.py","sha256":"a03db32940f5af3f7a0f1622d5afc97f6ac3134c470a00538039be2c29be48b4"},{"bytes":2382,"path":"src/_internal/evaluator.py","sha256":"9e9b163ad0fb563e3cbcd07da3ad6e44c1625d6371e348cfdd40a6c501b5d927"},{"bytes":2617,"path":"src/_internal/audit.py","sha256":"c5b18970ddc807a77646cf920954fe27097c90c2d82b75a38fe68eebd01863ae"},{"bytes":1484,"path":"src/_internal/geometry.py","sha256":"cd2c8231c67364aad3febfc54d70b9fa3ebb4e655da95957ff9f43aec943e0cd"}],"code_manifest_hash":"1f089485c7d789305deb745c3c3ff5d4aade70f4b38b33053887c6acf4c96187","commands":[{"auxiliary_suffixes":["v3_n200_q3-bin_attempts.csv","v3_n200_q3-bin_config_snapshot.json"],"command":["D:\\Anaconda\\envs\\CA-py310\\python.exe","-B","-m","src.Q3","--instance","n200","--candidate","Q3-BIN","--inner-candidate","Q2-HG","--lower-ratio","0","--upper-ratio","0.15","--precision","0.005","--robust-min-success-rate","0.8","--decision-rule","robust","--seeds","2201-2220","--max-evaluations","30000","--time-limit","60.0","--restarts","4","--workers","5","--adaptive-constraints","on","--hypergraph-init","on","--continuous-compression","off","--final-seeds","2301-2320","--final-max-evaluations","30000","--final-time-limit","60.0","--final-restarts","4","--raw","data/raw/附件","--runtime-root","D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q3\\_runtime\\v3_n200\\runtime","--table-root","D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q3\\_runtime\\v3_n200\\tables","--run-id","v3_n200_q3-bin"],"config_id":"Q3-BIN","final_seed_set":[2301,2302,2303,2304,2305,2306,2307,2308,2309,2310,2311,2312,2313,2314,2315,2316,2317,2318,2319,2320],"seed_set":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220]},{"auxiliary_suffixes":["v3_n200_q3-lin_attempts.csv","v3_n200_q3-lin_config_snapshot.json"],"command":["D:\\Anaconda\\envs\\CA-py310\\python.exe","-B","-m","src.Q3","--instance","n200","--candidate","Q3-LIN","--inner-candidate","Q2-HG","--lower-ratio","0","--upper-ratio","0.15","--precision","0.005","--robust-min-success-rate","0.8","--decision-rule","robust","--seeds","2201-2220","--max-evaluations","30000","--time-limit","60.0","--restarts","4","--workers","5","--adaptive-constraints","on","--hypergraph-init","on","--continuous-compression","off","--final-seeds","2301-2320","--final-max-evaluations","30000","--final-time-limit","60.0","--final-restarts","4","--raw","data/raw/附件","--runtime-root","D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q3\\_runtime\\v3_n200\\runtime","--table-root","D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q3\\_runtime\\v3_n200\\tables","--run-id","v3_n200_q3-lin"],"config_id":"Q3-LIN","final_seed_set":[2301,2302,2303,2304,2305,2306,2307,2308,2309,2310,2311,2312,2313,2314,2315,2316,2317,2318,2319,2320],"seed_set":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220]},{"auxiliary_suffixes":["v3_n200_q3-cont-r_attempts.csv","v3_n200_q3-cont-r_config_snapshot.json"],"command":["D:\\Anaconda\\envs\\CA-py310\\python.exe","-B","-m","src.Q3","--instance","n200","--candidate","Q3-CONT-R","--inner-candidate","Q2-HG","--lower-ratio","0","--upper-ratio","0.15","--precision","0.005","--robust-min-success-rate","0.8","--decision-rule","robust","--seeds","2201-2220","--max-evaluations","30000","--time-limit","60.0","--restarts","4","--workers","5","--adaptive-constraints","on","--hypergraph-init","on","--continuous-compression","on","--final-seeds","2301-2320","--final-max-evaluations","30000","--final-time-limit","60.0","--final-restarts","4","--raw","data/raw/附件","--runtime-root","D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q3\\_runtime\\v3_n200\\runtime","--table-root","D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q3\\_runtime\\v3_n200\\tables","--run-id","v3_n200_q3-cont-r"],"config_id":"Q3-CONT-R","final_seed_set":[2301,2302,2303,2304,2305,2306,2307,2308,2309,2310,2311,2312,2313,2314,2315,2316,2317,2318,2319,2320],"seed_set":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220]}],"configs":{"Q3-BIN":{"adaptive_constraints":true,"candidate":"Q3-BIN","continuous_compression":false,"decision_rule":"robust","final_max_evaluations":30000,"final_restarts":4,"final_seeds":[2301,2302,2303,2304,2305,2306,2307,2308,2309,2310,2311,2312,2313,2314,2315,2316,2317,2318,2319,2320],"final_time_limit":60.0,"hypergraph_init":true,"inner_candidate":"Q2-HG","lower_ratio":0.0,"max_evaluations":30000,"precision":0.005,"restarts":4,"robust_min_success_rate":0.8,"seeds":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220],"time_limit":60.0,"upper_ratio":0.15,"workers":5},"Q3-CONT-R":{"adaptive_constraints":true,"candidate":"Q3-CONT-R","continuous_compression":true,"decision_rule":"robust","final_max_evaluations":30000,"final_restarts":4,"final_seeds":[2301,2302,2303,2304,2305,2306,2307,2308,2309,2310,2311,2312,2313,2314,2315,2316,2317,2318,2319,2320],"final_time_limit":60.0,"hypergraph_init":true,"inner_candidate":"Q2-HG","lower_ratio":0.0,"max_evaluations":30000,"precision":0.005,"restarts":4,"robust_min_success_rate":0.8,"seeds":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220],"time_limit":60.0,"upper_ratio":0.15,"workers":5},"Q3-LIN":{"adaptive_constraints":true,"candidate":"Q3-LIN","continuous_compression":false,"decision_rule":"robust","final_max_evaluations":30000,"final_restarts":4,"final_seeds":[2301,2302,2303,2304,2305,2306,2307,2308,2309,2310,2311,2312,2313,2314,2315,2316,2317,2318,2319,2320],"final_time_limit":60.0,"hypergraph_init":true,"inner_candidate":"Q2-HG","lower_ratio":0.0,"max_evaluations":30000,"precision":0.005,"restarts":4,"robust_min_success_rate":0.8,"seeds":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220],"time_limit":60.0,"upper_ratio":0.15,"workers":5}},"data_files":[{"bytes":16719,"path":"data/raw/附件/n200.blocks","sha256":"bed652bf55c2034b04a1c1bbe97ad617e027c11736bf069727a63baf575720ef"},{"bytes":38414,"path":"data/raw/附件/n200.nets","sha256":"8867f3f167845d88623a5cadba68f7a19fe343278779538e7804c5ac0c5940a2"},{"bytes":6512,"path":"data/raw/附件/n200.pl","sha256":"0400507fcb07124e01f6cdb86c5e71cdce1bbbb871030651f5583a2f66ec3589"}],"data_manifest_hash":"475e63eefda4a1592adaddb9596e92595f6ef6d5404ae0fd1e826d367bd056a7","environment":{"implementation":"CPython","logical_cpu_count":16,"mkl_num_threads":"1","omp_num_threads":"1","openblas_num_threads":"1","os":"Windows","platform":"Windows-10-10.0.26200-SP0","processes":1,"python_executable":"D:\\Anaconda\\envs\\CA-py310\\python.exe","python_version":"3.10.20","rng":"random.Random (CPython MT19937)","threads":1,"workers":5},"spec":{"budgets":{"max_evaluations":30000,"restarts":4,"time_limit":60.0},"candidates":["Q3-BIN","Q3-LIN","Q3-CONT-R"],"code_hashes":{"Q3-BIN":"112df427de656e032b691fa1cc55cd14225ced5832e2c32b5fab0ec43f5779ba","Q3-CONT-R":"112df427de656e032b691fa1cc55cd14225ced5832e2c32b5fab0ec43f5779ba","Q3-LIN":"112df427de656e032b691fa1cc55cd14225ced5832e2c32b5fab0ec43f5779ba"},"config_hashes":{"Q3-BIN":"d199c899ccd7e0b32551015e1021c53be677c9a11ab13e22435017b1f7bb75ea","Q3-CONT-R":"77b287aa2415021bd1c49881aa318cd0c8508da7c2755d64da51616815cf0864","Q3-LIN":"0873b30da1bab74d09d0f63a8c4a64ab4535df540237cb0ad8728119247c0cce"},"data_hash":"475e63eefda4a1592adaddb9596e92595f6ef6d5404ae0fd1e826d367bd056a7","final_seeds":[2301,2302,2303,2304,2305,2306,2307,2308,2309,2310,2311,2312,2313,2314,2315,2316,2317,2318,2319,2320],"instance":"n200","output_root":"outputs\\q3\\_runtime\\v3_n200","problem":"q3","processes":1,"q2_v3_baseline":null,"rng":"random.Random (CPython MT19937)","seeds":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220],"stop_conditions":["max_evaluations","wall_clock","uncaught_exception","preserve_failure_status"],"threads":1,"workers":5}},"q4":{"code_files":[{"bytes":72532,"path":"src/v3.py","sha256":"a26b2992fc35a1bb0490cbf60c3f04d3deffdd7418c4e8611f6de5ba44295263"},{"bytes":598,"path":"src/Q4/__init__.py","sha256":"fb2b9adee946defd3c5232bbd9eb1d87299f99d60e34cd42f9c9f1fcfa17e870"},{"bytes":4359,"path":"src/Q4/__main__.py","sha256":"00675478a08b9b9b0eb1576c1fa168575009f74957932a65ac5c2f57678ed296"},{"bytes":1344,"path":"src/Q4/geometry.py","sha256":"6b7b123ca2c9ff5b84d6d1d1d9650f1a3a1252db59691204f7170d19bfe7eec2"},{"bytes":5332,"path":"src/Q4/model.py","sha256":"29fcd897ff9b90cfbeb19cca403e190edbc441c9336cc7308d19df533d3fa73b"},{"bytes":5093,"path":"src/Q4/sa.py","sha256":"ca643a63fbc8d6c257712280b848b7432b648954baf2d3fce410e4e9b8873ebd"},{"bytes":8998,"path":"src/Q4/search.py","sha256":"621fe2eaf346bdd1202ecc7787692003d8e5c09cc2f2ca8d910e4d3f65cad00d"},{"bytes":2617,"path":"src/_internal/audit.py","sha256":"c5b18970ddc807a77646cf920954fe27097c90c2d82b75a38fe68eebd01863ae"}],"code_hash":"2e91dcb54d8d672d6cf670c23cc28d1b54249ed4e03ef7e5f73ebe106a6d3d06","config_hash":"1ca180449987b53740782fb797d7046a3fad2c6b724e6078413917bc932594e4","configurations":{"G+_12x12_exact":{"config":{"b1_beam_thickness":3,"domain":[12,12],"geometry":"G+","grid_step":1,"mode":"exact","rotations":[0,90,180,270],"time_limit":300.0,"upper_area":36},"config_hash":"a38abf182c4d2dcbbaf3779c164e1dca013ea42abf5ad89c3cad875597ebd212"},"G+_12x12_sa":{"config":{"b1_beam_thickness":3,"domain":[12,12],"geometry":"G+","grid_step":1,"max_evaluations":[10000,30000,60000],"mode":"sa","restarts":4,"rotations":[0,90,180,270],"seeds":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220],"time_limits":[60.0,120.0]},"config_hash":"0e96b8a88eb38a3400e3585c3341bc02643c6792b5e37d4d29a9246e45974064"},"G+_9x9_exact":{"config":{"b1_beam_thickness":3,"domain":[9,9],"geometry":"G+","grid_step":1,"mode":"exact","rotations":[0,90,180,270],"time_limit":300.0,"upper_area":36},"config_hash":"b4014db8c5c6f2af9cd8d6bcf9b4eede5fab0358fddf38ff639ec4432e47244d"},"G+_9x9_sa":{"config":{"b1_beam_thickness":3,"domain":[9,9],"geometry":"G+","grid_step":1,"max_evaluations":[10000,30000,60000],"mode":"sa","restarts":4,"rotations":[0,90,180,270],"seeds":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220],"time_limits":[60.0,120.0]},"config_hash":"70de04cb5abb8536fa89ad5eab1703a3f7d547a5d19e6f5ad76fecdaa2f4c2a3"},"G-_12x12_exact":{"config":{"b1_beam_thickness":1,"domain":[12,12],"geometry":"G-","grid_step":1,"mode":"exact","rotations":[0,90,180,270],"time_limit":300.0,"upper_area":36},"config_hash":"c759d286a475e7f1c543ef5077107fba71f2b48b78197ee0b37eba95f98e8573"},"G-_12x12_sa":{"config":{"b1_beam_thickness":1,"domain":[12,12],"geometry":"G-","grid_step":1,"max_evaluations":[10000,30000,60000],"mode":"sa","restarts":4,"rotations":[0,90,180,270],"seeds":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220],"time_limits":[60.0,120.0]},"config_hash":"356aee9efc63f70ce015eacd3f32d9c125fb0d4f5b49055096adffce1ba70a31"},"G-_9x9_exact":{"config":{"b1_beam_thickness":1,"domain":[9,9],"geometry":"G-","grid_step":1,"mode":"exact","rotations":[0,90,180,270],"time_limit":300.0,"upper_area":36},"config_hash":"675fb092532377a95ca96ada450d3e45a25966d3611acc40988f637429d5abf1"},"G-_9x9_sa":{"config":{"b1_beam_thickness":1,"domain":[9,9],"geometry":"G-","grid_step":1,"max_evaluations":[10000,30000,60000],"mode":"sa","restarts":4,"rotations":[0,90,180,270],"seeds":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220],"time_limits":[60.0,120.0]},"config_hash":"c438af63bec5cd773ae7c3ebaea624023760e5ba0c01fd69b72ab79c39ac7794"},"G0_12x12_exact":{"config":{"b1_beam_thickness":2,"domain":[12,12],"geometry":"G0","grid_step":1,"mode":"exact","rotations":[0,90,180,270],"time_limit":300.0,"upper_area":36},"config_hash":"af293b59c6034dea3dc37d1e2f6f825be96b7e7e77ccdd2bf3a7f5f71368e9ab"},"G0_12x12_sa":{"config":{"b1_beam_thickness":2,"domain":[12,12],"geometry":"G0","grid_step":1,"max_evaluations":[10000,30000,60000],"mode":"sa","restarts":4,"rotations":[0,90,180,270],"seeds":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220],"time_limits":[60.0,120.0]},"config_hash":"e9314914779f0ab6e37cebdc3b3537d6e344b6df4ad89222ca391c8eca9ba5ad"},"G0_9x9_exact":{"config":{"b1_beam_thickness":2,"domain":[9,9],"geometry":"G0","grid_step":1,"mode":"exact","rotations":[0,90,180,270],"time_limit":300.0,"upper_area":36},"config_hash":"38858d0f4d4947f7d2f0b923523b82b759cd20e841ee03e2211933d28adf4e0b"},"G0_9x9_sa":{"config":{"b1_beam_thickness":2,"domain":[9,9],"geometry":"G0","grid_step":1,"max_evaluations":[10000,30000,60000],"mode":"sa","restarts":4,"rotations":[0,90,180,270],"seeds":[2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,2212,2213,2214,2215,2216,2217,2218,2219,2220],"time_limits":[60.0,120.0]},"config_hash":"74ee6d928f53120d69482cb21326e97474ae00cf9715f721d92d8ecc5d92f1f9"}},"continuous_domain_confirmed":false,"data_hash":null,"environment":{"implementation":"CPython","logical_cpu_count":16,"mkl_num_threads":"1","omp_num_threads":"1","openblas_num_threads":"1","os":"Windows","platform":"Windows-10-10.0.26200-SP0","python_executable":"D:\\Anaconda\\envs\\CA-py310\\python.exe","python_version":"3.10.20","threads":1,"workers":1},"geometry_confirmed":true,"integer_domain_confirmed":true,"problem":"q4","selection_scope":"geometry_budget_domain_sensitivity_only","status":"frozen_integer_domain_pending_main_run_review"}}
+{
+  "q1": {
+    "code_files": [
+      {
+        "bytes": 73781,
+        "path": "src/v3.py",
+        "sha256": "df7ff8f61016253aa90cb0aafbc49dd010b0d3546326336c0719498ad2cd033d"
+      },
+      {
+        "bytes": 43,
+        "path": "src/Q1/__init__.py",
+        "sha256": "039ddd56ea3b86c76dde82441012d67780c3d144d47e5a7b8729c76692a4ddee"
+      },
+      {
+        "bytes": 13655,
+        "path": "src/Q1/__main__.py",
+        "sha256": "405d19d62b39bb6f85840995e43c689590058114acfbca66abd3d719b61419d1"
+      },
+      {
+        "bytes": 9807,
+        "path": "src/Q1/p0.py",
+        "sha256": "10266679bfb2a20c9272e4f628df3619970593c26678c808a7041ec85e8d357d"
+      },
+      {
+        "bytes": 21343,
+        "path": "src/Q1/p1_p2.py",
+        "sha256": "4480edbdfd26a8330e3f6cb2d8036611cc0119a7aee93556f17a36a7f9f8f5bd"
+      },
+      {
+        "bytes": 4905,
+        "path": "src/_internal/parser.py",
+        "sha256": "a03db32940f5af3f7a0f1622d5afc97f6ac3134c470a00538039be2c29be48b4"
+      },
+      {
+        "bytes": 2382,
+        "path": "src/_internal/evaluator.py",
+        "sha256": "9e9b163ad0fb563e3cbcd07da3ad6e44c1625d6371e348cfdd40a6c501b5d927"
+      },
+      {
+        "bytes": 2617,
+        "path": "src/_internal/audit.py",
+        "sha256": "c5b18970ddc807a77646cf920954fe27097c90c2d82b75a38fe68eebd01863ae"
+      },
+      {
+        "bytes": 1484,
+        "path": "src/_internal/geometry.py",
+        "sha256": "cd2c8231c67364aad3febfc54d70b9fa3ebb4e655da95957ff9f43aec943e0cd"
+      }
+    ],
+    "code_manifest_hash": "c2f788030087a876e69a676187f01801e4677672a610e9169916cf059fc99355",
+    "commands": [
+      {
+        "auxiliary_suffixes": [],
+        "command": [
+          "D:\\miniconda3\\envs\\causal_paper\\python.exe",
+          "-B",
+          "-m",
+          "src.Q1",
+          "run",
+          "--instance",
+          "n200",
+          "--candidate",
+          "Q1-G",
+          "--seed",
+          "<registered-seed>",
+          "--max-evaluations",
+          "100000",
+          "--time-limit",
+          "180.0",
+          "--restarts",
+          "4",
+          "--raw",
+          "data/raw/附件",
+          "--output-root",
+          "E:\\2026_chinamcm\\outputs\\q1\\_runtime\\v3_n200",
+          "--config-id",
+          "Q1-G"
+        ],
+        "config_id": "Q1-G",
+        "final_seed_set": [],
+        "seed_set": [
+          2201,
+          2202,
+          2203,
+          2204,
+          2205,
+          2206,
+          2207,
+          2208,
+          2209,
+          2210,
+          2211,
+          2212,
+          2213,
+          2214,
+          2215,
+          2216,
+          2217,
+          2218,
+          2219,
+          2220
+        ]
+      },
+      {
+        "auxiliary_suffixes": [],
+        "command": [
+          "D:\\miniconda3\\envs\\causal_paper\\python.exe",
+          "-B",
+          "-m",
+          "src.Q1",
+          "run",
+          "--instance",
+          "n200",
+          "--candidate",
+          "Q1-SP",
+          "--seed",
+          "<registered-seed>",
+          "--max-evaluations",
+          "100000",
+          "--time-limit",
+          "180.0",
+          "--restarts",
+          "4",
+          "--raw",
+          "data/raw/附件",
+          "--output-root",
+          "E:\\2026_chinamcm\\outputs\\q1\\_runtime\\v3_n200",
+          "--config-id",
+          "Q1-SP"
+        ],
+        "config_id": "Q1-SP",
+        "final_seed_set": [],
+        "seed_set": [
+          2201,
+          2202,
+          2203,
+          2204,
+          2205,
+          2206,
+          2207,
+          2208,
+          2209,
+          2210,
+          2211,
+          2212,
+          2213,
+          2214,
+          2215,
+          2216,
+          2217,
+          2218,
+          2219,
+          2220
+        ]
+      },
+      {
+        "auxiliary_suffixes": [],
+        "command": [
+          "D:\\miniconda3\\envs\\causal_paper\\python.exe",
+          "-B",
+          "-m",
+          "src.Q1",
+          "run",
+          "--instance",
+          "n200",
+          "--candidate",
+          "Q1-BT",
+          "--seed",
+          "<registered-seed>",
+          "--max-evaluations",
+          "100000",
+          "--time-limit",
+          "180.0",
+          "--restarts",
+          "4",
+          "--raw",
+          "data/raw/附件",
+          "--output-root",
+          "E:\\2026_chinamcm\\outputs\\q1\\_runtime\\v3_n200",
+          "--config-id",
+          "Q1-BT"
+        ],
+        "config_id": "Q1-BT",
+        "final_seed_set": [],
+        "seed_set": [
+          2201,
+          2202,
+          2203,
+          2204,
+          2205,
+          2206,
+          2207,
+          2208,
+          2209,
+          2210,
+          2211,
+          2212,
+          2213,
+          2214,
+          2215,
+          2216,
+          2217,
+          2218,
+          2219,
+          2220
+        ]
+      },
+      {
+        "auxiliary_suffixes": [],
+        "command": [
+          "D:\\miniconda3\\envs\\causal_paper\\python.exe",
+          "-B",
+          "-m",
+          "src.Q1",
+          "run",
+          "--instance",
+          "n200",
+          "--candidate",
+          "Q1-BT-D",
+          "--seed",
+          "<registered-seed>",
+          "--max-evaluations",
+          "100000",
+          "--time-limit",
+          "180.0",
+          "--restarts",
+          "4",
+          "--raw",
+          "data/raw/附件",
+          "--output-root",
+          "E:\\2026_chinamcm\\outputs\\q1\\_runtime\\v3_n200",
+          "--config-id",
+          "Q1-BT-D",
+          "--directed-moves",
+          "on",
+          "--state-dedup",
+          "on"
+        ],
+        "config_id": "Q1-BT-D",
+        "final_seed_set": [],
+        "seed_set": [
+          2201,
+          2202,
+          2203,
+          2204,
+          2205,
+          2206,
+          2207,
+          2208,
+          2209,
+          2210,
+          2211,
+          2212,
+          2213,
+          2214,
+          2215,
+          2216,
+          2217,
+          2218,
+          2219,
+          2220
+        ]
+      },
+      {
+        "auxiliary_suffixes": [],
+        "command": [
+          "D:\\miniconda3\\envs\\causal_paper\\python.exe",
+          "-B",
+          "-m",
+          "src.Q1",
+          "run",
+          "--instance",
+          "n200",
+          "--candidate",
+          "Q1-BT",
+          "--seed",
+          "<registered-seed>",
+          "--max-evaluations",
+          "100000",
+          "--time-limit",
+          "180.0",
+          "--restarts",
+          "4",
+          "--raw",
+          "data/raw/附件",
+          "--output-root",
+          "E:\\2026_chinamcm\\outputs\\q1\\_runtime\\v3_n200",
+          "--config-id",
+          "Q1-BT-directed-only",
+          "--directed-moves",
+          "on"
+        ],
+        "config_id": "Q1-BT-directed-only",
+        "final_seed_set": [],
+        "seed_set": [
+          2201,
+          2202,
+          2203,
+          2204,
+          2205,
+          2206,
+          2207,
+          2208,
+          2209,
+          2210,
+          2211,
+          2212,
+          2213,
+          2214,
+          2215,
+          2216,
+          2217,
+          2218,
+          2219,
+          2220
+        ]
+      },
+      {
+        "auxiliary_suffixes": [],
+        "command": [
+          "D:\\miniconda3\\envs\\causal_paper\\python.exe",
+          "-B",
+          "-m",
+          "src.Q1",
+          "run",
+          "--instance",
+          "n200",
+          "--candidate",
+          "Q1-BT",
+          "--seed",
+          "<registered-seed>",
+          "--max-evaluations",
+          "100000",
+          "--time-limit",
+          "180.0",
+          "--restarts",
+          "4",
+          "--raw",
+          "data/raw/附件",
+          "--output-root",
+          "E:\\2026_chinamcm\\outputs\\q1\\_runtime\\v3_n200",
+          "--config-id",
+          "Q1-BT-dedup-only",
+          "--state-dedup",
+          "on"
+        ],
+        "config_id": "Q1-BT-dedup-only",
+        "final_seed_set": [],
+        "seed_set": [
+          2201,
+          2202,
+          2203,
+          2204,
+          2205,
+          2206,
+          2207,
+          2208,
+          2209,
+          2210,
+          2211,
+          2212,
+          2213,
+          2214,
+          2215,
+          2216,
+          2217,
+          2218,
+          2219,
+          2220
+        ]
+      },
+      {
+        "auxiliary_suffixes": [],
+        "command": [
+          "D:\\miniconda3\\envs\\causal_paper\\python.exe",
+          "-B",
+          "-m",
+          "src.Q1",
+          "run",
+          "--instance",
+          "n200",
+          "--candidate",
+          "Q1-BT",
+          "--seed",
+          "<registered-seed>",
+          "--max-evaluations",
+          "100000",
+          "--time-limit",
+          "180.0",
+          "--restarts",
+          "4",
+          "--raw",
+          "data/raw/附件",
+          "--output-root",
+          "E:\\2026_chinamcm\\outputs\\q1\\_runtime\\v3_n200",
+          "--config-id",
+          "Q1-BT-both",
+          "--directed-moves",
+          "on",
+          "--state-dedup",
+          "on"
+        ],
+        "config_id": "Q1-BT-both",
+        "final_seed_set": [],
+        "seed_set": [
+          2201,
+          2202,
+          2203,
+          2204,
+          2205,
+          2206,
+          2207,
+          2208,
+          2209,
+          2210,
+          2211,
+          2212,
+          2213,
+          2214,
+          2215,
+          2216,
+          2217,
+          2218,
+          2219,
+          2220
+        ]
+      }
+    ],
+    "configs": {
+      "Q1-BT": {
+        "calibration_samples": null,
+        "candidate": "Q1-BT",
+        "directed_moves": false,
+        "fast_sa_c": 100.0,
+        "fast_sa_k": 7,
+        "initial_acceptance": 0.9,
+        "max_evaluations": 100000,
+        "restarts": 4,
+        "state_dedup": false,
+        "time_limit": 180.0
+      },
+      "Q1-BT-D": {
+        "calibration_samples": null,
+        "candidate": "Q1-BT-D",
+        "directed_moves": true,
+        "fast_sa_c": 100.0,
+        "fast_sa_k": 7,
+        "initial_acceptance": 0.9,
+        "max_evaluations": 100000,
+        "restarts": 4,
+        "state_dedup": true,
+        "time_limit": 180.0
+      },
+      "Q1-BT-both": {
+        "calibration_samples": null,
+        "candidate": "Q1-BT",
+        "directed_moves": true,
+        "fast_sa_c": 100.0,
+        "fast_sa_k": 7,
+        "initial_acceptance": 0.9,
+        "max_evaluations": 100000,
+        "restarts": 4,
+        "state_dedup": true,
+        "time_limit": 180.0
+      },
+      "Q1-BT-dedup-only": {
+        "calibration_samples": null,
+        "candidate": "Q1-BT",
+        "directed_moves": false,
+        "fast_sa_c": 100.0,
+        "fast_sa_k": 7,
+        "initial_acceptance": 0.9,
+        "max_evaluations": 100000,
+        "restarts": 4,
+        "state_dedup": true,
+        "time_limit": 180.0
+      },
+      "Q1-BT-directed-only": {
+        "calibration_samples": null,
+        "candidate": "Q1-BT",
+        "directed_moves": true,
+        "fast_sa_c": 100.0,
+        "fast_sa_k": 7,
+        "initial_acceptance": 0.9,
+        "max_evaluations": 100000,
+        "restarts": 4,
+        "state_dedup": false,
+        "time_limit": 180.0
+      },
+      "Q1-G": {
+        "calibration_samples": null,
+        "candidate": "Q1-G",
+        "directed_moves": false,
+        "fast_sa_c": 100.0,
+        "fast_sa_k": 7,
+        "initial_acceptance": 0.9,
+        "max_evaluations": 100000,
+        "restarts": 4,
+        "state_dedup": false,
+        "time_limit": 180.0
+      },
+      "Q1-SP": {
+        "calibration_samples": null,
+        "candidate": "Q1-SP",
+        "directed_moves": false,
+        "fast_sa_c": 100.0,
+        "fast_sa_k": 7,
+        "initial_acceptance": 0.9,
+        "max_evaluations": 100000,
+        "restarts": 4,
+        "state_dedup": false,
+        "time_limit": 180.0
+      }
+    },
+    "data_files": [
+      {
+        "bytes": 16719,
+        "path": "data/raw/附件/n200.blocks",
+        "sha256": "bed652bf55c2034b04a1c1bbe97ad617e027c11736bf069727a63baf575720ef"
+      }
+    ],
+    "data_manifest_hash": "3a2163164076de80c6721e0486cfd20b16190ae83e28d4e4c10f7260abe252cc",
+    "environment": {
+      "implementation": "CPython",
+      "logical_cpu_count": 12,
+      "mkl_num_threads": "1",
+      "omp_num_threads": "1",
+      "openblas_num_threads": "1",
+      "os": "Windows",
+      "platform": "Windows-10-10.0.22631-SP0",
+      "processes": 1,
+      "python_executable": "D:\\miniconda3\\envs\\causal_paper\\python.exe",
+      "python_version": "3.10.20",
+      "rng": "random.Random (CPython MT19937)",
+      "threads": 1,
+      "workers": 8
+    },
+    "spec": {
+      "budgets": {
+        "max_evaluations": 100000,
+        "restarts": 4,
+        "time_limit": 180.0
+      },
+      "candidates": [
+        "Q1-G",
+        "Q1-SP",
+        "Q1-BT",
+        "Q1-BT-D"
+      ],
+      "code_hashes": {
+        "Q1-BT": "87ab0770aaa83d1b9a6836058fb6a09706a53960196978c9631cf1f2d71e9d1c",
+        "Q1-BT-D": "87ab0770aaa83d1b9a6836058fb6a09706a53960196978c9631cf1f2d71e9d1c",
+        "Q1-BT-both": "87ab0770aaa83d1b9a6836058fb6a09706a53960196978c9631cf1f2d71e9d1c",
+        "Q1-BT-dedup-only": "87ab0770aaa83d1b9a6836058fb6a09706a53960196978c9631cf1f2d71e9d1c",
+        "Q1-BT-directed-only": "87ab0770aaa83d1b9a6836058fb6a09706a53960196978c9631cf1f2d71e9d1c",
+        "Q1-G": "87ab0770aaa83d1b9a6836058fb6a09706a53960196978c9631cf1f2d71e9d1c",
+        "Q1-SP": "87ab0770aaa83d1b9a6836058fb6a09706a53960196978c9631cf1f2d71e9d1c"
+      },
+      "config_hashes": {
+        "Q1-BT": "21710a897788c7b5b1cb80917bb03da9d86b258a6531c066e2462c93a28c7dab",
+        "Q1-BT-D": "7eadc36f5e9f024a1f3829860b7a5ed0926bff8720189300ffaea4b152e95570",
+        "Q1-BT-both": "f0b3d4a9137999f51b507ddac15db33a0d9deb6af4c24c6b02a1ceb34628f8ea",
+        "Q1-BT-dedup-only": "242f588a676cd70a119d01e680b053be532e4a21ecce786a6adb3f39c4d33f58",
+        "Q1-BT-directed-only": "476976eeb4f3eb7fe333ae0406058b40d931c962dcad0df8cbe86ba5d1d28e17",
+        "Q1-G": "4c11f9694e3449c03d25bc33769f3520608fc5ac417967aadb773404a6aa4412",
+        "Q1-SP": "23759db27eb4b66fada058141c85ff43d1d2f5334ec9f1437658df4f05602c9b"
+      },
+      "data_hash": "bed652bf55c2034b04a1c1bbe97ad617e027c11736bf069727a63baf575720ef",
+      "final_seeds": [],
+      "instance": "n200",
+      "output_root": "outputs\\q1\\_runtime\\v3_n200",
+      "problem": "q1",
+      "processes": 1,
+      "q2_v3_baseline": null,
+      "rng": "random.Random (CPython MT19937)",
+      "seeds": [
+        2201,
+        2202,
+        2203,
+        2204,
+        2205,
+        2206,
+        2207,
+        2208,
+        2209,
+        2210,
+        2211,
+        2212,
+        2213,
+        2214,
+        2215,
+        2216,
+        2217,
+        2218,
+        2219,
+        2220
+      ],
+      "stop_conditions": [
+        "max_evaluations",
+        "wall_clock",
+        "uncaught_exception",
+        "preserve_failure_status"
+      ],
+      "threads": 1,
+      "workers": 8
+    }
+  },
+  "q2": {
+    "code_files": [
+      {
+        "bytes": 73781,
+        "path": "src/v3.py",
+        "sha256": "df7ff8f61016253aa90cb0aafbc49dd010b0d3546326336c0719498ad2cd033d"
+      },
+      {
+        "bytes": 53,
+        "path": "src/Q2/__init__.py",
+        "sha256": "d35c903c096f2c4532cc6014f1fa979077fbea5657762640354e8027666046dd"
+      },
+      {
+        "bytes": 17217,
+        "path": "src/Q2/__main__.py",
+        "sha256": "285eb9850fde432ddbaa8d0f3162699fe6686bd4ace2f64dae7bda2ceb1596d4"
+      },
+      {
+        "bytes": 13387,
+        "path": "src/Q2/common.py",
+        "sha256": "c3af3011c6cc634e3106dc6ec4e02fd956ec04d36c0ee5b433ed2c9ac59dafa1"
+      },
+      {
+        "bytes": 11187,
+        "path": "src/Q2/p0.py",
+        "sha256": "27dfa5a67f6bf02b02e177180c2801663a8a16a56282e9759d144d57af4653d4"
+      },
+      {
+        "bytes": 14191,
+        "path": "src/Q2/p1_p2.py",
+        "sha256": "cad0162119e11b14e66aa0177efcaed5e9a7f63e7b0764465300b28093873314"
+      },
+      {
+        "bytes": 15811,
+        "path": "src/Q2/summarize.py",
+        "sha256": "686fe72b8814c1b096d6098ef51cd2521e2643f29cebdacc45a214fb34712b1d"
+      },
+      {
+        "bytes": 9807,
+        "path": "src/Q1/p0.py",
+        "sha256": "10266679bfb2a20c9272e4f628df3619970593c26678c808a7041ec85e8d357d"
+      },
+      {
+        "bytes": 21343,
+        "path": "src/Q1/p1_p2.py",
+        "sha256": "4480edbdfd26a8330e3f6cb2d8036611cc0119a7aee93556f17a36a7f9f8f5bd"
+      },
+      {
+        "bytes": 4905,
+        "path": "src/_internal/parser.py",
+        "sha256": "a03db32940f5af3f7a0f1622d5afc97f6ac3134c470a00538039be2c29be48b4"
+      },
+      {
+        "bytes": 2382,
+        "path": "src/_internal/evaluator.py",
+        "sha256": "9e9b163ad0fb563e3cbcd07da3ad6e44c1625d6371e348cfdd40a6c501b5d927"
+      },
+      {
+        "bytes": 2617,
+        "path": "src/_internal/audit.py",
+        "sha256": "c5b18970ddc807a77646cf920954fe27097c90c2d82b75a38fe68eebd01863ae"
+      },
+      {
+        "bytes": 1484,
+        "path": "src/_internal/geometry.py",
+        "sha256": "cd2c8231c67364aad3febfc54d70b9fa3ebb4e655da95957ff9f43aec943e0cd"
+      }
+    ],
+    "code_manifest_hash": "c6b25af869a9608c97d21c1abf3e934139be0d7c0167eb04f55e0b68de47fd98",
+    "commands": [
+      {
+        "auxiliary_suffixes": [],
+        "command": [
+          "D:\\miniconda3\\envs\\causal_paper\\python.exe",
+          "-B",
+          "-m",
+          "src.Q2",
+          "run",
+          "--instance",
+          "n200",
+          "--candidate",
+          "Q2-SP",
+          "--seed",
+          "<registered-seed>",
+          "--max-evaluations",
+          "30000",
+          "--time-limit",
+          "180.0",
+          "--restarts",
+          "4",
+          "--adaptive-constraints",
+          "off",
+          "--hypergraph-init",
+          "off",
+          "--initialization-mode",
+          "shelf",
+          "--raw",
+          "data/raw/附件",
+          "--output-root",
+          "E:\\2026_chinamcm\\outputs\\q2\\_runtime\\v3_n200",
+          "--config-id",
+          "P0"
+        ],
+        "config_id": "P0",
+        "final_seed_set": [],
+        "seed_set": [
+          2201,
+          2202,
+          2203,
+          2204,
+          2205,
+          2206,
+          2207,
+          2208,
+          2209,
+          2210,
+          2211,
+          2212,
+          2213,
+          2214,
+          2215,
+          2216,
+          2217,
+          2218,
+          2219,
+          2220
+        ]
+      },
+      {
+        "auxiliary_suffixes": [],
+        "command": [
+          "D:\\miniconda3\\envs\\causal_paper\\python.exe",
+          "-B",
+          "-m",
+          "src.Q2",
+          "run",
+          "--instance",
+          "n200",
+          "--candidate",
+          "Q2-BT",
+          "--seed",
+          "<registered-seed>",
+          "--max-evaluations",
+          "30000",
+          "--time-limit",
+          "180.0",
+          "--restarts",
+          "4",
+          "--adaptive-constraints",
+          "on",
+          "--hypergraph-init",
+          "off",
+          "--initialization-mode",
+          "shelf",
+          "--raw",
+          "data/raw/附件",
+          "--output-root",
+          "E:\\2026_chinamcm\\outputs\\q2\\_runtime\\v3_n200",
+          "--config-id",
+          "P1"
+        ],
+        "config_id": "P1",
+        "final_seed_set": [],
+        "seed_set": [
+          2201,
+          2202,
+          2203,
+          2204,
+          2205,
+          2206,
+          2207,
+          2208,
+          2209,
+          2210,
+          2211,
+          2212,
+          2213,
+          2214,
+          2215,
+          2216,
+          2217,
+          2218,
+          2219,
+          2220
+        ]
+      },
+      {
+        "auxiliary_suffixes": [],
+        "command": [
+          "D:\\miniconda3\\envs\\causal_paper\\python.exe",
+          "-B",
+          "-m",
+          "src.Q2",
+          "run",
+          "--instance",
+          "n200",
+          "--candidate",
+          "Q2-HG",
+          "--seed",
+          "<registered-seed>",
+          "--max-evaluations",
+          "30000",
+          "--time-limit",
+          "180.0",
+          "--restarts",
+          "4",
+          "--adaptive-constraints",
+          "on",
+          "--hypergraph-init",
+          "on",
+          "--initialization-mode",
+          "shelf",
+          "--raw",
+          "data/raw/附件",
+          "--output-root",
+          "E:\\2026_chinamcm\\outputs\\q2\\_runtime\\v3_n200",
+          "--config-id",
+          "P2"
+        ],
+        "config_id": "P2",
+        "final_seed_set": [],
+        "seed_set": [
+          2201,
+          2202,
+          2203,
+          2204,
+          2205,
+          2206,
+          2207,
+          2208,
+          2209,
+          2210,
+          2211,
+          2212,
+          2213,
+          2214,
+          2215,
+          2216,
+          2217,
+          2218,
+          2219,
+          2220
+        ]
+      }
+    ],
+    "configs": {
+      "P0": {
+        "adaptive_constraints": false,
+        "calibration_samples": null,
+        "candidate": "Q2-SP",
+        "classic_final_temperature_ratio": 0.001,
+        "coordinate_tolerance": 0.0,
+        "dead_space_ratio": 0.15,
+        "fast_sa_c": 100.0,
+        "fast_sa_k": 7,
+        "hypergraph_init": false,
+        "initial_acceptance": 0.9,
+        "initialization_mode": "shelf",
+        "max_evaluations": 30000,
+        "restarts": 4,
+        "sa_schedule": "classic",
+        "time_limit": 180.0
+      },
+      "P1": {
+        "adaptive_constraints": true,
+        "calibration_samples": null,
+        "candidate": "Q2-BT",
+        "classic_final_temperature_ratio": 0.001,
+        "coordinate_tolerance": 0.0,
+        "dead_space_ratio": 0.15,
+        "fast_sa_c": 100.0,
+        "fast_sa_k": 7,
+        "hypergraph_init": false,
+        "initial_acceptance": 0.9,
+        "initialization_mode": "shelf",
+        "max_evaluations": 30000,
+        "restarts": 4,
+        "sa_schedule": "fast",
+        "time_limit": 180.0
+      },
+      "P2": {
+        "adaptive_constraints": true,
+        "calibration_samples": null,
+        "candidate": "Q2-HG",
+        "classic_final_temperature_ratio": 0.001,
+        "coordinate_tolerance": 0.0,
+        "dead_space_ratio": 0.15,
+        "fast_sa_c": 100.0,
+        "fast_sa_k": 7,
+        "hypergraph_init": true,
+        "initial_acceptance": 0.9,
+        "initialization_mode": "shelf",
+        "max_evaluations": 30000,
+        "restarts": 4,
+        "sa_schedule": "fast",
+        "time_limit": 180.0
+      }
+    },
+    "data_files": [
+      {
+        "bytes": 16719,
+        "path": "data/raw/附件/n200.blocks",
+        "sha256": "bed652bf55c2034b04a1c1bbe97ad617e027c11736bf069727a63baf575720ef"
+      },
+      {
+        "bytes": 38414,
+        "path": "data/raw/附件/n200.nets",
+        "sha256": "8867f3f167845d88623a5cadba68f7a19fe343278779538e7804c5ac0c5940a2"
+      },
+      {
+        "bytes": 6512,
+        "path": "data/raw/附件/n200.pl",
+        "sha256": "0400507fcb07124e01f6cdb86c5e71cdce1bbbb871030651f5583a2f66ec3589"
+      }
+    ],
+    "data_manifest_hash": "475e63eefda4a1592adaddb9596e92595f6ef6d5404ae0fd1e826d367bd056a7",
+    "environment": {
+      "implementation": "CPython",
+      "logical_cpu_count": 12,
+      "mkl_num_threads": "1",
+      "omp_num_threads": "1",
+      "openblas_num_threads": "1",
+      "os": "Windows",
+      "platform": "Windows-10-10.0.22631-SP0",
+      "processes": 4,
+      "python_executable": "D:\\miniconda3\\envs\\causal_paper\\python.exe",
+      "python_version": "3.10.20",
+      "rng": "random.Random (CPython MT19937)",
+      "threads": 1,
+      "workers": 4
+    },
+    "spec": {
+      "budgets": {
+        "max_evaluations": 30000,
+        "restarts": 4,
+        "time_limit": 180.0
+      },
+      "candidates": [
+        "P0",
+        "P1",
+        "P2"
+      ],
+      "code_hashes": {
+        "P0": "815f545fff15ed9b3822f4d2050e450631daf16e7f46fde4df41151e8f8de838",
+        "P1": "815f545fff15ed9b3822f4d2050e450631daf16e7f46fde4df41151e8f8de838",
+        "P2": "815f545fff15ed9b3822f4d2050e450631daf16e7f46fde4df41151e8f8de838"
+      },
+      "config_hashes": {
+        "P0": "b4e9c046a28d9fa5da81c71344c61710653c902f72dda0acf23a769324dcee06",
+        "P1": "62c4fc0857968603f5af8a4add05d7825ccbb79cfdfbde340b920a03183d787c",
+        "P2": "53cc3b06b1f09685c2b904c24fe7e462cb8e2ab5f94334409e1229dad3f0fb17"
+      },
+      "data_hash": "475e63eefda4a1592adaddb9596e92595f6ef6d5404ae0fd1e826d367bd056a7",
+      "final_seeds": [],
+      "instance": "n200",
+      "output_root": "outputs\\q2\\_runtime\\v3_n200",
+      "problem": "q2",
+      "processes": 4,
+      "q2_v3_baseline": "B",
+      "rng": "random.Random (CPython MT19937)",
+      "seeds": [
+        2201,
+        2202,
+        2203,
+        2204,
+        2205,
+        2206,
+        2207,
+        2208,
+        2209,
+        2210,
+        2211,
+        2212,
+        2213,
+        2214,
+        2215,
+        2216,
+        2217,
+        2218,
+        2219,
+        2220
+      ],
+      "stop_conditions": [
+        "max_evaluations",
+        "wall_clock",
+        "uncaught_exception",
+        "preserve_failure_status"
+      ],
+      "threads": 1,
+      "workers": 4
+    }
+  },
+  "q3": {
+    "code_files": [
+      {
+        "bytes": 73781,
+        "path": "src/v3.py",
+        "sha256": "df7ff8f61016253aa90cb0aafbc49dd010b0d3546326336c0719498ad2cd033d"
+      },
+      {
+        "bytes": 44,
+        "path": "src/Q3/__init__.py",
+        "sha256": "2800ceed9dab81125eceb923c64be6200a8775fc09fb07926010c2f1170439c6"
+      },
+      {
+        "bytes": 11859,
+        "path": "src/Q3/__main__.py",
+        "sha256": "f3adf101ca72a37579d6356112b90b59b6235006ce42699d75a3df766ca1e829"
+      },
+      {
+        "bytes": 8678,
+        "path": "src/Q3/common.py",
+        "sha256": "589ba3a4b1f50e36b239154300be3574f6d126c75402593f66cdf3b654988daa"
+      },
+      {
+        "bytes": 7307,
+        "path": "src/Q3/search.py",
+        "sha256": "83be29382cd2e7e8ba11efa8cc98971dd7de7876a859d21b6f995799bf574d8d"
+      },
+      {
+        "bytes": 53,
+        "path": "src/Q2/__init__.py",
+        "sha256": "d35c903c096f2c4532cc6014f1fa979077fbea5657762640354e8027666046dd"
+      },
+      {
+        "bytes": 17217,
+        "path": "src/Q2/__main__.py",
+        "sha256": "285eb9850fde432ddbaa8d0f3162699fe6686bd4ace2f64dae7bda2ceb1596d4"
+      },
+      {
+        "bytes": 13387,
+        "path": "src/Q2/common.py",
+        "sha256": "c3af3011c6cc634e3106dc6ec4e02fd956ec04d36c0ee5b433ed2c9ac59dafa1"
+      },
+      {
+        "bytes": 11187,
+        "path": "src/Q2/p0.py",
+        "sha256": "27dfa5a67f6bf02b02e177180c2801663a8a16a56282e9759d144d57af4653d4"
+      },
+      {
+        "bytes": 14191,
+        "path": "src/Q2/p1_p2.py",
+        "sha256": "cad0162119e11b14e66aa0177efcaed5e9a7f63e7b0764465300b28093873314"
+      },
+      {
+        "bytes": 15811,
+        "path": "src/Q2/summarize.py",
+        "sha256": "686fe72b8814c1b096d6098ef51cd2521e2643f29cebdacc45a214fb34712b1d"
+      },
+      {
+        "bytes": 9807,
+        "path": "src/Q1/p0.py",
+        "sha256": "10266679bfb2a20c9272e4f628df3619970593c26678c808a7041ec85e8d357d"
+      },
+      {
+        "bytes": 21343,
+        "path": "src/Q1/p1_p2.py",
+        "sha256": "4480edbdfd26a8330e3f6cb2d8036611cc0119a7aee93556f17a36a7f9f8f5bd"
+      },
+      {
+        "bytes": 4905,
+        "path": "src/_internal/parser.py",
+        "sha256": "a03db32940f5af3f7a0f1622d5afc97f6ac3134c470a00538039be2c29be48b4"
+      },
+      {
+        "bytes": 2382,
+        "path": "src/_internal/evaluator.py",
+        "sha256": "9e9b163ad0fb563e3cbcd07da3ad6e44c1625d6371e348cfdd40a6c501b5d927"
+      },
+      {
+        "bytes": 2617,
+        "path": "src/_internal/audit.py",
+        "sha256": "c5b18970ddc807a77646cf920954fe27097c90c2d82b75a38fe68eebd01863ae"
+      },
+      {
+        "bytes": 1484,
+        "path": "src/_internal/geometry.py",
+        "sha256": "cd2c8231c67364aad3febfc54d70b9fa3ebb4e655da95957ff9f43aec943e0cd"
+      }
+    ],
+    "code_manifest_hash": "f29038af5d3c57c130fc066a1d76d4e42b5944b7e2ce65c88ab7f5294fb2e5b1",
+    "commands": [
+      {
+        "auxiliary_suffixes": [
+          "v3_n200_q3-bin_attempts.csv",
+          "v3_n200_q3-bin_config_snapshot.json"
+        ],
+        "command": [
+          "D:\\miniconda3\\envs\\causal_paper\\python.exe",
+          "-B",
+          "-m",
+          "src.Q3",
+          "--instance",
+          "n200",
+          "--candidate",
+          "Q3-BIN",
+          "--inner-candidate",
+          "Q2-HG",
+          "--lower-ratio",
+          "0",
+          "--upper-ratio",
+          "0.15",
+          "--precision",
+          "0.005",
+          "--robust-min-success-rate",
+          "0.8",
+          "--decision-rule",
+          "robust",
+          "--seeds",
+          "2201-2220",
+          "--max-evaluations",
+          "30000",
+          "--time-limit",
+          "60.0",
+          "--restarts",
+          "4",
+          "--workers",
+          "5",
+          "--adaptive-constraints",
+          "on",
+          "--hypergraph-init",
+          "on",
+          "--continuous-compression",
+          "off",
+          "--final-seeds",
+          "2301-2320",
+          "--final-max-evaluations",
+          "30000",
+          "--final-time-limit",
+          "60.0",
+          "--final-restarts",
+          "4",
+          "--raw",
+          "data/raw/附件",
+          "--runtime-root",
+          "E:\\2026_chinamcm\\outputs\\q3\\_runtime\\v3_n200\\runtime",
+          "--table-root",
+          "E:\\2026_chinamcm\\outputs\\q3\\_runtime\\v3_n200\\tables",
+          "--run-id",
+          "v3_n200_q3-bin"
+        ],
+        "config_id": "Q3-BIN",
+        "final_seed_set": [
+          2301,
+          2302,
+          2303,
+          2304,
+          2305,
+          2306,
+          2307,
+          2308,
+          2309,
+          2310,
+          2311,
+          2312,
+          2313,
+          2314,
+          2315,
+          2316,
+          2317,
+          2318,
+          2319,
+          2320
+        ],
+        "seed_set": [
+          2201,
+          2202,
+          2203,
+          2204,
+          2205,
+          2206,
+          2207,
+          2208,
+          2209,
+          2210,
+          2211,
+          2212,
+          2213,
+          2214,
+          2215,
+          2216,
+          2217,
+          2218,
+          2219,
+          2220
+        ]
+      },
+      {
+        "auxiliary_suffixes": [
+          "v3_n200_q3-lin_attempts.csv",
+          "v3_n200_q3-lin_config_snapshot.json"
+        ],
+        "command": [
+          "D:\\miniconda3\\envs\\causal_paper\\python.exe",
+          "-B",
+          "-m",
+          "src.Q3",
+          "--instance",
+          "n200",
+          "--candidate",
+          "Q3-LIN",
+          "--inner-candidate",
+          "Q2-HG",
+          "--lower-ratio",
+          "0",
+          "--upper-ratio",
+          "0.15",
+          "--precision",
+          "0.005",
+          "--robust-min-success-rate",
+          "0.8",
+          "--decision-rule",
+          "robust",
+          "--seeds",
+          "2201-2220",
+          "--max-evaluations",
+          "30000",
+          "--time-limit",
+          "60.0",
+          "--restarts",
+          "4",
+          "--workers",
+          "5",
+          "--adaptive-constraints",
+          "on",
+          "--hypergraph-init",
+          "on",
+          "--continuous-compression",
+          "off",
+          "--final-seeds",
+          "2301-2320",
+          "--final-max-evaluations",
+          "30000",
+          "--final-time-limit",
+          "60.0",
+          "--final-restarts",
+          "4",
+          "--raw",
+          "data/raw/附件",
+          "--runtime-root",
+          "E:\\2026_chinamcm\\outputs\\q3\\_runtime\\v3_n200\\runtime",
+          "--table-root",
+          "E:\\2026_chinamcm\\outputs\\q3\\_runtime\\v3_n200\\tables",
+          "--run-id",
+          "v3_n200_q3-lin"
+        ],
+        "config_id": "Q3-LIN",
+        "final_seed_set": [
+          2301,
+          2302,
+          2303,
+          2304,
+          2305,
+          2306,
+          2307,
+          2308,
+          2309,
+          2310,
+          2311,
+          2312,
+          2313,
+          2314,
+          2315,
+          2316,
+          2317,
+          2318,
+          2319,
+          2320
+        ],
+        "seed_set": [
+          2201,
+          2202,
+          2203,
+          2204,
+          2205,
+          2206,
+          2207,
+          2208,
+          2209,
+          2210,
+          2211,
+          2212,
+          2213,
+          2214,
+          2215,
+          2216,
+          2217,
+          2218,
+          2219,
+          2220
+        ]
+      },
+      {
+        "auxiliary_suffixes": [
+          "v3_n200_q3-cont-r_attempts.csv",
+          "v3_n200_q3-cont-r_config_snapshot.json"
+        ],
+        "command": [
+          "D:\\miniconda3\\envs\\causal_paper\\python.exe",
+          "-B",
+          "-m",
+          "src.Q3",
+          "--instance",
+          "n200",
+          "--candidate",
+          "Q3-CONT-R",
+          "--inner-candidate",
+          "Q2-HG",
+          "--lower-ratio",
+          "0",
+          "--upper-ratio",
+          "0.15",
+          "--precision",
+          "0.005",
+          "--robust-min-success-rate",
+          "0.8",
+          "--decision-rule",
+          "robust",
+          "--seeds",
+          "2201-2220",
+          "--max-evaluations",
+          "30000",
+          "--time-limit",
+          "60.0",
+          "--restarts",
+          "4",
+          "--workers",
+          "5",
+          "--adaptive-constraints",
+          "on",
+          "--hypergraph-init",
+          "on",
+          "--continuous-compression",
+          "on",
+          "--final-seeds",
+          "2301-2320",
+          "--final-max-evaluations",
+          "30000",
+          "--final-time-limit",
+          "60.0",
+          "--final-restarts",
+          "4",
+          "--raw",
+          "data/raw/附件",
+          "--runtime-root",
+          "E:\\2026_chinamcm\\outputs\\q3\\_runtime\\v3_n200\\runtime",
+          "--table-root",
+          "E:\\2026_chinamcm\\outputs\\q3\\_runtime\\v3_n200\\tables",
+          "--run-id",
+          "v3_n200_q3-cont-r"
+        ],
+        "config_id": "Q3-CONT-R",
+        "final_seed_set": [
+          2301,
+          2302,
+          2303,
+          2304,
+          2305,
+          2306,
+          2307,
+          2308,
+          2309,
+          2310,
+          2311,
+          2312,
+          2313,
+          2314,
+          2315,
+          2316,
+          2317,
+          2318,
+          2319,
+          2320
+        ],
+        "seed_set": [
+          2201,
+          2202,
+          2203,
+          2204,
+          2205,
+          2206,
+          2207,
+          2208,
+          2209,
+          2210,
+          2211,
+          2212,
+          2213,
+          2214,
+          2215,
+          2216,
+          2217,
+          2218,
+          2219,
+          2220
+        ]
+      }
+    ],
+    "configs": {
+      "Q3-BIN": {
+        "adaptive_constraints": true,
+        "candidate": "Q3-BIN",
+        "continuous_compression": false,
+        "decision_rule": "robust",
+        "final_max_evaluations": 30000,
+        "final_restarts": 4,
+        "final_seeds": [
+          2301,
+          2302,
+          2303,
+          2304,
+          2305,
+          2306,
+          2307,
+          2308,
+          2309,
+          2310,
+          2311,
+          2312,
+          2313,
+          2314,
+          2315,
+          2316,
+          2317,
+          2318,
+          2319,
+          2320
+        ],
+        "final_time_limit": 60.0,
+        "hypergraph_init": true,
+        "inner_candidate": "Q2-HG",
+        "lower_ratio": 0.0,
+        "max_evaluations": 30000,
+        "precision": 0.005,
+        "restarts": 4,
+        "robust_min_success_rate": 0.8,
+        "seeds": [
+          2201,
+          2202,
+          2203,
+          2204,
+          2205,
+          2206,
+          2207,
+          2208,
+          2209,
+          2210,
+          2211,
+          2212,
+          2213,
+          2214,
+          2215,
+          2216,
+          2217,
+          2218,
+          2219,
+          2220
+        ],
+        "time_limit": 60.0,
+        "upper_ratio": 0.15,
+        "workers": 5
+      },
+      "Q3-CONT-R": {
+        "adaptive_constraints": true,
+        "candidate": "Q3-CONT-R",
+        "continuous_compression": true,
+        "decision_rule": "robust",
+        "final_max_evaluations": 30000,
+        "final_restarts": 4,
+        "final_seeds": [
+          2301,
+          2302,
+          2303,
+          2304,
+          2305,
+          2306,
+          2307,
+          2308,
+          2309,
+          2310,
+          2311,
+          2312,
+          2313,
+          2314,
+          2315,
+          2316,
+          2317,
+          2318,
+          2319,
+          2320
+        ],
+        "final_time_limit": 60.0,
+        "hypergraph_init": true,
+        "inner_candidate": "Q2-HG",
+        "lower_ratio": 0.0,
+        "max_evaluations": 30000,
+        "precision": 0.005,
+        "restarts": 4,
+        "robust_min_success_rate": 0.8,
+        "seeds": [
+          2201,
+          2202,
+          2203,
+          2204,
+          2205,
+          2206,
+          2207,
+          2208,
+          2209,
+          2210,
+          2211,
+          2212,
+          2213,
+          2214,
+          2215,
+          2216,
+          2217,
+          2218,
+          2219,
+          2220
+        ],
+        "time_limit": 60.0,
+        "upper_ratio": 0.15,
+        "workers": 5
+      },
+      "Q3-LIN": {
+        "adaptive_constraints": true,
+        "candidate": "Q3-LIN",
+        "continuous_compression": false,
+        "decision_rule": "robust",
+        "final_max_evaluations": 30000,
+        "final_restarts": 4,
+        "final_seeds": [
+          2301,
+          2302,
+          2303,
+          2304,
+          2305,
+          2306,
+          2307,
+          2308,
+          2309,
+          2310,
+          2311,
+          2312,
+          2313,
+          2314,
+          2315,
+          2316,
+          2317,
+          2318,
+          2319,
+          2320
+        ],
+        "final_time_limit": 60.0,
+        "hypergraph_init": true,
+        "inner_candidate": "Q2-HG",
+        "lower_ratio": 0.0,
+        "max_evaluations": 30000,
+        "precision": 0.005,
+        "restarts": 4,
+        "robust_min_success_rate": 0.8,
+        "seeds": [
+          2201,
+          2202,
+          2203,
+          2204,
+          2205,
+          2206,
+          2207,
+          2208,
+          2209,
+          2210,
+          2211,
+          2212,
+          2213,
+          2214,
+          2215,
+          2216,
+          2217,
+          2218,
+          2219,
+          2220
+        ],
+        "time_limit": 60.0,
+        "upper_ratio": 0.15,
+        "workers": 5
+      }
+    },
+    "data_files": [
+      {
+        "bytes": 16719,
+        "path": "data/raw/附件/n200.blocks",
+        "sha256": "bed652bf55c2034b04a1c1bbe97ad617e027c11736bf069727a63baf575720ef"
+      },
+      {
+        "bytes": 38414,
+        "path": "data/raw/附件/n200.nets",
+        "sha256": "8867f3f167845d88623a5cadba68f7a19fe343278779538e7804c5ac0c5940a2"
+      },
+      {
+        "bytes": 6512,
+        "path": "data/raw/附件/n200.pl",
+        "sha256": "0400507fcb07124e01f6cdb86c5e71cdce1bbbb871030651f5583a2f66ec3589"
+      }
+    ],
+    "data_manifest_hash": "475e63eefda4a1592adaddb9596e92595f6ef6d5404ae0fd1e826d367bd056a7",
+    "environment": {
+      "implementation": "CPython",
+      "logical_cpu_count": 12,
+      "mkl_num_threads": "1",
+      "omp_num_threads": "1",
+      "openblas_num_threads": "1",
+      "os": "Windows",
+      "platform": "Windows-10-10.0.22631-SP0",
+      "processes": 1,
+      "python_executable": "D:\\miniconda3\\envs\\causal_paper\\python.exe",
+      "python_version": "3.10.20",
+      "rng": "random.Random (CPython MT19937)",
+      "threads": 1,
+      "workers": 5
+    },
+    "spec": {
+      "budgets": {
+        "max_evaluations": 30000,
+        "restarts": 4,
+        "time_limit": 60.0
+      },
+      "candidates": [
+        "Q3-BIN",
+        "Q3-LIN",
+        "Q3-CONT-R"
+      ],
+      "code_hashes": {
+        "Q3-BIN": "5ae7215aef11fdd348e1fe071c403b50f5f218cc97c73277b6b34d23bfc9a0ee",
+        "Q3-CONT-R": "5ae7215aef11fdd348e1fe071c403b50f5f218cc97c73277b6b34d23bfc9a0ee",
+        "Q3-LIN": "5ae7215aef11fdd348e1fe071c403b50f5f218cc97c73277b6b34d23bfc9a0ee"
+      },
+      "config_hashes": {
+        "Q3-BIN": "d199c899ccd7e0b32551015e1021c53be677c9a11ab13e22435017b1f7bb75ea",
+        "Q3-CONT-R": "77b287aa2415021bd1c49881aa318cd0c8508da7c2755d64da51616815cf0864",
+        "Q3-LIN": "0873b30da1bab74d09d0f63a8c4a64ab4535df540237cb0ad8728119247c0cce"
+      },
+      "data_hash": "475e63eefda4a1592adaddb9596e92595f6ef6d5404ae0fd1e826d367bd056a7",
+      "final_seeds": [
+        2301,
+        2302,
+        2303,
+        2304,
+        2305,
+        2306,
+        2307,
+        2308,
+        2309,
+        2310,
+        2311,
+        2312,
+        2313,
+        2314,
+        2315,
+        2316,
+        2317,
+        2318,
+        2319,
+        2320
+      ],
+      "instance": "n200",
+      "output_root": "outputs\\q3\\_runtime\\v3_n200",
+      "problem": "q3",
+      "processes": 1,
+      "q2_v3_baseline": null,
+      "rng": "random.Random (CPython MT19937)",
+      "seeds": [
+        2201,
+        2202,
+        2203,
+        2204,
+        2205,
+        2206,
+        2207,
+        2208,
+        2209,
+        2210,
+        2211,
+        2212,
+        2213,
+        2214,
+        2215,
+        2216,
+        2217,
+        2218,
+        2219,
+        2220
+      ],
+      "stop_conditions": [
+        "max_evaluations",
+        "wall_clock",
+        "uncaught_exception",
+        "preserve_failure_status"
+      ],
+      "threads": 1,
+      "workers": 5
+    }
+  },
+  "q4": {
+    "code_files": [
+      {
+        "bytes": 73781,
+        "path": "src/v3.py",
+        "sha256": "df7ff8f61016253aa90cb0aafbc49dd010b0d3546326336c0719498ad2cd033d"
+      },
+      {
+        "bytes": 598,
+        "path": "src/Q4/__init__.py",
+        "sha256": "fb2b9adee946defd3c5232bbd9eb1d87299f99d60e34cd42f9c9f1fcfa17e870"
+      },
+      {
+        "bytes": 4359,
+        "path": "src/Q4/__main__.py",
+        "sha256": "00675478a08b9b9b0eb1576c1fa168575009f74957932a65ac5c2f57678ed296"
+      },
+      {
+        "bytes": 1344,
+        "path": "src/Q4/geometry.py",
+        "sha256": "6b7b123ca2c9ff5b84d6d1d1d9650f1a3a1252db59691204f7170d19bfe7eec2"
+      },
+      {
+        "bytes": 5332,
+        "path": "src/Q4/model.py",
+        "sha256": "29fcd897ff9b90cfbeb19cca403e190edbc441c9336cc7308d19df533d3fa73b"
+      },
+      {
+        "bytes": 5093,
+        "path": "src/Q4/sa.py",
+        "sha256": "ca643a63fbc8d6c257712280b848b7432b648954baf2d3fce410e4e9b8873ebd"
+      },
+      {
+        "bytes": 8998,
+        "path": "src/Q4/search.py",
+        "sha256": "621fe2eaf346bdd1202ecc7787692003d8e5c09cc2f2ca8d910e4d3f65cad00d"
+      },
+      {
+        "bytes": 2617,
+        "path": "src/_internal/audit.py",
+        "sha256": "c5b18970ddc807a77646cf920954fe27097c90c2d82b75a38fe68eebd01863ae"
+      }
+    ],
+    "code_hash": "1d60e17ce3467c4a0e2a2012de24bccd68a812a1a5e41ccfa02f781fd14d89e3",
+    "config_hash": "1ca180449987b53740782fb797d7046a3fad2c6b724e6078413917bc932594e4",
+    "configurations": {
+      "G+_12x12_exact": {
+        "config": {
+          "b1_beam_thickness": 3,
+          "domain": [
+            12,
+            12
+          ],
+          "geometry": "G+",
+          "grid_step": 1,
+          "mode": "exact",
+          "rotations": [
+            0,
+            90,
+            180,
+            270
+          ],
+          "time_limit": 300.0,
+          "upper_area": 36
+        },
+        "config_hash": "a38abf182c4d2dcbbaf3779c164e1dca013ea42abf5ad89c3cad875597ebd212"
+      },
+      "G+_12x12_sa": {
+        "config": {
+          "b1_beam_thickness": 3,
+          "domain": [
+            12,
+            12
+          ],
+          "geometry": "G+",
+          "grid_step": 1,
+          "max_evaluations": [
+            10000,
+            30000,
+            60000
+          ],
+          "mode": "sa",
+          "restarts": 4,
+          "rotations": [
+            0,
+            90,
+            180,
+            270
+          ],
+          "seeds": [
+            2201,
+            2202,
+            2203,
+            2204,
+            2205,
+            2206,
+            2207,
+            2208,
+            2209,
+            2210,
+            2211,
+            2212,
+            2213,
+            2214,
+            2215,
+            2216,
+            2217,
+            2218,
+            2219,
+            2220
+          ],
+          "time_limits": [
+            60.0,
+            120.0
+          ]
+        },
+        "config_hash": "0e96b8a88eb38a3400e3585c3341bc02643c6792b5e37d4d29a9246e45974064"
+      },
+      "G+_9x9_exact": {
+        "config": {
+          "b1_beam_thickness": 3,
+          "domain": [
+            9,
+            9
+          ],
+          "geometry": "G+",
+          "grid_step": 1,
+          "mode": "exact",
+          "rotations": [
+            0,
+            90,
+            180,
+            270
+          ],
+          "time_limit": 300.0,
+          "upper_area": 36
+        },
+        "config_hash": "b4014db8c5c6f2af9cd8d6bcf9b4eede5fab0358fddf38ff639ec4432e47244d"
+      },
+      "G+_9x9_sa": {
+        "config": {
+          "b1_beam_thickness": 3,
+          "domain": [
+            9,
+            9
+          ],
+          "geometry": "G+",
+          "grid_step": 1,
+          "max_evaluations": [
+            10000,
+            30000,
+            60000
+          ],
+          "mode": "sa",
+          "restarts": 4,
+          "rotations": [
+            0,
+            90,
+            180,
+            270
+          ],
+          "seeds": [
+            2201,
+            2202,
+            2203,
+            2204,
+            2205,
+            2206,
+            2207,
+            2208,
+            2209,
+            2210,
+            2211,
+            2212,
+            2213,
+            2214,
+            2215,
+            2216,
+            2217,
+            2218,
+            2219,
+            2220
+          ],
+          "time_limits": [
+            60.0,
+            120.0
+          ]
+        },
+        "config_hash": "70de04cb5abb8536fa89ad5eab1703a3f7d547a5d19e6f5ad76fecdaa2f4c2a3"
+      },
+      "G-_12x12_exact": {
+        "config": {
+          "b1_beam_thickness": 1,
+          "domain": [
+            12,
+            12
+          ],
+          "geometry": "G-",
+          "grid_step": 1,
+          "mode": "exact",
+          "rotations": [
+            0,
+            90,
+            180,
+            270
+          ],
+          "time_limit": 300.0,
+          "upper_area": 36
+        },
+        "config_hash": "c759d286a475e7f1c543ef5077107fba71f2b48b78197ee0b37eba95f98e8573"
+      },
+      "G-_12x12_sa": {
+        "config": {
+          "b1_beam_thickness": 1,
+          "domain": [
+            12,
+            12
+          ],
+          "geometry": "G-",
+          "grid_step": 1,
+          "max_evaluations": [
+            10000,
+            30000,
+            60000
+          ],
+          "mode": "sa",
+          "restarts": 4,
+          "rotations": [
+            0,
+            90,
+            180,
+            270
+          ],
+          "seeds": [
+            2201,
+            2202,
+            2203,
+            2204,
+            2205,
+            2206,
+            2207,
+            2208,
+            2209,
+            2210,
+            2211,
+            2212,
+            2213,
+            2214,
+            2215,
+            2216,
+            2217,
+            2218,
+            2219,
+            2220
+          ],
+          "time_limits": [
+            60.0,
+            120.0
+          ]
+        },
+        "config_hash": "356aee9efc63f70ce015eacd3f32d9c125fb0d4f5b49055096adffce1ba70a31"
+      },
+      "G-_9x9_exact": {
+        "config": {
+          "b1_beam_thickness": 1,
+          "domain": [
+            9,
+            9
+          ],
+          "geometry": "G-",
+          "grid_step": 1,
+          "mode": "exact",
+          "rotations": [
+            0,
+            90,
+            180,
+            270
+          ],
+          "time_limit": 300.0,
+          "upper_area": 36
+        },
+        "config_hash": "675fb092532377a95ca96ada450d3e45a25966d3611acc40988f637429d5abf1"
+      },
+      "G-_9x9_sa": {
+        "config": {
+          "b1_beam_thickness": 1,
+          "domain": [
+            9,
+            9
+          ],
+          "geometry": "G-",
+          "grid_step": 1,
+          "max_evaluations": [
+            10000,
+            30000,
+            60000
+          ],
+          "mode": "sa",
+          "restarts": 4,
+          "rotations": [
+            0,
+            90,
+            180,
+            270
+          ],
+          "seeds": [
+            2201,
+            2202,
+            2203,
+            2204,
+            2205,
+            2206,
+            2207,
+            2208,
+            2209,
+            2210,
+            2211,
+            2212,
+            2213,
+            2214,
+            2215,
+            2216,
+            2217,
+            2218,
+            2219,
+            2220
+          ],
+          "time_limits": [
+            60.0,
+            120.0
+          ]
+        },
+        "config_hash": "c438af63bec5cd773ae7c3ebaea624023760e5ba0c01fd69b72ab79c39ac7794"
+      },
+      "G0_12x12_exact": {
+        "config": {
+          "b1_beam_thickness": 2,
+          "domain": [
+            12,
+            12
+          ],
+          "geometry": "G0",
+          "grid_step": 1,
+          "mode": "exact",
+          "rotations": [
+            0,
+            90,
+            180,
+            270
+          ],
+          "time_limit": 300.0,
+          "upper_area": 36
+        },
+        "config_hash": "af293b59c6034dea3dc37d1e2f6f825be96b7e7e77ccdd2bf3a7f5f71368e9ab"
+      },
+      "G0_12x12_sa": {
+        "config": {
+          "b1_beam_thickness": 2,
+          "domain": [
+            12,
+            12
+          ],
+          "geometry": "G0",
+          "grid_step": 1,
+          "max_evaluations": [
+            10000,
+            30000,
+            60000
+          ],
+          "mode": "sa",
+          "restarts": 4,
+          "rotations": [
+            0,
+            90,
+            180,
+            270
+          ],
+          "seeds": [
+            2201,
+            2202,
+            2203,
+            2204,
+            2205,
+            2206,
+            2207,
+            2208,
+            2209,
+            2210,
+            2211,
+            2212,
+            2213,
+            2214,
+            2215,
+            2216,
+            2217,
+            2218,
+            2219,
+            2220
+          ],
+          "time_limits": [
+            60.0,
+            120.0
+          ]
+        },
+        "config_hash": "e9314914779f0ab6e37cebdc3b3537d6e344b6df4ad89222ca391c8eca9ba5ad"
+      },
+      "G0_9x9_exact": {
+        "config": {
+          "b1_beam_thickness": 2,
+          "domain": [
+            9,
+            9
+          ],
+          "geometry": "G0",
+          "grid_step": 1,
+          "mode": "exact",
+          "rotations": [
+            0,
+            90,
+            180,
+            270
+          ],
+          "time_limit": 300.0,
+          "upper_area": 36
+        },
+        "config_hash": "38858d0f4d4947f7d2f0b923523b82b759cd20e841ee03e2211933d28adf4e0b"
+      },
+      "G0_9x9_sa": {
+        "config": {
+          "b1_beam_thickness": 2,
+          "domain": [
+            9,
+            9
+          ],
+          "geometry": "G0",
+          "grid_step": 1,
+          "max_evaluations": [
+            10000,
+            30000,
+            60000
+          ],
+          "mode": "sa",
+          "restarts": 4,
+          "rotations": [
+            0,
+            90,
+            180,
+            270
+          ],
+          "seeds": [
+            2201,
+            2202,
+            2203,
+            2204,
+            2205,
+            2206,
+            2207,
+            2208,
+            2209,
+            2210,
+            2211,
+            2212,
+            2213,
+            2214,
+            2215,
+            2216,
+            2217,
+            2218,
+            2219,
+            2220
+          ],
+          "time_limits": [
+            60.0,
+            120.0
+          ]
+        },
+        "config_hash": "74ee6d928f53120d69482cb21326e97474ae00cf9715f721d92d8ecc5d92f1f9"
+      }
+    },
+    "continuous_domain_confirmed": false,
+    "data_hash": null,
+    "environment": {
+      "implementation": "CPython",
+      "logical_cpu_count": 12,
+      "mkl_num_threads": "1",
+      "omp_num_threads": "1",
+      "openblas_num_threads": "1",
+      "os": "Windows",
+      "platform": "Windows-10-10.0.22631-SP0",
+      "python_executable": "D:\\miniconda3\\envs\\causal_paper\\python.exe",
+      "python_version": "3.10.20",
+      "threads": 1,
+      "workers": 1
+    },
+    "geometry_confirmed": true,
+    "integer_domain_confirmed": true,
+    "problem": "q4",
+    "selection_scope": "geometry_budget_domain_sensitivity_only",
+    "status": "frozen_integer_domain_pending_main_run_review"
+  }
+}
