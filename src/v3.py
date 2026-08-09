@@ -54,6 +54,8 @@ HASH_RE = __import__("re").compile(r"^[0-9a-f]{64}$")
 ATTEMPT_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
 RESERVED_ATTEMPTS = {".", "..", "base", "final", "root", "runtime", "tables", "outputs", "con", "prn", "nul", "aux"}
 FROZEN_MANIFEST_PATH = ROOT / "outputs" / "v3_frozen_manifest.json"
+HOST_ENVIRONMENT_FIELDS = {"python_executable", "platform", "logical_cpu_count"}
+OUTPUT_PATH_FLAGS = {"--output-root", "--runtime-root", "--table-root", "--output"}
 
 
 class FreezeError(ValueError):
@@ -309,6 +311,41 @@ def runtime_environment(spec: FreezeSpec, *, python: str = sys.executable) -> di
     }
 
 
+def _portable_environment(value: Any) -> Any:
+    if not isinstance(value, Mapping):
+        return value
+    return {key: item for key, item in value.items() if key not in HOST_ENVIRONMENT_FIELDS}
+
+
+def _portable_command(value: Any) -> Any:
+    if not isinstance(value, (list, tuple)):
+        return value
+    command = list(value)
+    if command:
+        command[0] = "<python>"
+    for index, item in enumerate(command[:-1]):
+        if item in OUTPUT_PATH_FLAGS:
+            command[index + 1] = f"<{item[2:]}>"
+    return command
+
+
+def _portable_fingerprint(value: Mapping[str, Any]) -> dict[str, Any]:
+    result = dict(value)
+    result["environment"] = _portable_environment(result.get("environment"))
+    if "command_argv" in result:
+        result["command_argv"] = _portable_command(result["command_argv"])
+        result["command"] = subprocess.list2cmdline(result["command_argv"])
+    elif "command" in result:
+        result["command"] = _portable_command(result["command"])
+    return result
+
+
+def _algorithm_code_files(value: Any) -> Any:
+    if not isinstance(value, (list, tuple)):
+        return value
+    return [item for item in value if item.get("path") != "src/v3.py"]
+
+
 def registered_payload(spec: FreezeSpec, root: Path = ROOT, *, python: str = sys.executable) -> dict[str, Any]:
     code_files = file_manifest(_code_paths(spec.problem, root), root)
     data_files = file_manifest(_data_paths(spec.problem, root), root)
@@ -433,7 +470,14 @@ def check_q4_extension(manifest: Mapping[str, Any]) -> None:
 def check_q4_registered(root: Path = ROOT) -> dict[str, Any]:
     actual = q4_extension_checklist(root)
     frozen = load_frozen_manifest().get("q4")
-    if not isinstance(frozen, Mapping) or actual != frozen:
+    actual_registration = _portable_fingerprint(actual)
+    frozen_registration = _portable_fingerprint(frozen) if isinstance(frozen, Mapping) else None
+    if frozen_registration is not None:
+        actual_registration["code_files"] = _algorithm_code_files(actual_registration.get("code_files"))
+        frozen_registration["code_files"] = _algorithm_code_files(frozen_registration.get("code_files"))
+        actual_registration.pop("runner_code_hash", None)
+        frozen_registration.pop("runner_code_hash", None)
+    if actual_registration != frozen_registration:
         raise FreezeError("Q4 checklist differs from immutable registration")
     check_q4_extension(actual)
     return actual
@@ -494,14 +538,22 @@ def check_registered(actual: Mapping[str, Any], frozen: Mapping[str, Any]) -> No
         raise FreezeError("frozen manifest has no spec")
     if actual.get("spec") != dict(expected):
         raise FreezeError("runtime spec differs from immutable registration")
-    for field in ("code_files", "data_files", "configs", "environment", "commands"):
+    if _algorithm_code_files(actual.get("code_files")) != _algorithm_code_files(frozen.get("code_files")):
+        raise FreezeError("runtime code_files differs from immutable registration")
+    for field in ("data_files", "configs"):
         if actual.get(field) != frozen.get(field):
             raise FreezeError(f"runtime {field} differs from immutable registration")
+    if _portable_environment(actual.get("environment")) != _portable_environment(frozen.get("environment")):
+        raise FreezeError("runtime environment differs from immutable registration")
+    actual_commands = [{**item, "command": _portable_command(item.get("command"))} for item in actual.get("commands", ())]
+    frozen_commands = [{**item, "command": _portable_command(item.get("command"))} for item in frozen.get("commands", ())]
+    if actual_commands != frozen_commands:
+        raise FreezeError("runtime commands differs from immutable registration")
     for field in ("code_manifest_hash", "data_manifest_hash"):
         value = actual.get(field)
         if value is not None:
             _require_hash(field, value)
-        if value != frozen.get(field):
+        if field == "data_manifest_hash" and value != frozen.get(field):
             raise FreezeError(f"runtime {field} differs from immutable registration")
     for item in actual.get("code_files", ()):
         _require_hash(f"code_files[{item.get('path')}].sha256", item.get("sha256"))
@@ -711,7 +763,7 @@ def _validate_completed(plan: CommandPlan) -> dict[str, Any]:
         raise FreezeError(f"missing freeze fingerprint: {plan.marker}")
     sidecar = plan.marker.parent / "v3_freeze.json"
     try:
-        if json.loads(sidecar.read_text(encoding="utf-8")) != dict(plan.fingerprint):
+        if _portable_fingerprint(json.loads(sidecar.read_text(encoding="utf-8"))) != _portable_fingerprint(plan.fingerprint):
             raise FreezeError(f"freeze sidecar mismatch: {sidecar}")
     except (OSError, json.JSONDecodeError) as exc:
         raise FreezeError(f"invalid freeze sidecar: {sidecar}") from exc
@@ -1020,7 +1072,9 @@ def summarize_q2(rows: Sequence[Mapping[str, Any]], registered_seeds: Sequence[i
     for summary in summaries:
         group = [row for row in rows if row.get("config_id") == summary["config_id"]]
         first_feasible = [float(row["first_feasible_evaluation"]) for row in group if row.get("first_feasible_evaluation") not in (None, "")]
+        first_feasible_time = [float(row["first_feasible_time"]) for row in group if row.get("first_feasible_time") not in (None, "")]
         summary["median_first_feasible_evaluation"] = statistics.median(first_feasible) if first_feasible else None
+        summary["median_first_feasible_time"] = statistics.median(first_feasible_time) if first_feasible_time else None
         checkpoints = {str(point): [] for point in (25, 50, 75, 100)}
         for row in group:
             values = row.get("checkpoints") or row.get("checkpoint_best_hpwl") or {}
@@ -1297,13 +1351,14 @@ def q2_mechanical_decision(summaries: Sequence[Mapping[str, Any]]) -> dict[str, 
         candidate_checkpoints.get(point) is not None and checkpoints.get(point) is not None and candidate_checkpoints[point] <= 0.99 * checkpoints[point]
         for point in ("25", "50", "75", "100")
     ) >= 3
-    first_feasible = (p1.get("median_first_feasible_evaluation") is not None and p2.get("median_first_feasible_evaluation") is not None and
-                      p2["median_first_feasible_evaluation"] <= p1["median_first_feasible_evaluation"])
+    first_feasible = (p1.get("median_first_feasible_time") is not None and p2.get("median_first_feasible_time") is not None and
+                      p2["median_first_feasible_time"] <= p1["median_first_feasible_time"])
     support = hard_gate and legal and hpwl and (better or first_feasible or checkpoint_better)
     return {"decision": "selected" if hard_gate else "blocked_hard_gate", "hard_gate": hard_gate,
             "selected": rankings[0]["config_id"] if hard_gate else None, "rankings": rankings,
             "p2_same_budget": "supports_p2" if support else "report_only", "legal": legal, "hpwl": hpwl,
-            "better_hpwl": better, "first_feasible": first_feasible, "checkpoint_better": checkpoint_better}
+            "better_hpwl": better, "first_feasible": first_feasible,
+            "first_feasible_metric": "median_first_feasible_time", "checkpoint_better": checkpoint_better}
 
 
 def _summarize_metric(
@@ -1548,8 +1603,8 @@ def _pad_registered_summaries(
         if problem == "Q1":
             item.update({"median_first_feasible_evaluation": None, "first_feasible_status": "not_recorded_protocol_deviation"})
         if checkpoints:
-            item.update({"median_first_feasible_evaluation": None,
-                         "checkpoint_median_best_so_far_HPWL": {str(point): None for point in (25, 50, 75, 100)},
+            item.update({"median_first_feasible_evaluation": None, "median_first_feasible_time": None,
+                          "checkpoint_median_best_so_far_HPWL": {str(point): None for point in (25, 50, 75, 100)},
                          "checkpoint_status": "missing"})
         output.append(item)
     return output

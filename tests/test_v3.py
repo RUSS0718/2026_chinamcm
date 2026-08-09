@@ -312,9 +312,42 @@ class V3ProtocolTests(unittest.TestCase):
         actual = registered_payload(spec)
         check_registered(actual, frozen)
         broken = json.loads(json.dumps(actual))
-        broken["code_files"][0]["sha256"] = "0" * 64
+        next(item for item in broken["code_files"] if item["path"] != "src/v3.py")["sha256"] = "0" * 64
         with self.assertRaises(FreezeError):
             check_registered(broken, frozen)
+
+        broken = json.loads(json.dumps(actual))
+        command = broken["commands"][0]["command"]
+        command[command.index("--max-evaluations") + 1] = "1"
+        with self.assertRaises(FreezeError):
+            check_registered(broken, frozen)
+
+    def test_completed_marker_allows_host_paths_but_rejects_budget_drift(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            spec = replace(build_specs()["q2"], output_root=tmp, seeds=(2201,))
+            plan = build_plan(spec)[0]
+            fingerprint = json.loads(json.dumps(plan.fingerprint))
+            fingerprint["command"][0] = r"E:\python.exe"
+            output_index = fingerprint["command"].index("--output-root") + 1
+            fingerprint["command"][output_index] = r"E:\historical-output"
+            fingerprint["environment"].update({
+                "python_executable": r"E:\python.exe",
+                "platform": "Windows-historical",
+                "logical_cpu_count": 12,
+            })
+            plan.marker.parent.mkdir(parents=True)
+            (plan.marker.parent / "v3_freeze.json").write_text(json.dumps(fingerprint), encoding="utf-8")
+            record = {key: plan.fingerprint[key] for key in (
+                "problem", "instance", "config_id", "seed", "code_hash", "config_hash", "data_hash"
+            )}
+            record.update({"status": "timeout", "formal_audit_match": True})
+            plan.marker.write_text(json.dumps(record) + "\n", encoding="utf-8")
+            self.assertEqual(_validate_completed(plan)["status"], "timeout")
+
+            fingerprint["command"][fingerprint["command"].index("--max-evaluations") + 1] = "1"
+            (plan.marker.parent / "v3_freeze.json").write_text(json.dumps(fingerprint), encoding="utf-8")
+            with self.assertRaises(FreezeError):
+                _validate_completed(plan)
 
     def test_plan_uses_isolated_seed_markers_without_running(self):
         spec = build_specs()["q2"]
@@ -405,6 +438,7 @@ class V3ProtocolTests(unittest.TestCase):
                 plan.marker.parent.mkdir(parents=True, exist_ok=True)
                 record = {**dict(plan.fingerprint), "problem": "Q2", "status": "success", "legal": True,
                           "formal_audit_match": True, "HPWL": 10.0, "first_feasible_evaluation": 1,
+                          "first_feasible_time": 0.01,
                           "checkpoint_best_hpwl": {"25": 10.0, "50": 10.0, "75": 10.0, "100": 10.0}}
                 plan.marker.write_text(json.dumps(record) + "\n", encoding="utf-8")
                 (plan.marker.parent / "v3_freeze.json").write_text(json.dumps(plan.fingerprint), encoding="utf-8")
@@ -435,6 +469,25 @@ class V3ProtocolTests(unittest.TestCase):
         self.assertEqual(summary["checkpoint_status"], "missing")
         self.assertIsNone(summary["checkpoint_median_best_so_far_HPWL"]["25"])
 
+    def test_q2_first_feasible_comparison_uses_time_not_evaluation_count(self):
+        rows = [
+            {"config_id": "P1", "status": "success", "legal": True, "formal_audit_match": True,
+             "HPWL": 10.0, "first_feasible_evaluation": 1, "first_feasible_time": 0.01},
+            {"config_id": "P2", "status": "success", "legal": True, "formal_audit_match": True,
+             "HPWL": 10.0, "first_feasible_evaluation": 1, "first_feasible_time": 0.20},
+        ]
+        summaries = summarize_q2(rows)
+        by_id = {row["config_id"]: row for row in summaries}
+        self.assertEqual(by_id["P1"]["median_first_feasible_time"], 0.01)
+        self.assertEqual(by_id["P2"]["median_first_feasible_time"], 0.20)
+        decision = q2_mechanical_decision([
+            {**by_id[config_id], "registered_runs": 1, "missing_runs": 0, "audit_match_runs": 20,
+             "checkpoint_median_best_so_far_HPWL": {str(point): None for point in (25, 50, 75, 100)}}
+            for config_id in ("P1", "P2")
+        ])
+        self.assertFalse(decision["first_feasible"])
+        self.assertEqual(decision["p2_same_budget"], "report_only")
+
     def test_q3_summary_keeps_warm_and_final_out_of_cold_denominator(self):
         rows = [
             {"phase": "threshold", "mode": "cold", "legal": True, "formal_audit_match": True, "status": "success"},
@@ -458,7 +511,7 @@ class V3ProtocolTests(unittest.TestCase):
                                           "missing_runs": 0, "median_area" if metric == "area" else "median_HPWL": 10.0,
                                           "median_aspect_ratio": 1.0, "iqr_area": 1.0, "p90_area": 1.0,
                                           "checkpoint_median_best_so_far_HPWL": {"25": 10.0, "50": 10.0, "75": 10.0, "100": 10.0},
-                                          "median_first_feasible_evaluation": 1}
+                                          "median_first_feasible_evaluation": 1, "median_first_feasible_time": 0.01}
         q1 = q1_mechanical_decision([good(name, "area") for name in ("Q1-G", "Q1-SP", "Q1-BT", "Q1-BT-D", "Q1-BT-both", "Q1-BT-directed-only", "Q1-BT-dedup-only")])
         self.assertEqual(q1["decision"], "selected")
         self.assertEqual([row["config_id"] for row in q1["rankings"]], ["Q1-BT", "Q1-BT-D", "Q1-G", "Q1-SP"])

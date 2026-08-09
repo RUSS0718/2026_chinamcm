@@ -1,13 +1,13 @@
 # Q2 V3：n200 正式选型运行报告
 
-- 阶段：`REVIEWING`
+- 阶段：`VERIFIED`
 - 更新日期：2026-08-09
 - 运行范围：Q2 的 `n200` 正式候选比较，P0 → P1 → P2
-- 当前暂定结论：按预注册主指标暂选 `P1`；`P2` 保留为有效创新候选和消融证据
-- 明确边界：本报告不是 `VERIFIED`、`FINAL` 或论文终稿，不覆盖后续 n300 留出验证
+- 当前结论：按预注册主指标选择 `P1`；`P2` 保留为有效创新候选和消融证据
+- 明确边界：本报告为 `VERIFIED` 阶段材料，不是 `FINAL` 或论文终稿；n300 留出验证见独立报告
 - Git 状态：运行发生在分支 `V2go`、HEAD `832e8bde7d9a857c4023693f1a67249e25f07d5d` 上的未提交工作区；正式证据必须以本文记录的完整 code/config/data hash 为准，不能只用 HEAD 代替
 
-本报告是正式汇总 JSON 的人类可读伴随材料。关键数字来自 `outputs/q2/tables/v3_n200_summary.json` 和 60 条 `events.jsonl`，没有补种子、删除 timeout、覆盖结果或改写失败状态。
+本报告是正式汇总 JSON 的人类可读伴随材料。原始运行不变；首次合法解时间口径整改后的派生结果来自 `outputs/q2/tables/v3_n200_summary_v2.json` 和 60 条 `events.jsonl`，没有补种子、删除 timeout、覆盖结果或改写失败状态。旧 `v3_n200_summary.json` 保留为整改前分析追溯，不再作为专项验收入口。
 
 ## 1. 本轮回答的问题
 
@@ -108,11 +108,11 @@ V3 编排器只在当前候选的全部 seed 已落盘且 marker、哈希和审�
 
 HPWL 越低越好。IQR 和 p90 用于观察波动与较差尾部表现。
 
-| 配置 | 最好 HPWL | median HPWL | IQR | p90 | 最差 HPWL | 中位 evaluations | 中位 runtime/s |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| P0 | 536183.5 | 543792.0 | 4703.625 | 549110.65 | 553106.5 | 7860.5 | 180.0084 |
-| P1 | **487309.5** | **504410.5** | 12094.5 | 518658.05 | 521899.0 | 24731.5 | 180.0040 |
-| P2 | 495154.5 | 505079.0 | **7409.125** | **512890.60** | **515909.5** | 24809.5 | 180.0032 |
+| 配置 | 最好 HPWL | median HPWL | IQR | p90 | 最差 HPWL | 首次合法解时间中位数/s | 中位 evaluations | 中位 runtime/s |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| P0 | 536183.5 | 543792.0 | 4703.625 | 549110.65 | 553106.5 | 0.023744 | 7860.5 | 180.0084 |
+| P1 | **487309.5** | **504410.5** | 12094.5 | 518658.05 | 521899.0 | **0.008188** | 24731.5 | 180.0040 |
+| P2 | 495154.5 | 505079.0 | **7409.125** | **512890.60** | **515909.5** | 0.170665 | 24809.5 | 180.0032 |
 
 相对 P0 的 median HPWL 改善为：
 
@@ -187,13 +187,13 @@ P2 在 25% checkpoint 比 P1 低约 `1.1335%`，在 50% checkpoint 低约 `0.529
 
 因此当前机械字段为 `selected=P1`。推荐把 P1 作为 Q2 当前主方案，原因是其预注册主指标排名第一，且模型结构比 P2 更简单。
 
-`p2_same_budget=supports_p2` 不表示 P2 胜出。该字段成立是因为：
+整改后的机械字段为 `p2_same_budget=report_only`。原因是：
 
 - P2 与 P1 的合法率均为 1.0；
 - P2 median HPWL 仅比 P1 高 0.1325%，仍位于 1% 非劣范围；
-- 两者中位首次合法评价均为 1，因此 P2 的首次可行性不慢于 P1。
+- 两者中位首次合法评价次数虽然均为 1，但专项验收要求比较墙钟时间；P2 为 `0.170665 s`，P1 为 `0.008188 s`，因此 P2 的首次可行墙钟明显更慢。
 
-同时，`better_hpwl=false`、`checkpoint_better=false`，配对胜负为 10:10。综合解释应为：P2 的超图初始化具有尾部稳定性价值，但尚无稳定收益足以替换 P1。P2 应保留为创新模块、消融结果和备选方案，而不是写成已证明优于 P1。
+同时，`better_hpwl=false`、`first_feasible=false`、`checkpoint_better=false`，配对胜负为 10:10。综合解释应为：P2 的超图初始化具有尾部稳定性价值，但尚无稳定收益足以替换 P1。P2 应保留为创新模块、消融结果和备选方案，而不是写成已证明优于 P1。
 
 ## 11. GitHub 协作交付范围
 
@@ -225,7 +225,8 @@ GitHub 协作交付应同时包含人类可读文档和机器可核验证据，�
 
 主要产物：
 
-- `outputs/q2/tables/v3_n200_summary.json`；
+- `outputs/q2/tables/v3_n200_summary_v2.json`（专项验收纠正版，SHA-256 `82f11abdc466e2bc0573e8103b1eeb4f0a2991b0ff7e9786f6e3ba791178af0e`）；
+- `outputs/q2/tables/v3_n200_summary.json`（整改前分析追溯）；
 - `outputs/q2/_runtime/v3_n200/n200/P0/seed_2201...2220/`；
 - `outputs/q2/_runtime/v3_n200/n200/P1/seed_2201...2220/`；
 - `outputs/q2/_runtime/v3_n200/n200/P2/seed_2201...2220/`；
@@ -234,15 +235,13 @@ GitHub 协作交付应同时包含人类可读文档和机器可核验证据，�
 现有汇总入口：
 
 ```text
-D:\miniconda3\envs\causal_paper\python.exe -B -m src.v3 summary --problem q2 --input outputs/q2/_runtime/v3_n200 --output outputs/q2/tables/v3_n200_summary.json
+D:\Anaconda\envs\CA-py310\python.exe -B -m src.v3 summary --problem q2 --input outputs/q2/_runtime/v3_n200 --output outputs/q2/tables/v3_n200_summary_v2.json
 ```
 
-后续按顺序处理：
+2026-08-09，人工复核人（用户）接受纠正版 `_v2.json`、20 组配对差值、首次合法解墙钟时间口径和“n200 选择 P1、P2 同预算仅 report_only”的边界，批准本阶段为 `VERIFIED`。
 
-1. 由 Q2 主责和交叉复核人核对本文、summary、20 组配对差值和随机 seed 目录；
-2. 人工决定是否接受“n200 暂选 P1、P2 保留创新证据”；
-3. 若接受，再更新协作验收表并考虑将本阶段从 `REVIEWING` 提升为 `VERIFIED`；
-4. 冻结 P1 后执行 n300 留出验证，不在 n300 上继续选型或调参；
-5. 只有通过人工复核和后续门槛后，才生成 `paper/q2/v3_handoff.md` 或迁入 `final/`。
+论文图：[代表布局](../figures/v3_final_layouts.png)与[模型比较](../figures/v3_model_comparison.png)；对应源数据为 `v3_figure_layout_sources.csv` 与 `v3_figure_model_comparison.csv`。
 
-截至本文生成时，未创建 commit、未 push、未迁移任何文件到 `paper/` 或 `final/`。
+截至本文生成时，未创建 commit、未 push、未迁移任何文件到 `final/`。
+
+整改后验证：Q2 n200 可在当前仓库从 60 条历史 marker 重新汇总；纠正版 JSON 逐字节复现一致。全量命令 `D:\Anaconda\envs\CA-py310\python.exe -B -m unittest discover -s tests -q` 实际运行 109 项测试，结果 `OK`。

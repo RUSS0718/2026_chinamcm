@@ -1,14 +1,14 @@
 # Q2 V3：n300 留出验证报告
 
 - 问题：Q2
-- 阶段：`REVIEWING`
+- 阶段：`VERIFIED`
 - 基本执行：`luna_worker`
 - 阶段验收：Codex 主代理
-- 人工复核人：待团队指定
+- 人工复核人：用户（2026-08-09 明确批准）
 - 更新日期：2026-08-09
 - 运行范围：冻结候选 `P1` 与主基线 `P0` 的 n300 留出验证
 - 直接结论：60/60 条最终注册结果完整；`P1` 在 30 个同 seed 配对中均取得更低 HPWL
-- 边界：`P2` 只保留 n200 消融证据，没有进入 n300 性能汇总；本报告不重新选型、不声称收敛、全局最优、文献领先、`VERIFIED` 或 `FINAL`
+- 边界：`P2` 只保留 n200 消融证据，没有进入 n300 性能汇总；本报告不重新选型、不声称收敛、全局最优或文献领先；`VERIFIED` 不等于 `FINAL`
 
 ## 1. 配置与冻结协议
 
@@ -42,7 +42,7 @@ D:\Anaconda\envs\CA-py310\python.exe -B -m src.n300 run --problem q2 --execute -
 汇总命令：
 
 ```text
-D:\Anaconda\envs\CA-py310\python.exe -B -m src.n300 summary --problem q2 --input outputs/q2/_runtime/v3_n300_holdout --output outputs/q2/tables/v3_n300_holdout_summary.json
+D:\Anaconda\envs\CA-py310\python.exe -B -m src.n300 summary --problem q2 --input outputs/q2/_runtime/v3_n300_holdout --output outputs/q2/tables/v3_n300_holdout_summary_v2.json
 ```
 
 运行开始时使用的 v2 联合清单仍包含 `P2`。用户随后明确 n300 只运行冻结候选和主基线。由于候选组按 `P0 -> P1 -> P2` 串行调度，P0 与 P1 各 30 条已经完整结束；在 P2 首批只写入 8 个 `v3_freeze.json`、尚无任何 `events.jsonl`、layout 或 orchestrator sidecar 时，外层 runner 被明确终止。外层命令因此没有生成 `tmp/n300_q2_run_results_v2.json`，不能写成正常 exit 0。
@@ -63,14 +63,14 @@ D:\Anaconda\envs\CA-py310\python.exe -B -m src.n300 summary --problem q2 --input
 
 HPWL 越低越好。
 
-| 配置 | min HPWL | median HPWL | IQR | p90 | max HPWL | median first feasible eval | median evaluations | median runtime/s |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| P0 | 818990 | 831802 | 7482.875 | 840255.9 | 849827.5 | 1 | 12581 | 600.0223 |
-| P1 | **758199** | **776636.75** | 11385.5 | **788598.75** | **795623** | 1 | 30000 | 300.2509 |
+| 配置 | min HPWL | median HPWL | IQR | p90 | max HPWL | 首次合法评价中位数 | 首次合法解时间中位数/s | median evaluations | median runtime/s |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| P0 | 818990 | 831802 | 7482.875 | 840255.9 | 849827.5 | 1 | 0.047978 | 12581 | 600.0223 |
+| P1 | **758199** | **776636.75** | 11385.5 | **788598.75** | **795623** | 1 | **0.012372** | 30000 | 300.2509 |
 
 `P1` 的 median HPWL 比 `P0` 低 `6.6320%`。P1 的 IQR 大于 P0，但其最差值仍低于 P0 的最好值；这支持在本轮留出种子上 P1 的整体 HPWL 水平更低。
 
-P1 完成全部 30000 evaluations；P0 在 600 s 内的 evaluations 范围为 12086--14825。P0 与 P1 的主要比较是相同墙钟上限下的最终 incumbent，同时也揭示 P0 单次评价路径明显更慢。
+P1 完成全部 30000 evaluations；P0 在 600 s 内的 evaluations 范围为 12086--14825。P0 与 P1 的主要比较是相同墙钟上限下的最终 incumbent，同时也揭示 P0 单次评价路径明显更慢。两者首次合法评价次数均为 1，但 P1 的首次合法解墙钟中位数比 P0 更短，因此首次可行性结论应以时间而不是评价序号表述。
 
 ## 5. Checkpoint 与同 seed 配对
 
@@ -94,13 +94,16 @@ P1 完成全部 30000 evaluations；P0 在 600 s 内的 evaluations 范围为 12
 3. v3 是在 P2 产生完整结果前完成的范围收紧；报告保留该时间顺序，不将其改写为原始运行一开始就只有两组。
 4. n300 只验证冻结选择，不允许依据本批结果继续调参或重新选型。
 5. 当前结果只覆盖 hard blocks、中心引脚、原始 terminal 坐标、正方形轮廓和当前机器/预算；不能直接与采用 soft modules、边界迁移 terminal 或其他轮廓定义的文献数字排名。
-6. 当前阶段保持 `REVIEWING`，人工复核前不得迁入 `outputs/q2/final/`。
+6. 2026-08-09，人工复核人（用户）接受 P1 留出结果和纠正后的首次合法解时间口径，批准阶段为 `VERIFIED`；仍不得迁入 `outputs/q2/final/`。
 
 ## 7. 证据与验证
 
-- 正式汇总：[`v3_n300_holdout_summary.json`](../tables/v3_n300_holdout_summary.json)，SHA-256 `93ad632a06d6d28e3636efbf799477a465f4185bb9833c8611726dab15dbd3bc`
+- 专项验收纠正版汇总：[`v3_n300_holdout_summary_v2.json`](../tables/v3_n300_holdout_summary_v2.json)，SHA-256 `df6ec9dbf5d2863ec4b5cfa764d4a1960aad15648777ca8e9b3d82e8c8b9e1ba`
+- 整改前分析追溯：[`v3_n300_holdout_summary.json`](../tables/v3_n300_holdout_summary.json)，不再作为首次合法解时间验收入口
 - 运行根：`outputs/q2/_runtime/v3_n300_holdout`，60 个 `events.jsonl`、60 个 layout、60 个冻结 sidecar、60 个 orchestrator sidecar
 - 运行器：[`src/n300.py`](../../../src/n300.py)
 - 回归测试：[`tests/test_n300.py`](../../../tests/test_n300.py)
 - 当前验证命令：`D:\Anaconda\envs\CA-py310\python.exe -B -m unittest tests.test_n300 tests.test_v3 -q`
-- 当前验证结果：35 tests，`OK`
+- 当前验证结果：37 tests，`OK`
+- 全量回归：`D:\Anaconda\envs\CA-py310\python.exe -B -m unittest discover -s tests -q`，109 tests，`OK`
+- 论文图：[代表布局](../figures/v3_final_layouts.png)与[模型比较](../figures/v3_model_comparison.png)
