@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from fractions import Fraction
 from typing import Mapping
 
-from .geometry import DEFAULT_MODULES, Polygon, polygon_area, rotate_normalized
+from .geometry import DEFAULT_MODULES, GEOMETRY_THICKNESSES, Polygon, modules_for_geometry, polygon_area, rotate_normalized
 
 
 @dataclass(frozen=True)
@@ -20,8 +20,15 @@ class Q4Instance:
     nets: tuple = ()
 
     @classmethod
-    def default(cls) -> "Q4Instance":
-        return cls({name: Q4Block(name, polygon) for name, polygon in DEFAULT_MODULES.items()})
+    def default(cls, geometry: str = "G0") -> "Q4Instance":
+        return cls({name: Q4Block(name, polygon) for name, polygon in modules_for_geometry(geometry).items()})
+
+    @property
+    def geometry(self) -> str:
+        for geometry, thickness in GEOMETRY_THICKNESSES.items():
+            if self.blocks.get("b1", Q4Block("b1", DEFAULT_MODULES["b1"])).polygon == modules_for_geometry(geometry)["b1"]:
+                return geometry
+        return "custom"
 
     @property
     def module_area(self) -> int:

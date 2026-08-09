@@ -11,6 +11,7 @@ from scripts.q4_v2 import build_deliverables
 
 from src.Q4 import (
     DEFAULT_MODULES,
+    GEOMETRY_THICKNESSES,
     Q4Block,
     Q4Instance,
     bbox,
@@ -24,6 +25,50 @@ from src.Q4 import (
 
 
 class Q4GeometryTests(unittest.TestCase):
+    def test_declared_geometry_variants_change_only_b1_thickness(self):
+        self.assertEqual(GEOMETRY_THICKNESSES, {"G-": 1, "G0": 2, "G+": 3})
+        self.assertEqual(Q4Instance.default("G-").geometry, "G-")
+        self.assertEqual(Q4Instance.default("G0").geometry, "G0")
+        self.assertEqual(Q4Instance.default("G+").geometry, "G+")
+        self.assertEqual([Q4Instance.default(name).module_area for name in ("G-", "G0", "G+")], [22, 24, 26])
+        with self.assertRaises(ValueError):
+            Q4Instance.default("continuous")
+
+    def test_exact_domain_is_declared_and_filtered(self):
+        result = solve_exact(Q4Instance.default("G-"), upper_area=36, time_limit=0, domain=(9, 9))
+        self.assertEqual(result.domain["declared_outline"], [9, 9])
+        self.assertEqual(result.domain["grid_step"], 1)
+
+    def test_domain_outside_row_is_not_a_timeout_incumbent(self):
+        result = solve_exact(Q4Instance.default("G-"), upper_area=36, time_limit=0, domain=(1, 1))
+        self.assertEqual(result.status, "timeout")
+        self.assertIsNone(result.layout)
+        self.assertIsNone(result.evaluation)
+        self.assertFalse(result.formal_audit_match)
+
+    def test_objective_bbox_and_declared_domain_metrics_are_separate(self):
+        instance = Q4Instance.default()
+        compact = {"b1": (0, 0, 0), "b2": (4, 0, 0), "b3": (6, 0, 0), "b4": (8, 0, 0)}
+        spread = dict(compact, b4=(10, 0, 0))
+        compact_objective = evaluate_layout(instance, compact)
+        spread_objective = evaluate_layout(instance, spread)
+        compact_domain = evaluate_layout(instance, compact, (12, 12))
+        spread_domain = evaluate_layout(instance, spread, (12, 12))
+        self.assertNotEqual(compact_objective.area, spread_objective.area)
+        self.assertEqual((compact_domain.area, spread_domain.area), (144, 144))
+        self.assertTrue(compact_domain.legal and spread_domain.legal)
+
+    def test_exact_result_preserves_objective_and_domain_evidence(self):
+        result = solve_exact(Q4Instance.default(), upper_area=36, time_limit=0, domain=(12, 12))
+        self.assertEqual(result.evaluation.area, 36)
+        self.assertEqual(result.domain_evaluation.area, 144)
+        self.assertTrue(result.formal_audit_match)
+        self.assertTrue(result.domain_audit_match)
+
+    def test_sa_geometry_is_bound_in_config(self):
+        result = solve_sa(Q4Instance.default("G+"), seed=17, max_evaluations=2, time_limit=2, restarts=1, domain=(12, 12), geometry="G+")
+        self.assertEqual(result.config["geometry"], "G+")
+        self.assertEqual(result.config["b1_beam_thickness"], 3)
     def test_confirmed_local_vertices_and_areas(self):
         self.assertEqual(DEFAULT_MODULES["b1"], ((1, 0), (3, 0), (3, 2), (4, 2), (4, 4), (0, 4), (0, 2), (1, 2)))
         self.assertEqual(DEFAULT_MODULES["b2"], ((0, 0), (2, 0), (2, 2), (1, 2), (1, 4), (0, 4)))

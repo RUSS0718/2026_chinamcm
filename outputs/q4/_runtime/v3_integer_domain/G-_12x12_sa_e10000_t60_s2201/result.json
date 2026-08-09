@@ -1,0 +1,343 @@
+{
+  "audit": {
+    "H": 6,
+    "HPWL": 0,
+    "W": 5,
+    "area": 30,
+    "aspect_ratio": 1.2,
+    "dead_space_ratio": 0.36363636363636365,
+    "deadspace": 8.0,
+    "legal": true,
+    "module_area": 22.0,
+    "rho": 0.26666666666666666,
+    "square_side": 6
+  },
+  "b1_beam_thickness": 1,
+  "code_hash": "51df5eac273ea439410170bda7198b38ed3c360bad647679442303aea02f7db3",
+  "code_manifest": [
+    {
+      "bytes": 762,
+      "path": "src/Q4/__init__.py",
+      "sha256": "f6709aa09a5e52f087de222ea18693039bc24a6e79f16fb2f2233fc35684a402"
+    },
+    {
+      "bytes": 6601,
+      "path": "src/Q4/__main__.py",
+      "sha256": "c1edf578ff2c9cb496e4f3eb2b0dd2f34fb498d68437943c015c20a497f0fa97"
+    },
+    {
+      "bytes": 2160,
+      "path": "src/Q4/geometry.py",
+      "sha256": "0f8fc23bb9026b6fbad05347c103481702cf167be414ac547ac5dcca76c783cb"
+    },
+    {
+      "bytes": 5704,
+      "path": "src/Q4/model.py",
+      "sha256": "9fb174c29de3928ad4b9e6cb8b06ad78e99ac837e6d7225ba14412425df038f0"
+    },
+    {
+      "bytes": 5319,
+      "path": "src/Q4/sa.py",
+      "sha256": "147fd9b4470fbffa9de089c45c73c89203885301921f78a4cb1264c3f231d843"
+    },
+    {
+      "bytes": 10887,
+      "path": "src/Q4/search.py",
+      "sha256": "4a666e2daf45547fa32c92d3371154488d33ec5bd18c04908a7d15536b723893"
+    },
+    {
+      "bytes": 2617,
+      "path": "src/_internal/audit.py",
+      "sha256": "c5b18970ddc807a77646cf920954fe27097c90c2d82b75a38fe68eebd01863ae"
+    }
+  ],
+  "command": "D:\\Anaconda\\envs\\CA-py310\\python.exe -B -m src.Q4 sa --geometry G- --seed 2201 --max-evaluations 10000 --time-limit 60.0 --restarts 4 --domain-width 12 --domain-height 12 --output D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q4\\_runtime\\v3_integer_domain\\G-_12x12_sa_e10000_t60_s2201\\result.json",
+  "command_argv": [
+    "D:\\Anaconda\\envs\\CA-py310\\python.exe",
+    "-B",
+    "-m",
+    "src.Q4",
+    "sa",
+    "--geometry",
+    "G-",
+    "--seed",
+    "2201",
+    "--max-evaluations",
+    "10000",
+    "--time-limit",
+    "60.0",
+    "--restarts",
+    "4",
+    "--domain-width",
+    "12",
+    "--domain-height",
+    "12",
+    "--output",
+    "D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q4\\_runtime\\v3_integer_domain\\G-_12x12_sa_e10000_t60_s2201\\result.json"
+  ],
+  "config": {
+    "b1_beam_thickness": 1,
+    "domain": [
+      12,
+      12
+    ],
+    "geometry": "G-",
+    "grid_step": 1,
+    "max_evaluations": 10000,
+    "mode": "sa",
+    "restarts": 4,
+    "rotations": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "search_domain": "integer_translation_grid",
+    "seed": 2201,
+    "temperature_schedule": "per_restart_linear",
+    "time_limit": 60.0
+  },
+  "config_hash": "35c36eeda9d897b7ff3c7382d233bd5eac9801d2a22469ed5bd1d8294f19e04e",
+  "data_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "domain": [
+    12,
+    12
+  ],
+  "domain_audit": {
+    "H": 12,
+    "HPWL": 0,
+    "W": 12,
+    "area": 144,
+    "aspect_ratio": 1.0,
+    "dead_space_ratio": 5.545454545454546,
+    "deadspace": 122.0,
+    "legal": true,
+    "module_area": 22.0,
+    "rho": 0.8472222222222222,
+    "square_side": 12
+  },
+  "domain_audit_match": true,
+  "domain_formal": {
+    "H": 12,
+    "HPWL": 0,
+    "W": 12,
+    "area": 144,
+    "aspect_ratio": 1.0,
+    "dead_space_ratio": 5.545454545454546,
+    "deadspace": 122,
+    "layout": {
+      "b1": {
+        "rotation": 180,
+        "x": 0,
+        "y": 4
+      },
+      "b2": {
+        "rotation": 180,
+        "x": 3,
+        "y": 4
+      },
+      "b3": {
+        "rotation": 270,
+        "x": 0,
+        "y": 7
+      },
+      "b4": {
+        "rotation": 90,
+        "x": 1,
+        "y": 9
+      }
+    },
+    "legal": true,
+    "module_area": 22,
+    "rho": 0.8472222222222222,
+    "square_side": 12
+  },
+  "environment": {
+    "cpu_count": 16,
+    "cwd": "D:\\project\\chinamcm_2026\\2026_chinamcm",
+    "mkl_num_threads": "1",
+    "omp_num_threads": "1",
+    "openblas_num_threads": "1",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "processes": 1,
+    "python": "3.10.20 | packaged by Anaconda, Inc. | (main, Mar 11 2026, 17:42:35) [MSC v.1942 64 bit (AMD64)]",
+    "threads": 1,
+    "workers": 1
+  },
+  "formal": {
+    "H": 6,
+    "HPWL": 0,
+    "W": 5,
+    "area": 30,
+    "aspect_ratio": 1.2,
+    "dead_space_ratio": 0.36363636363636365,
+    "deadspace": 8,
+    "layout": {
+      "b1": {
+        "rotation": 180,
+        "x": 0,
+        "y": 4
+      },
+      "b2": {
+        "rotation": 180,
+        "x": 3,
+        "y": 4
+      },
+      "b3": {
+        "rotation": 270,
+        "x": 0,
+        "y": 7
+      },
+      "b4": {
+        "rotation": 90,
+        "x": 1,
+        "y": 9
+      }
+    },
+    "legal": true,
+    "module_area": 22,
+    "rho": 0.26666666666666666,
+    "square_side": 6
+  },
+  "formal_audit_match": true,
+  "geometry": "G-",
+  "instance": "integer-domain",
+  "layout": {
+    "b1": {
+      "rotation": 180,
+      "x": 0,
+      "y": 4
+    },
+    "b2": {
+      "rotation": 180,
+      "x": 3,
+      "y": 4
+    },
+    "b3": {
+      "rotation": 270,
+      "x": 0,
+      "y": 7
+    },
+    "b4": {
+      "rotation": 90,
+      "x": 1,
+      "y": 9
+    }
+  },
+  "mode": "sa",
+  "problem": "Q4",
+  "result": {
+    "H": 6,
+    "HPWL": 0,
+    "W": 5,
+    "area": 30,
+    "aspect_ratio": 1.2,
+    "audit": {
+      "H": 6,
+      "HPWL": 0,
+      "W": 5,
+      "area": 30,
+      "aspect_ratio": 1.2,
+      "dead_space_ratio": 0.36363636363636365,
+      "deadspace": 8.0,
+      "legal": true,
+      "module_area": 22.0,
+      "rho": 0.26666666666666666,
+      "square_side": 6
+    },
+    "config": {
+      "b1_beam_thickness": 1,
+      "domain": [
+        12,
+        12
+      ],
+      "geometry": "G-",
+      "grid_step": 1,
+      "max_evaluations": 10000,
+      "mode": "sa",
+      "restarts": 4,
+      "rotations": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "search_domain": "integer_translation_grid",
+      "seed": 2201,
+      "temperature_schedule": "per_restart_linear",
+      "time_limit": 60.0
+    },
+    "dead_space_ratio": 0.36363636363636365,
+    "deadspace": 8,
+    "evaluation": {
+      "H": 6,
+      "HPWL": 0,
+      "W": 5,
+      "area": 30,
+      "aspect_ratio": 1.2,
+      "dead_space_ratio": 0.36363636363636365,
+      "deadspace": 8,
+      "layout": {
+        "b1": {
+          "rotation": 180,
+          "x": 0,
+          "y": 4
+        },
+        "b2": {
+          "rotation": 180,
+          "x": 3,
+          "y": 4
+        },
+        "b3": {
+          "rotation": 270,
+          "x": 0,
+          "y": 7
+        },
+        "b4": {
+          "rotation": 90,
+          "x": 1,
+          "y": 9
+        }
+      },
+      "legal": true,
+      "module_area": 22,
+      "rho": 0.26666666666666666,
+      "square_side": 6
+    },
+    "evaluations": 10000,
+    "formal_audit_match": true,
+    "initial_area": 36,
+    "layout": {
+      "b1": {
+        "rotation": 180,
+        "x": 0,
+        "y": 4
+      },
+      "b2": {
+        "rotation": 180,
+        "x": 3,
+        "y": 4
+      },
+      "b3": {
+        "rotation": 270,
+        "x": 0,
+        "y": 7
+      },
+      "b4": {
+        "rotation": 90,
+        "x": 1,
+        "y": 9
+      }
+    },
+    "legal": true,
+    "module_area": 22,
+    "restarts_completed": 4,
+    "rho": 0.26666666666666666,
+    "runtime": 11.558744199999637,
+    "seed": 2201,
+    "square_side": 6,
+    "status": "success"
+  },
+  "seed": 2201,
+  "status": "success"
+}

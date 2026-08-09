@@ -1,8 +1,10 @@
 import json
 import csv
+from dataclasses import replace
 from pathlib import Path
 import shutil
 import sys
+import subprocess
 import tempfile
 import threading
 import time
@@ -32,12 +34,133 @@ from src.v3 import (
     summarize_q1,
     summarize_q2,
     summarize_q3,
+    summarize_q4,
     write_once,
 )
+from src.v3 import _q4_config_digest, _q4_slot_configs, _validate_completed
+from src.Q4.geometry import EXTERNAL_DATA_MANIFEST_HASH
 
 
 class V3ProtocolTests(unittest.TestCase):
-    def test_outer_workers_are_frozen_by_problem(self):
+    def test_q4_plan_is_726_slots_and_workers_eight(self):
+        spec = build_specs()["q4"]
+        plans = build_plan(spec)
+        self.assertEqual(spec.workers, 8)
+        self.assertEqual(spec.output_root.replace("\\", "/"), "outputs/q4/_runtime/v3_integer_domain")
+        self.assertEqual(len(plans), 726)
+        self.assertEqual(sum(plan.fingerprint["mode"] == "exact" for plan in plans), 6)
+        self.assertEqual(sum(plan.fingerprint["mode"] == "sa" for plan in plans), 720)
+        self.assertEqual({plan.fingerprint["geometry"] for plan in plans}, {"G-", "G0", "G+"})
+        self.assertEqual({tuple(plan.fingerprint["domain"]) for plan in plans}, {(9, 9), (12, 12)})
+        self.assertTrue(all(plan.fingerprint["environment"]["workers"] == 8 for plan in plans))
+        self.assertTrue(all("n200" not in plan.fingerprint["config_id"] and "n300" not in plan.fingerprint["config_id"] for plan in plans))
+
+    def test_q4_summary_requires_registered_shape_and_computes_gap(self):
+        spec = build_specs()["q4"]
+        plans = build_plan(spec)
+        rows = []
+        for plan in plans:
+            fp = plan.fingerprint
+            rows.append({"config_id": fp["config_id"], "geometry": fp["geometry"], "mode": fp["mode"],
+                         "seed": fp["seed"], "status": "optimal" if fp["mode"] == "exact" else "success",
+                         "formal": {"legal": True, "area": 24}, "formal_audit_match": True,
+                         "domain_formal": {"legal": True, "area": fp["domain"][0] * fp["domain"][1]},
+                         "domain_audit_match": True})
+        summary = summarize_q4(rows, plans)
+        self.assertEqual(summary["registered_slots"], 726)
+        self.assertEqual(len(summary["exact"]), 6)
+        self.assertEqual(len(summary["summary_by_cell"]), 36)
+        self.assertTrue(all(cell["legal_rate"] == 1.0 and cell["incumbent_gap"]["median"] == 0.0 for cell in summary["summary_by_cell"]))
+
+    def test_q4_summary_rejects_domain_outside_layout_as_legal(self):
+        spec = build_specs()["q4"]
+        plans = build_plan(spec)
+        rows = []
+        for plan in plans:
+            fp = plan.fingerprint
+            rows.append({"config_id": fp["config_id"], "geometry": fp["geometry"], "mode": fp["mode"],
+                         "seed": fp["seed"], "status": "optimal" if fp["mode"] == "exact" else "success",
+                         "formal": {"legal": True, "area": 24}, "formal_audit_match": True,
+                         "domain_formal": {"legal": True, "area": fp["domain"][0] * fp["domain"][1]},
+                         "domain_audit_match": True})
+        exact = next(row for row in rows if row["mode"] == "exact")
+        exact["domain_formal"] = {"legal": False, "area": exact["domain_formal"]["area"]}
+        exact["domain_audit_match"] = False
+        summary = summarize_q4(rows, plans)
+        self.assertFalse(summary["exact"][0]["legal"])
+        self.assertIsNone(summary["exact"][0]["area"])
+
+    def test_q4_marker_validator_accepts_complete_failure_record(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            spec = replace(build_specs()["q4"], output_root=tmp)
+            plan = build_plan(spec)[0]
+            fp = dict(plan.fingerprint)
+            payload = {"problem": "Q4", "instance": fp["instance"], "geometry": fp["geometry"],
+                       "b1_beam_thickness": fp["b1_beam_thickness"], "domain": fp["domain"], "mode": "exact",
+                       "seed": None, "data_hash": fp["data_hash"], "code_hash": fp["code_hash"],
+                       "config": _q4_slot_configs()[fp["config_id"]], "config_hash": fp["config_hash"],
+                       "command": fp["command"], "command_argv": fp["command_argv"], "environment": {"omp_num_threads": "1", "mkl_num_threads": "1", "openblas_num_threads": "1"},
+                       "status": "timeout", "formal": {}, "audit": {},
+                       "formal_audit_match": False, "domain_formal": {}, "domain_audit": {},
+                       "domain_audit_match": False}
+            plan.marker.parent.mkdir(parents=True)
+            plan.marker.write_text(json.dumps(payload), encoding="utf-8")
+            (plan.marker.parent / "v3_freeze.json").write_text(json.dumps(fp), encoding="utf-8")
+            self.assertEqual(_validate_completed(plan)["status"], "timeout")
+
+    def test_q4_real_single_plan_executes_and_validator_accepts(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            spec = replace(build_specs()["q4"], output_root=tmp)
+            original = build_plan(spec)[0]
+            command = list(original.command)
+            command[command.index("--time-limit") + 1] = "0"
+            config = dict(_q4_slot_configs()[original.fingerprint["config_id"]])
+            config["time_limit"] = 0.0
+            fingerprint = dict(original.fingerprint)
+            fingerprint.update({"command": subprocess.list2cmdline(command), "command_argv": command, "config": config, "config_hash": _q4_config_digest(config)})
+            plan = CommandPlan(tuple(command), original.marker, fingerprint, original.env)
+            result = execute_plan((plan,), execute=True)
+            self.assertEqual(result[0]["status"], "completed")
+            self.assertEqual(_validate_completed(plan)["status"], "timeout")
+
+    def test_q4_full_preflight_rejects_partial_before_any_child(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            spec = replace(build_specs()["q4"], output_root=tmp)
+            plans = build_plan(spec)
+            plans[-1].marker.parent.mkdir(parents=True)
+            (plans[-1].marker.parent / "partial.txt").write_text("partial", encoding="utf-8")
+            with self.assertRaises(FreezeError):
+                execute_plan(plans, execute=True)
+            self.assertFalse(plans[0].marker.exists())
+
+    def test_q4_directory_summary_injects_plan_config_id_and_rejects_forged_sidecar(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            spec = replace(build_specs()["q4"], output_root=tmp)
+            plans = build_plan(spec)
+            for plan in plans:
+                fp = plan.fingerprint
+                payload = {"problem": "Q4", "instance": fp["instance"], "geometry": fp["geometry"],
+                           "b1_beam_thickness": fp["b1_beam_thickness"], "domain": fp["domain"],
+                           "mode": fp["mode"], "seed": fp["seed"], "data_hash": fp["data_hash"],
+                           "code_hash": fp["code_hash"], "config": fp["config"], "config_hash": fp["config_hash"],
+                           "command": fp["command"], "command_argv": fp["command_argv"],
+                           "environment": {"omp_num_threads": "1", "mkl_num_threads": "1", "openblas_num_threads": "1"},
+                           "status": "timeout", "formal": {}, "audit": {}, "formal_audit_match": False,
+                           "domain_formal": {}, "domain_audit": {}, "domain_audit_match": False}
+                plan.marker.parent.mkdir(parents=True, exist_ok=True)
+                plan.marker.write_text(json.dumps(payload), encoding="utf-8")
+                (plan.marker.parent / "v3_freeze.json").write_text(json.dumps(dict(fp)), encoding="utf-8")
+            summary = summarize_directory("q4", root)
+            self.assertEqual(summary["registered_slots"], 726)
+            self.assertEqual(summary["discovered_slots"], 726)
+            first_sidecar = plans[0].marker.parent / "v3_freeze.json"
+            forged = json.loads(first_sidecar.read_text(encoding="utf-8"))
+            forged["config_id"] = "forged"
+            first_sidecar.write_text(json.dumps(forged), encoding="utf-8")
+            with self.assertRaises(FreezeError):
+                summarize_directory("q4", root)
+    def test_workers_are_frozen_by_problem(self):
         specs = build_specs()
         self.assertEqual(specs["q1"].workers, 8)
         self.assertEqual(specs["q2"].processes, 4)
@@ -372,6 +495,8 @@ class V3ProtocolTests(unittest.TestCase):
 
     def test_q4_extension_is_independent_and_locked_without_human_domain_definition(self):
         checklist = q4_extension_checklist()
+        self.assertEqual(build_specs()["q4"].data_hash, EXTERNAL_DATA_MANIFEST_HASH)
+        self.assertEqual(checklist["data_hash"], EXTERNAL_DATA_MANIFEST_HASH)
         self.assertEqual(checklist["status"], "frozen_integer_domain_pending_main_run_review")
         self.assertEqual(checklist["continuous_domain_confirmed"], False)
         check_q4_extension(checklist)

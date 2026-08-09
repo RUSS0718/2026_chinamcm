@@ -12,6 +12,25 @@ DEFAULT_MODULES: dict[str, Polygon] = {
 }
 
 
+GEOMETRY_THICKNESSES = {"G-": 1, "G0": 2, "G+": 3}
+# Q4 declares no external input files.  This is the SHA-256 of the
+# canonical empty data manifest (JSON ``[]``), shared by the runner and
+# the orchestration freeze checks.
+EXTERNAL_DATA_MANIFEST_HASH = "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+
+
+def modules_for_geometry(geometry: str = "G0") -> dict[str, Polygon]:
+    """Return the declared integer-domain geometry variant."""
+    try:
+        thickness = GEOMETRY_THICKNESSES[geometry]
+    except KeyError as exc:
+        raise ValueError("geometry must be one of G-, G0, G+") from exc
+    shoulder = 4 - thickness
+    modules = dict(DEFAULT_MODULES)
+    modules["b1"] = ((1, 0), (3, 0), (3, shoulder), (4, shoulder), (4, 4), (0, 4), (0, shoulder), (1, shoulder))
+    return modules
+
+
 def polygon_area(polygon: Polygon) -> int:
     return abs(
         sum(

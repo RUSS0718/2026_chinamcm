@@ -1,15 +1,15 @@
-# Q1--Q4 V3 协议与证据盘点（REVIEWING，Q3 workers=4实现变更待复核）
+# Q1--Q4 V3 协议与证据盘点（REVIEWING）
 
 - **更新时间**：2026-08-09
-- **阶段**：`REVIEWING`。2026-08-09 已人工确认完整 V3 协议并选择 Q2B；随后为同轨迹 checkpoint、Q3-LIN 全网格及 Q1 外层 workers=8 修订实现，形成新 runner/overall hash。Q1 workers=8 正式运行已完成 140/140，结果与分析仍待复核；Q2 n200 已完成 P0/P1/P2 并保持 `REVIEWING`，Q3/Q4/n300 尚未运行。本文仍不是 `VERIFIED`、`FINAL`，不替代主代理验收。
+- **阶段**：`REVIEWING`。2026-08-09 已人工确认完整 V3 协议并选择 Q2B；随后为同轨迹 checkpoint、Q3-LIN 全网格及并发执行修订实现。Q1 已完成 140/140，Q2 已完成 60/60，Q3 已完成三条注册路线的 threshold/final 正式运行，Q4 整数声明域已完成 726/726；结果均待人工复核。`n300` 尚未运行。本文仍不是 `VERIFIED`、`FINAL`。
 - **范围**：Q1--Q3 的 `n200` 正式选型与消融预注册；Q4 的几何/预算扩展协议。`n300` 仅作为后续留出规模，不在本文运行。
-- **本轮明确边界**：不改 `data/raw/`，不重跑 Q2，不启动 Q3/Q4 或 n300，不迁入 `outputs/qN/final/`，不暂存/提交/push。Q1 workers=8 的 140 条 n200 记录和 Q2 P0/P1/P2 的 60 条 n200 记录保留在各自正式根；workers=1 的旧 28 条记录已独立归档作废。
+- **本轮明确边界**：不改 `data/raw/`，不启动 n300，不迁入 `outputs/qN/final/`。Q1 的 140 条、Q2 的 60 条 n200 记录、Q3 三路线正式记录与 Q4 整数声明域的 726 条记录均保留在各自正式根；workers=1 的旧 28 条 Q1 记录已独立归档作废。Q4 不属于 n200 选型。
 
 ## 1. 只读盘点：当前代码、入口和证据
 
 ### 1.1 工作区与入口
 
-此前写作盘点基于 `V2go` 的干净 checkout；当前准备在 `v3-temp` 分支 `b3ac17ddf54db8e9f2931d915c3ae7349930a967`（`q2(v3): 提交n200 P2正式运行证据`）上继续。当前未提交变更仅限本轮 Q3 workers/运行代码、冻结清单、协议和对应测试；当前真实入口和兼容入口如下：
+当前组合工作树已将 `v3-temp` 的 Q3 n200 四并发实现与正式证据同步到 `origin/V3` 的 Q4 整数声明域实现与证据；冲突仅涉及共享 runner、冻结清单和本文，并按当前代码重新生成完整清单。当前真实入口和兼容入口如下：
 
 | 问题 | 当前真实入口 | 关键实现/配置事实 | V2 证据位置 |
 |---|---|---|---|
@@ -23,7 +23,7 @@
 ### 1.2 当前测试与 V2 证据边界
 
 - 实际执行（只读验证，使用临时目录的测试夹具）：
-  `D:\miniconda3\envs\causal_paper\python.exe -B -m unittest discover -s tests -p 'test*.py' -q` → **87/87，OK，30.467 s**；测试只证明代码契约和小夹具可运行，不是模型效果或 n200 选型结论。
+  `D:\miniconda3\envs\causal_paper\python.exe -B -m unittest discover -s tests -p 'test*.py' -q` → **100/100，OK，48.370 s**；测试只证明代码契约和小夹具可运行，不是模型效果或 n200 选型结论。
 - 该测试结论只证明代码契约、入口和小夹具可运行，不是模型效果、n200 选型或论文结论。
 - Q1 V2 是 n100 开发批次；P2 消融的正式重跑留待 V3。Q2 V2 是 `n100` 的 50 条主组加 20 条随机初始化压力组；Q3 V2 是 `n100` 三路线比较；Q4 V2 是四模块 exact/SA，不是 n100。
 - `outputs/v2_technical_acceptance.md` 与各 handoff 明确规定：V2 的 `VERIFIED` 不覆盖 V3、`n200/n300`、最终模型或 `FINAL`；`timeout`/`no_feasible` 不能改写为最优性/不可行证明；P0 不能改写为 ground truth。
@@ -34,16 +34,16 @@
 
 | 组件 | 当前代码哈希 | V3 草案配置哈希/数据哈希 | 具体指向 |
 |---|---|---|---|
-| Q1 | `3191e8fa3cfd8aaa7948395b9026ff11bb50871a09425b05f1d85c6a8a6a5aaa` | Q1-G `4c11f9694e3449c03d25bc33769f3520608fc5ac417967aadb773404a6aa4412`；Q1-SP `23759db27eb4b66fada058141c85ff43d1d2f5334ec9f1437658df4f05602c9b`；Q1-BT `21710a897788c7b5b1cb80917bb03da9d86b258a6531c066e2462c93a28c7dab`；Q1-BT-D `7eadc36f5e9f024a1f3829860b7a5ed0926bff8720189300ffaea4b152e95570`；n200.blocks `bed652bf55c2034b04a1c1bbe97ad617e027c11736bf069727a63baf575720ef` | `src/Q1/__main__.py` 的 `_code_hash()` 覆盖 Q1 与 `_internal` 依赖；n200 输入为 `data/raw/附件/n200.blocks` |
-| Q2 | `bd3ed1f896b81fa3317c2e7f5eaf9d6051976483693f75288b6b3636d1dd004b` | P0 `b4e9c046a28d9fa5da81c71344c61710653c902f72dda0acf23a769324dcee06`；P1 `62c4fc0857968603f5af8a4add05d7825ccbb79cfdfbde340b920a03183d787c`；P2 `53cc3b06b1f09685c2b904c24fe7e462cb8e2ab5f94334409e1229dad3f0fb17`；n200 三文件 manifest `475e63eefda4a1592adaddb9596e92595f6ef6d5404ae0fd1e826d367bd056a7` | 当前 `src/v3.py` 冻结清单含 Q2 与被调用 Q1/内部文件；`data/raw/附件/n200.{blocks,nets,pl}` |
-| Q3 | `af3206f66f6a554c0861c9e8a75f74660a48ba97a6076fcd58e1dbbbb2597a99` | BIN `0d76fc973af444d1849e9a3413c75cb51d7a8d9cda91a8582b168cbeb6e47cba`；LIN `20a8329f4f661c574fc4a4f9c0192fa5ae7a73d969741ca6feb782be34fdca99`；CONT-R `ae5becde3ed321d8ca6e1f4726934399a8eb33116da5b19de7aca82285455e06`；n200 三文件 manifest `475e63eefda4a1592adaddb9596e92595f6ef6d5404ae0fd1e826d367bd056a7` | 当前 `src/v3.py` 冻结清单含 Q3、Q2、Q1/内部被调用文件；配置含 cold `2201--2220` 与 final `2301--2320` |
-| Q4 | `f7f990bef6454d74ceb86aa20a5c59f2c1000615d35d2bb567fdbe083bce48b4` | 整数声明域扩展 config manifest `1ca180449987b53740782fb797d7046a3fad2c6b724e6078413917bc932594e4`；无外部数据文件；连续域仍明确为 false | `python -B -m src.v3 q4-check` 输出及 `outputs/v3_frozen_manifest.json` |
+| Q1 | `87ab0770aaa83d1b9a6836058fb6a09706a53960196978c9631cf1f2d71e9d1c` | Q1-G `4c11f9694e3449c03d25bc33769f3520608fc5ac417967aadb773404a6aa4412`；Q1-SP `23759db27eb4b66fada058141c85ff43d1d2f5334ec9f1437658df4f05602c9b`；Q1-BT `21710a897788c7b5b1cb80917bb03da9d86b258a6531c066e2462c93a28c7dab`；Q1-BT-D `7eadc36f5e9f024a1f3829860b7a5ed0926bff8720189300ffaea4b152e95570`；n200.blocks `bed652bf55c2034b04a1c1bbe97ad617e027c11736bf069727a63baf575720ef` | `src/Q1/__main__.py` 的 `_code_hash()` 覆盖 Q1 与 `_internal` 依赖；n200 输入为 `data/raw/附件/n200.blocks` |
+| Q2 | `815f545fff15ed9b3822f4d2050e450631daf16e7f46fde4df41151e8f8de838` | P0 `b4e9c046a28d9fa5da81c71344c61710653c902f72dda0acf23a769324dcee06`；P1 `62c4fc0857968603f5af8a4add05d7825ccbb79cfdfbde340b920a03183d787c`；P2 `53cc3b06b1f09685c2b904c24fe7e462cb8e2ab5f94334409e1229dad3f0fb17`；n200 三文件 manifest `475e63eefda4a1592adaddb9596e92595f6ef6d5404ae0fd1e826d367bd056a7` | 正式记录按实际 n200 三文件生成 data hash；候选串行、候选内最多 4 个 seed 并发 |
+| Q3 | `af3206f66f6a554c0861c9e8a75f74660a48ba97a6076fcd58e1dbbbb2597a99` | BIN `0d76fc973af444d1849e9a3413c75cb51d7a8d9cda91a8582b168cbeb6e47cba`；LIN `20a8329f4f661c574fc4a4f9c0192fa5ae7a73d969741ca6feb782be34fdca99`；CONT-R `ae5becde3ed321d8ca6e1f4726934399a8eb33116da5b19de7aca82285455e06`；n200 三文件 manifest `475e63eefda4a1592adaddb9596e92595f6ef6d5404ae0fd1e826d367bd056a7` | 当前 `src/v3.py` 冻结清单含 Q3、Q2、Q1/内部被调用文件；配置含 cold `2201--2220`、final `2301--2320` 与 `workers=4` |
+| Q4 | `51df5eac273ea439410170bda7198b38ed3c360bad647679442303aea02f7db3` | 整数声明域扩展 config manifest `6153919d92e2740f8e07ffd59c13a958680dc0f32d0fc3995195d5b1db034ed4`；canonical 空外部数据 hash `4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945`；连续域仍明确为 false | `python -B -m src.v3 q4-check` 输出及 `outputs/v3_frozen_manifest.json` |
 
 哈希后的完整逐文件清单不在本文重复；Q2 历史清单可直接查阅 `outputs/q2/tables/v2_n100_repaired_fix2_*_config_snapshot.json`，当前 Q2 清单由 `src/Q2/__main__.py::_code_manifest()` 生成。正式运行前必须把完整 `code_files`、`data_files`、配置 JSON、命令和环境写入每一条 snapshot，不能只记录短 hash。
 
-当前 V3 不可变逐文件 manifest 聚合 hash 为：Q1 `ab121728295be4aaf9db6108ef1cc8a00153594304511fdc9c82d837bd7897c5`、Q2 `25de3df5323233dbfcaf8c0e0713bc52bc2128562b51d0d50d366457139b346e`、Q3 `839947e21e0b5cf25465d1d1410b9afc9afdf276c9af64d49f69696d015d75d7`；Q4 整体 code hash `f7f990bef6454d74ceb86aa20a5c59f2c1000615d35d2bb567fdbe083bce48b4`。完整内容见 `outputs/v3_frozen_manifest.json`。当前分析 runner `src/v3.py` 已纳入上述各问题清单；Q1/Q2 历史正式运行仍以各自独立 execution manifest 中的运行快照为准。
+当前组合 checkout 的逐文件 manifest 聚合 hash 为：Q1 `42a53042b22d94350d3b17a12573845fdb5e650ff3c8c4505c806c269d2ea66d`、Q2 `14278f4180ecc148dfc90cae368d126e93934203a383851e1e4a15673b682202`、Q3 `423e94b985a0cefe72559cd72c25d24cf622acc9bd57b8c5add893919fbfdeaf`；Q4 core code hash 为 `51df5eac273ea439410170bda7198b38ed3c360bad647679442303aea02f7db3`，合并后的分析 runner `runner_code_hash` 为 `2ee3b0f0a0b2d78a88ae8adcc6f04f9b820038d95b253c509820e07adafbf33c`。完整内容见 `outputs/v3_frozen_manifest.json`；历史正式运行仍引用各自 execution manifest 中的执行快照，不可被合并后的分析 hash 追溯改写。
 
-## 2. 历史 Q2 code_hash `5182e532feca7ba4337692b112b06f181d6f79ee85596eacf83c9109b14fb709` 与当时 Git HEAD `beaf166` 下 Q2 code_hash `8486b3cd4164489a9bede5e71db248a389ba0f5ef3dc616ed4a75e4fb95aad5a`（V3 B′ 新 hash `bd3ed1f896b81fa3317c2e7f5eaf9d6051976483693f75288b6b3636d1dd004b` 待复核）
+## 2. 历史 Q2 code_hash `5182e532feca7ba4337692b112b06f181d6f79ee85596eacf83c9109b14fb709`、原 B `8486b3cd...` 与 V3 正式执行 hash `815f545f...` 的版本边界
 
 ### 2.1 历史快照的具体指向
 
@@ -63,20 +63,20 @@
 | A | 历史运行快照：Q2 聚合 `code_hash=5182e532feca7ba4337692b112b06f181d6f79ee85596eacf83c9109b14fb709`；不是 Git HEAD commit | 当前仓库保存逐文件 manifest、命令、n100 输出和日志，但没有与该 manifest 一一对应的源码归档/可检出的 Git commit；因此只能复核历史产物，不能声称从当前 checkout 可重跑 | **否**，除非人工先提供并核验完整源码快照、依赖环境和来源 hash |
 | B（推荐） | 当时 Git HEAD commit `beaf1663463a7f3c1bb3bd7de6c2dacea96e53a7`（`q2-q4(v2): 记录人工复核通过并更新为VERIFIED`）；其当时 Q2 聚合 `code_hash=8486b3cd4164489a9bede5e71db248a389ba0f5ef3dc616ed4a75e4fb95aad5a` | 当时源码、入口和测试均在 checkout；原 B 可按当时 CLI 运行，但 V3 checkpoint 修订后已形成 B′ 新 hash，不能把历史 5182 结果改标为当前结果 | **原 B 已确认；B′ 必须重新人工确认并通过主代理冻结验收** |
 
-**2026-08-09 人工确认记录**：完整 Q1--Q4 V3 协议已确认，`q2_v3_baseline=B`；当时采用 Git HEAD commit `beaf1663463a7f3c1bb3bd7de6c2dacea96e53a7` 下的 Q2 `code_hash=8486b3cd4164489a9bede5e71db248a389ba0f5ef3dc616ed4a75e4fb95aad5a`。随后加入同一 trajectory 的 25/50/75/100% checkpoint，形成 Q2B′ `code_hash=bd3ed1f896b81fa3317c2e7f5eaf9d6051976483693f75288b6b3636d1dd004b`；该实现变更不由原 B 确认自动覆盖，须人工重新确认后才可运行。确认只解除版本选择歧义，不把本文标为 `VERIFIED/FINAL`；正式 n200 运行仍须通过主代理冻结验收，n300 不得调参或选型。所有新 Q2 结果必须绑定复核后的 B′ code hash，不得沿用历史 5182 快照标签。
+**2026-08-09 版本记录**：完整协议已确认并选择 `q2_v3_baseline=B`。原 B 的 Q2 hash 为 `8486b3cd4164489a9bede5e71db248a389ba0f5ef3dc616ed4a75e4fb95aad5a`；checkpoint 修订一度形成 B′ `bd3ed1f896b81fa3317c2e7f5eaf9d6051976483693f75288b6b3636d1dd004b`。正式 n200 运行前又修复了“按实际实例生成 data hash”，最终 60 条正式 marker 绑定 Q2 execution code hash `815f545fff15ed9b3822f4d2050e450631daf16e7f46fde4df41151e8f8de838`。三者均不得冒充历史 `5182e532...` 快照；正式结果仍只处于 `REVIEWING`。
 
 ### 2.3 当前 HEAD 的具体差异与复现限制
 
-当时 `src/Q2/__main__.py::_code_hash()` 实测为 V3B′ `bd3ed1f896b81fa3317c2e7f5eaf9d6051976483693f75288b6b3636d1dd004b`；n200 三文件 data manifest 为 `475e63eefda4a1592adaddb9596e92595f6ef6d5404ae0fd1e826d367bd056a7`，历史 n100 snapshot 的 `6be0918f672ac3bbdf8300aaeddedf4f348a2b1a1ea74f5975cc084ba0b2ec13` 仅用于历史证据。与 `5182e532feca7ba4337692b112b06f181d6f79ee85596eacf83c9109b14fb709` 不一致的文件仍包括 `src/Q2/common.py` 和 `src/Q2/p1_p2.py`，并新增同轨迹 checkpoint 字段；Q2 CLI 现已序列化 `checkpoint_evaluations` 与 `checkpoint_best_hpwl`。当前测试覆盖默认路径、checkpoint 位置/单调 best-so-far、marker 验真和接口契约；Q2 n200 正式结果另见 `outputs/q2/reports/v3_n200_model_report.md`，Q3 n200 正式运行仍未开始。
+当前 `src/Q2/__main__.py::_code_hash()` 为 `815f545fff15ed9b3822f4d2050e450631daf16e7f46fde4df41151e8f8de838`；n200 三文件 data manifest 为 `475e63eefda4a1592adaddb9596e92595f6ef6d5404ae0fd1e826d367bd056a7`。Q2 CLI 已序列化同轨迹 checkpoint，并按实际运行实例生成 data hash。正式证据为 `outputs/q2/_runtime/v3_n200/` 的 60 条记录与 `outputs/q2/tables/v3_n200_summary.json`；机械暂选 P1，P2 保留为创新与消融证据。
 
 可复现性结论应分层写：
 
 1. 由历史 snapshot、命令、输入和逐文件 manifest，`5182e532feca7ba4337692b112b06f181d6f79ee85596eacf83c9109b14fb709` 绑定的 n100 结果是可追溯的历史证据。
-2. 由未修改的**当时** Git HEAD 直接重跑将生成 `8486b3cd4164489a9bede5e71db248a389ba0f5ef3dc616ed4a75e4fb95aad5a`；当前 V3 checkout 已生成 B′ `bd3ed1f896b81fa3317c2e7f5eaf9d6051976483693f75288b6b3636d1dd004b`，二者均不能将产物冒充 `5182e532feca7ba4337692b112b06f181d6f79ee85596eacf83c9109b14fb709` 结果。
+2. 原 B、checkpoint B′ 与正式执行版本均有不同 hash；任何版本都不能将产物冒充 `5182e532feca7ba4337692b112b06f181d6f79ee85596eacf83c9109b14fb709` 结果。
 3. 当前 n100 结果不能外推为 n200/n300 选型：实例规模、模块/网络/terminal 数据、搜索状态空间、运行时间和随机误差均改变；即使接口测试全绿，也不替代同窗 n200 运行。
 4. 因此 V3 必须在运行前绑定**当前实际代码 hash + n200 数据 manifest + 每候选 config hash**；禁止只写短前缀或沿用历史 hash 作为新证据。
 
-## 3. Q1--Q3 V3 n200 正式选型协议（协议已确认；Q2B′/Q3实现待复核，REVIEWING）
+## 3. Q1--Q3 V3 n200 正式选型协议（Q1/Q2/Q3 已运行；REVIEWING）
 
 ### 3.1 共同冻结、随机性和停止条件
 
@@ -171,13 +171,15 @@
 
 ### 3.6 V3 编排与 dry-run 实现边界
 
-新增 `src/v3.py` 负责从当前 checkout 生成完整 hash/config/seed manifest、在子进程启动前执行候选/预算/线程/RNG/停止条件/输出根目录/Q2B′ 的 fail-closed 检查，并把 `src/v3.py` 与被调用核心逐文件 bytes/SHA 写入不可变 `outputs/v3_frozen_manifest.json`。现有 marker 必须含完整字段、sidecar fingerprint 与合法 JSON；Q1/Q2 marker 还必须含 data_hash，Q3 同时验 result、attempts、final seed 集合和 tables marker。`python -B -m src.v3 dry-run --problem q2` 只打印 60 条计划；正式入口 `python -B -m src.v3 run --problem q2 --execute` 仍需人工显式授权，失败重试必须传新的 `--attempt` 后缀。Q1 workers=8 与 Q2 workers=4 的正式运行已完成；Q3/Q4/n300 仍不在本轮已执行范围。
+新增 `src/v3.py` 负责从当前 checkout 生成完整 hash/config/seed manifest、在子进程启动前执行候选/预算/线程/RNG/停止条件/输出根目录/Q2B′ 的 fail-closed 检查，并把 `src/v3.py` 与被调用核心逐文件 bytes/SHA 写入 `outputs/v3_frozen_manifest.json`。现有 marker 必须含完整字段、sidecar fingerprint 与合法 JSON；Q1/Q2 marker 还必须含 data_hash，Q3 同时验 result、attempts、final seed 集合和 tables marker。Q1、Q2、Q3 与 Q4 的本轮注册运行均已完成；Q3 固定 `workers=4`，三条路线均无缺失 threshold/final seed，机械并列时按注册顺序暂选 Q3-BIN。所有结论仍为 `REVIEWING`，`n300` 尚未执行。
 
-Q1 正式 execute 在全量预检 140 个 marker/sidecar/output slot 后，使用 stdlib `ThreadPoolExecutor` 保持最多 8 个 in-flight runs；完成一个才提交下一个，结果按注册 plan index 排序，Q2/Q3 外层保持串行。主线程收到中断或其他 `BaseException` 时取消尚未启动的 futures，不再提交新 run；活动子进程由人工停止，partial/失败状态原位保留，禁止自动重跑或覆盖。dry-run 与 plan 路径只读且顺序生成计划。
+Q1 与 Q4 在全量预检后分别保持最多 8 个 in-flight runs；Q2 保持候选串行，仅在同一候选内最多 4 个 seed 并发；Q3 外层路线仍串行。结果按注册 plan index 排序。主线程收到中断或其他 `BaseException` 时取消尚未启动的 futures，不再提交新 run；partial/失败状态原位保留，禁止自动重跑或覆盖。
 
 Q1/Q2 汇总支持注册集合分母（缺失 seed 计数）、合法率、审计率、状态计数、面积/长宽比或 HPWL 的 median/IQR/p90 及同 seed 差值；Q2 输出 25/50/75/100% 同一 trajectory checkpoint 并明确 `checkpoint_status`。Q3 汇总将 threshold cold、CONT-R warm 和 final cold 分母严格分开，按阈值报告 cold 缺失、`d_best`/`d_robust`、final 20 seed 的合法率/HPWL/IQR/p90 与阶段失败计数。摘要 CLI 读取运行产物并以 `write_once` 写入隔离表，不把 warm/final 混入 cold。
 
-Q4 由 `python -B -m src.v3 q4-check` 提供真实独立 checklist：冻结整数声明域 `G-/G0/G+`、domain `9x9/12x12`、exact/SA 预算矩阵，写入完整 code/config hash 与环境；continuous domain 明确为 false，且 checklist 拒绝任何 n200/n300 选型标签。几何或域定义变更时必须重新生成并人工确认，当前正式 Q4 运行仍阻塞。
+Q3 正式结果见 `outputs/q3/reports/v3_n200_formal_run_report.md` 与 `outputs/q3/tables/v3_n200_summary.json`。当前正式 `src.v3 summary` 校验器的重复键缺少 `mode`，会把 CONT-R 同一阈值的 warm/cold 同 seed 误判为重复；现有机器汇总使用加入 `mode` 的临时审计键并记录 `validation_note`，该限制尚未作为代码修复关闭。
+
+Q4 由 `python -B -m src.v3 q4-check` 提供真实独立 checklist：冻结整数声明域 `G-/G0/G+`、domain `9x9/12x12`、exact/SA 预算矩阵，注册 6 个 exact + 720 个 SA = 726 个 slot，外层 `workers=8`、每 run 单进程单线程，写入完整 code/config/data hash 与环境；continuous domain 明确为 false，且 checklist 拒绝任何 n200/n300 选型标签。几何或域定义变更时必须重新生成并人工确认。本轮 Q4 已在门禁通过后完成 726/726；总结仍仅为 `REVIEWING`。
 
 ## 4. Q4 V3 扩展协议（不是 n200 选型）
 
@@ -192,11 +194,11 @@ Q4 V3 只回答“几何声明、搜索预算和域边界改变时，四模块�
 - `G+`：厚度 3（同上）；
 - 可选 `Grot`：固定基线几何但只允许题面确认的旋转子集，作为声明域敏感性，不得与几何变化混在一组。
 
-Q4 当前已由 `q4_extension_checklist()` 生成整数声明域的完整 64-hex `code_hash=1a6d9bcdd61485b203acd08122a157c6b434a0c71aef8544021f3e76af330665`、聚合 `config_hash=1ca180449987b53740782fb797d7046a3fad2c6b724e6078413917bc932594e4`，并写入 `outputs/v3_frozen_manifest.json`；该清单仅可进入人工复核，continuous domain 保持 false，未授权前仍阻塞正式运行。
+Q4 当前由 `q4_extension_checklist()` 生成整数声明域的完整 64-hex `code_hash=51df5eac273ea439410170bda7198b38ed3c360bad647679442303aea02f7db3`、合并后分析 runner `2ee3b0f0a0b2d78a88ae8adcc6f04f9b820038d95b253c509820e07adafbf33c`、聚合 `config_hash=6153919d92e2740f8e07ffd59c13a958680dc0f32d0fc3995195d5b1db034ed4`、canonical 空外部数据 manifest hash `4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945`；该分析 hash 不追溯覆盖 execution manifest 中的 execution runner；continuous domain 保持 false，正式运行已完成但结果仍待人工复核。
 
 ### 4.2 搜索/预算敏感性
 
-- Exact：对每个已确认几何变体，在整数平移声明域运行 `upper_area=36`、`grid_step=1`、`time_limit=300 s`；保存 `width_range/height_range/containers_total/containers_checked`、`status`、`complete`、上下界和 exact/audit 一致性。若要测试连续平移，必须新增独立连续域实现并另给 code hash；当前整数 exact 不能自动证明连续域结论。只有达到模块面积下界且证明路径覆盖连续域时，才可写连续域下界结论。
+- Exact：对每个已确认几何变体，在整数平移声明域运行 `upper_area=36`、`grid_step=1`、`time_limit=300 s`；保存 `width_range/height_range/containers_total/containers_checked`、`status`、`complete`、上下界。`formal/audit` 表示候选布局紧包围盒目标指标，`domain_formal/domain_audit/domain_audit_match` 单列声明域（9x9 或 12x12）合法性；汇总面积使用 objective `formal.area`，只有 objective 与声明域两组合法/审计均通过才计入合法。若要测试连续平移，必须新增独立连续域实现并另给 code hash；当前整数 exact 不能自动证明连续域结论。只有达到模块面积下界且证明路径覆盖连续域时，才可写连续域下界结论。
 - SA：固定同一几何/域/初始行布局，预注册预算矩阵 `max_evaluations ∈ {10000,30000,60000}`，`time_limit ∈ {60,120}` 只在人工确认资源足够时采用；每个单元使用独立 seeds `2201--2220`、4 restarts，记录合法率、best/median/IQR/p90 area、evaluations、runtime、相对 exact incumbent 的 gap。预算敏感性是观测曲线，不是证明。
 - 对 `domain=(9,9)` 与扩大域（例如 `domain=(12,12)`）可做独立域敏感性，但每个域必须单列配置/hash，不能将不同域结果合并为一个 SA 分布。
 
@@ -230,6 +232,6 @@ Q4 当前已由 `q4_extension_checklist()` 生成整数声明域的完整 64-hex
 5. Q4 `G-/G0/G+`、9x9/12x12、exact/SA 预算矩阵及论文图需求是否明确授权；连续域当前不在声明范围；
 6. 变更后是否重新生成完整 manifest/config snapshot，并将本文状态保持为 `REVIEWING` 直到复核完成。
 
-本轮解锁前还需确认：Q1 core code hash `3191e8fa3cfd8aaa7948395b9026ff11bb50871a09425b05f1d85c6a8a6a5aaa` 因正式 marker 增加 `data_hash` 字段而变化；Q2/Q3/Q4 core code hash 与 V3 runner overall manifest hash 分别见第 1.3 节和 `outputs/v3_frozen_manifest.json`，所有 hash 必须按 core/overall 两层逐字核对。workers=1 的旧 28 条记录及 Q1-SP seed_2209 partial 已归档并作废；Q1 workers=8 正式根 `outputs/q1/_runtime/v3_n200` 已完成 140/140，Q2 P0/P1/P2 已完成 60/60，二者分析仍为 `REVIEWING`。Q3/Q4/n300 后续运行仍需主代理验收及相应人工确认。
+本轮还需人工复核：Q1 正式根已完成 140/140；Q2 正式根已完成 60/60，机械暂选 P1；Q3 三条路线已完成 threshold/final 正式记录，三者 `d_robust=0.075` 且 final 指标并列，按注册顺序机械暂选 Q3-BIN；Q4 整数声明域正式根已完成 726/726。四问均保持 `REVIEWING`。`n300` 未运行，仍不得调参或选型。core/overall 与执行快照哈希必须分层核对，不得用合并后的分析 hash 改写历史 marker。
 
-**解锁规则**：完整协议和原 Q2B 已确认，但 Q2B′ checkpoint 实现、Q3-LIN 全网格实现以及 Q1 正式结果仍需相应复核；Q1 结果只保持 `REVIEWING`，不得以它解锁 Q2/Q3/Q4/n300。不得以 V2 n100 结果、测试或历史 `5182e532feca7ba4337692b112b06f181d6f79ee85596eacf83c9109b14fb709` 快照替代 n200 正式证据；n300 仍不可调参/选型。
+**解锁规则**：Q1、Q2、Q3、Q4 正式结果仍需相应人工复核，当前只保持 `REVIEWING`；`n300` 不因前述运行自动解锁。不得以 V2 n100 结果、测试或历史 `5182e532feca7ba4337692b112b06f181d6f79ee85596eacf83c9109b14fb709` 快照替代 n200 正式证据；n300 仍不可调参/选型。

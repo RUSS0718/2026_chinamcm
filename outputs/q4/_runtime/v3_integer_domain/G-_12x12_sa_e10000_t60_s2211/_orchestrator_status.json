@@ -1,0 +1,30 @@
+{
+  "command": [
+    "D:\\Anaconda\\envs\\CA-py310\\python.exe",
+    "-B",
+    "-m",
+    "src.Q4",
+    "sa",
+    "--geometry",
+    "G-",
+    "--seed",
+    "2211",
+    "--max-evaluations",
+    "10000",
+    "--time-limit",
+    "60.0",
+    "--restarts",
+    "4",
+    "--domain-width",
+    "12",
+    "--domain-height",
+    "12",
+    "--output",
+    "D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q4\\_runtime\\v3_integer_domain\\G-_12x12_sa_e10000_t60_s2211\\result.json"
+  ],
+  "index": 132,
+  "marker": "D:/project/chinamcm_2026/2026_chinamcm/outputs/q4/_runtime/v3_integer_domain/G-_12x12_sa_e10000_t60_s2211/result.json",
+  "returncode": 0,
+  "stderr": "",
+  "stdout": ""
+}
