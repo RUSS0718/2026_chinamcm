@@ -41,6 +41,7 @@ Q1_CANDIDATES = ("Q1-G", "Q1-SP", "Q1-BT", "Q1-BT-D")
 Q1_ABLATION_CANDIDATES = ("Q1-BT-directed-only", "Q1-BT-dedup-only", "Q1-BT-both")
 Q2_CANDIDATES = ("P0", "P1", "P2")
 Q3_CANDIDATES = ("Q3-BIN", "Q3-LIN", "Q3-CONT-R")
+Q3_WORKERS = 4
 HASH_RE = __import__("re").compile(r"^[0-9a-f]{64}$")
 ATTEMPT_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
 RESERVED_ATTEMPTS = {".", "..", "base", "final", "root", "runtime", "tables", "outputs", "con", "prn", "nul", "aux"}
@@ -159,7 +160,7 @@ def _q3_configs() -> dict[str, Q3SearchConfig]:
         "max_evaluations": 30_000,
         "time_limit": 60.0,
         "restarts": 4,
-        "workers": 5,
+        "workers": Q3_WORKERS,
         "adaptive_constraints": True,
         "hypergraph_init": True,
         "final_seeds": FINAL_SEEDS,
@@ -204,7 +205,7 @@ def build_specs(root: Path = ROOT, output_root: str = "outputs") -> dict[str, Fr
             {name: q3_code_hash() for name in q3_configs},
             {name: q3_config_hash(config) for name, config in q3_configs.items()},
             manifest_hash(q2_data), COLD_SEEDS, {"max_evaluations": 30_000, "time_limit": 60.0, "restarts": 4},
-            1, 1, 5, "random.Random (CPython MT19937)", common_stop, str(Path(output_root) / "q3" / "_runtime" / "v3_n200"), FINAL_SEEDS,
+            1, 1, Q3_WORKERS, "random.Random (CPython MT19937)", common_stop, str(Path(output_root) / "q3" / "_runtime" / "v3_n200"), FINAL_SEEDS,
         ),
     }
 

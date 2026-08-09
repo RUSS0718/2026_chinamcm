@@ -43,7 +43,7 @@ class V3ProtocolTests(unittest.TestCase):
         self.assertEqual(specs["q2"].processes, 4)
         self.assertEqual(specs["q2"].threads, 1)
         self.assertEqual(specs["q2"].workers, 4)
-        self.assertEqual(specs["q3"].workers, 5)  # Q3 inner cold-seed workers; outer route execution stays serial.
+        self.assertEqual(specs["q3"].workers, 4)  # Q3 inner cold-seed workers; outer route execution stays serial.
 
     def test_q1_execution_manifest_is_immutable_run_snapshot(self):
         payload = json.loads(Path("outputs/q1/tables/v3_n200_execution_manifest.json").read_text(encoding="utf-8"))
@@ -108,7 +108,7 @@ class V3ProtocolTests(unittest.TestCase):
             self.assertEqual(maximum, 8)
             self.assertEqual(len({item["marker"] for item in result}), 16)
 
-    def test_q3_outer_execution_stays_serial_when_inner_workers_are_five(self):
+    def test_q3_outer_execution_stays_serial_when_inner_workers_are_four(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             plans = []
@@ -116,7 +116,7 @@ class V3ProtocolTests(unittest.TestCase):
                 marker = root / f"route_{index}" / "result.jsonl"
                 fingerprint = {"problem": "q3", "instance": "n200", "config_id": f"Q3-{index}", "seed": 2201,
                                "code_hash": "a" * 64, "config_hash": "b" * 64, "data_hash": "c" * 64,
-                               "environment": {"workers": 5}}
+                               "environment": {"workers": 4}}
                 plans.append(CommandPlan((sys.executable, str(marker)), marker, fingerprint))
             lock = threading.Lock()
             active = 0
