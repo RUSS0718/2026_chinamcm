@@ -1,6 +1,6 @@
-# Q4 V2 模型与运行证据（REVIEWING）
+# Q4 V2 模型与运行证据（VERIFIED）
 
-状态：`REVIEWING`。本文是可复查的 V2 技术材料，不是人工 `VERIFIED` 或 `FINAL`，也不是论文最终结论。实验定义见[正式协议](v2_experiment_protocol.md)；原始 JSON、表格、图和生成脚本均保留在仓库中。
+状态：`VERIFIED`。2026-08-09 人工复核接受 `b1` 横梁厚度 2、exact 声明域和现有运行证据。本文不是 `FINAL` 或论文最终结论；实验定义见[正式协议](v2_experiment_protocol.md)，原始 JSON、表格、图和生成脚本均保留在仓库中。
 
 ## 1. 范围与结论边界
 
@@ -104,4 +104,4 @@ D:\Anaconda\envs\CA-py310\python.exe -B -m src.Q4 exact --upper-area 36 --time-l
 
 本轮 exact 证明的是声明的整数平移网格、四方向、实际候选容器域；连续域结论仅因面积 24 下界被达到而成立，不能推广为其他几何或其他旋转许可。SA 是固定预算的随机启发式，不提供最优性证明，seed 1108 的面积匹配不能替代 exact。当前没有敏感性分析、跨参数预算分析、连续域搜索或正式论文级不确定性分析；V3 需先由人工复核冻结几何/协议，再决定是否开展这些扩展。
 
-阶段仍为 `REVIEWING`，本报告不标记 `VERIFIED`/`FINAL`，也不迁入 `outputs/q4/final/`。
+本阶段已人工复核为 `VERIFIED`，但不标记 `FINAL`，也不迁入 `outputs/q4/final/`。任何几何、旋转许可、声明域、关键数字或结论变化都必须退回 `REVIEWING`。

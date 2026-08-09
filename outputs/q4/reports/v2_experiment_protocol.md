@@ -1,8 +1,8 @@
-# Q4 V2 正式实验协议（REVIEWING）
+# Q4 V2 正式实验协议（VERIFIED）
 
 ## 1. 状态、范围与解锁条件
 
-- 阶段状态：`REVIEWING`。这是 Agent 技术冻结，不是人工 `VERIFIED` 或 `FINAL`。
+- 阶段状态：`VERIFIED`。2026-08-09 人工复核接受几何来源、exact 声明域和运行证据边界；本协议不是 `FINAL`，发生影响性变更时退回 `REVIEWING`。
 - 本协议针对题面给出的四个异形模块 `b1`、`b2`、`b3`、`b4`；本协议绝不将该问题称作 `n100`，也不把四模块实验扩展为其他规模实例。
 - 本文件只登记实验定义、命令和证据字段；当前不包含运行结果。所有实验输出必须写入 `outputs/q4/_runtime/v2/`，不得写入 `outputs/q4/final/`。
 - SA 正式批次须在精确路线结果由主 Agent 验收后另行解锁；在此之前不得运行 seeds 1101--1110 正式批次。
@@ -67,4 +67,4 @@ D:\Anaconda\envs\CA-py310\python.exe -B -m src.Q4 sa --seed SEED --max-evaluatio
 
 SA 汇总表必须记录：合法率、best area、median area、IQR、runtime、evaluations，以及相对精确 incumbent/声明域结果的 `gap`。汇总不得把 timeout、crash 或 no-feasible 当作成功样本，也不得用缺失结果补齐统计量。
 
-本协议及其运行输出不会自行迁入 `outputs/q4/final/`，也不会自行将阶段标记为 `VERIFIED` 或 `FINAL`。
+本协议及其运行输出不会自行迁入 `outputs/q4/final/`，也不会自行将阶段提升为 `FINAL`；当前 `VERIFIED` 来自 2026-08-09 的人工复核批准。

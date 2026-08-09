@@ -2,7 +2,7 @@
 
 - 检查点：追溯修复后协议。当前 `_code_hash=a3971eefa77bc2cdaecd9fa0f59e85fc37668df57d6587d2217ec3f416ae8215`；旧 `_code_hash=144fa968a824ac6f943c9f547f54506bfe683c4e14befce0780c3cfc917a3b87` 的首次 BIN 运行因命令/环境追溯字段修复标记为 `superseded due to command/environment trace fix`，仅作为历史证据保留，不冒充正式结果，归档于 `outputs/q3/_runtime/v2_n100/n100/v2_n100_q3_bin_pre_trace_fix` 及 `outputs/q3/tables/*_pre_trace_fix`。
 - 重跑范围：BIN、LIN、CONT-R 均待在整合后代码上按本协议全量重跑；以下参数继续作为下一次运行的冻结协议。
-- 状态：REVIEWING
+- 状态：VERIFIED（2026-08-09 人工复核批准；协议变更时退回 REVIEWING）
 - 冻结日期：2026-08-08
 - 实例：`n100`
 - 目的：开发阶段比较 Q3 外层死区搜索策略，检查边界记录、稳定性和最终轮廓复优化流程。

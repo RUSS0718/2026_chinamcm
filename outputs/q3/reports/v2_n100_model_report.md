@@ -1,6 +1,6 @@
-# Q3 V2 n100 模型报告（REVIEWING）
+# Q3 V2 n100 模型报告（VERIFIED）
 
-本文件是方法与开发结果骨架，不是 `VERIFIED` 或 `FINAL` 结论。统计只来自三次整合后正式运行的 `result.json`/`layout.json`；首次 BIN 运行因命令与环境追溯修复已标记为 `superseded due to command/environment trace fix`，归档在 `outputs/q3/_runtime/v2_n100/n100/v2_n100_q3_bin_pre_trace_fix`，不进入本汇总。
+本文件已于 2026-08-09 通过人工复核，阶段为 `VERIFIED`，但不是 `FINAL`。统计只来自三次整合后正式运行的 `result.json`/`layout.json`；首次 BIN 运行因命令与环境追溯修复已标记为 `superseded due to command/environment trace fix`，归档在 `outputs/q3/_runtime/v2_n100/n100/v2_n100_q3_bin_pre_trace_fix`，不进入本汇总。
 
 ## 1. 口径、符号与模型
 
@@ -51,6 +51,6 @@ D:\Anaconda\envs\CA-py310\python.exe -B -m src.Q3
 - 代码测试验证入口、正式评价器和独立审计字段一致性，但测试不是模型效果证据。
 - 本轮不生成 V3 敏感性结论，也未将任何材料迁入 `outputs/q3/final/`。
 
-## 5. 下一步（需人工复核）
+## 5. 人工复核结论与下一步
 
-人工复核应检查 30 个 final seed 明细、三份 layout、协议参数、命令/环境/hash 与表格聚合；之后才能决定是否进入下一阶段。当前状态保持 `REVIEWING`，本文件不能直接写入正式结论或论文定稿。
+2026-08-09，指定人工复核人接受 30 个 final seed、三份 layout、366 条正式记录、协议参数、命令/环境/hash 与表格聚合，批准本阶段为 `VERIFIED`。该状态只覆盖 n100 V2 开发证据；timeout、no_feasible、跨规模外推和 V3 局限仍然有效，本文件不是论文定稿。

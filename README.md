@@ -1,9 +1,9 @@
 # 2026 华数杯数学建模仓库
 
-> V2 本轮执行基线为 HEAD `5b4042aff79ac6e3134998adc93eb679895309c0`，Q3 追溯修复后的 `_code_hash=a3971eefa77bc2cdaecd9fa0f59e85fc37668df57d6587d2217ec3f416ae8215`。BIN、LIN、CONT-R 已按冻结协议全量重跑；旧 hash `144fa968a824ac6f943c9f547f54506bfe683c4e14befce0780c3cfc917a3b87` 的首次 BIN 仅作 superseded 追溯证据。Q3 状态仍为 `REVIEWING`；真实入口为 `D:\Anaconda\envs\CA-py310\python.exe -B -m src.Q3`。
+> V2 本轮执行基线为 HEAD `5b4042aff79ac6e3134998adc93eb679895309c0`，Q3 追溯修复后的 `_code_hash=a3971eefa77bc2cdaecd9fa0f59e85fc37668df57d6587d2217ec3f416ae8215`。BIN、LIN、CONT-R 已按冻结协议全量重跑；旧 hash `144fa968a824ac6f943c9f547f54506bfe683c4e14befce0780c3cfc917a3b87` 的首次 BIN 仅作 superseded 追溯证据。2026-08-09 人工复核已批准 Q2/Q3/Q4 V2，状态为 `VERIFIED`；真实入口为 `D:\Anaconda\envs\CA-py310\python.exe -B -m src.Q3`。
 
 本仓库按“原始数据 → 可复现处理数据 → 分问题建模 → 正式结果 → 论文材料”组织。
-当前已完成第 0 轮共享解析/评价/审计和 Q1-Q4 的 V1 问题分析；Q1 已完成 Q1-G、Q1-SP、Q1-BT、Q1-BT-D 的 V2 n100 批次（共 40 条运行记录），P2 消融留待 V3。Q2 已完成修复后的 P0/P1/P2 n100 主组（50 条）与随机初始化压力组（20 条）；P0 已满足可信独立参考基线的技术门槛，但状态仍为 `REVIEWING`，正式选型留待 n200。Q3 三候选与 Q4 精确/SA 两路线已完成 V2 正式运行和 handoff；`requirements.txt` 已记录 Q4 绘图依赖 `matplotlib==3.10.9`。Q1 V2 结果已通过既有人工复核，状态为 `VERIFIED`，但不是最终结果。
+当前已完成第 0 轮共享解析/评价/审计和 Q1-Q4 的 V1 问题分析；Q1 已完成 Q1-G、Q1-SP、Q1-BT、Q1-BT-D 的 V2 n100 批次（共 40 条运行记录），P2 消融留待 V3。Q2 已完成修复后的 P0/P1/P2 n100 主组（50 条）与随机初始化压力组（20 条），人工复核接受代码哈希 `5182e532…` 的历史运行快照；正式选型留待 n200。Q3 三候选与 Q4 精确/SA 两路线已完成 V2 正式运行和 handoff；`requirements.txt` 已记录 Q4 绘图依赖 `matplotlib==3.10.9`。Q1-Q4 V2 均已通过人工复核，状态为 `VERIFIED`，但不是最终结果。
 
 ## 目录结构
 
@@ -217,7 +217,7 @@ V3 验收标准：每个重要结论都有具体数值和结果表支持，不�
 
 ### 当前可用的论文手阶段包
 
-- Q2 V2：[`paper/q2/v2_handoff.md`](paper/q2/v2_handoff.md)。该清单链接到 fix2 的 50 条主组明细、20 条随机压力明细、五配置汇总、配对差值、比较快照、代码入口和测试；P0/P2 初始化隔离已复核，当前状态为 `REVIEWING`，P0 仅作为可信独立参考基线，材料只可用于方法章节和开发结果草稿。
+- Q2 V2：[`paper/q2/v2_handoff.md`](paper/q2/v2_handoff.md)。该清单链接到 fix2 的 50 条主组明细、20 条随机压力明细、五配置汇总、配对差值、比较快照、代码入口和测试；P0/P2 初始化隔离已复核，当前状态为 `VERIFIED`。P0 仅作为可信独立参考基线，n100 材料不得外推为 n200/n300 正式选型或最终模型结论。
 
 ### 分阶段交接表
 
