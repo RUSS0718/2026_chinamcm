@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from concurrent.futures import ProcessPoolExecutor
+from typing import Any, Callable
 
 from ..Q2.common import Q2SearchConfig, SearchResult
 from ..Q2.p0 import search_p0
@@ -18,6 +19,9 @@ from .common import (
     rounded_midpoint,
     validate_config,
 )
+
+
+ProgressCallback = Callable[[dict[str, Any]], None]
 
 
 def _inner_config(config: Q3SearchConfig, dead_space_ratio: float, final: bool = False) -> Q2SearchConfig:
@@ -58,12 +62,40 @@ def _run_seed_attempts(
     seeds: tuple[int, ...],
     workers: int,
     mode: str,
+    *,
+    candidate: str | None = None,
+    dead_space_ratio: float | None = None,
+    progress_callback: ProgressCallback | None = None,
 ) -> list[SeedAttempt]:
     tasks = [(instance, config, seed, mode) for seed in seeds]
+    attempts: list[SeedAttempt] = []
+
+    def record(index: int, attempt: SeedAttempt) -> None:
+        if progress_callback is None:
+            return
+        progress_callback({
+            "event": "seed_complete",
+            "candidate": candidate,
+            "phase": "final" if mode == "final_cold" else "threshold",
+            "mode": mode,
+            "dead_space_ratio": dead_space_ratio,
+            "seed": attempt.seed,
+            "seed_index": index + 1,
+            "seed_total": len(seeds),
+            **attempt.as_dict(),
+        })
+
     if workers == 1:
-        return [_run_seed_attempt(task) for task in tasks]
+        for index, task in enumerate(tasks):
+            attempt = _run_seed_attempt(task)
+            attempts.append(attempt)
+            record(index, attempt)
+        return attempts
     with ProcessPoolExecutor(max_workers=workers) as executor:
-        return list(executor.map(_run_seed_attempt, tasks))
+        for index, attempt in enumerate(executor.map(_run_seed_attempt, tasks)):
+            attempts.append(attempt)
+            record(index, attempt)
+    return attempts
 
 
 def _run_cold_attempts(
@@ -71,8 +103,21 @@ def _run_cold_attempts(
     config: Q2SearchConfig,
     seeds: tuple[int, ...],
     workers: int,
+    *,
+    candidate: str | None = None,
+    dead_space_ratio: float | None = None,
+    progress_callback: ProgressCallback | None = None,
 ) -> list[SeedAttempt]:
-    return _run_seed_attempts(instance, config, seeds, workers, "cold")
+    return _run_seed_attempts(
+        instance,
+        config,
+        seeds,
+        workers,
+        "cold",
+        candidate=candidate,
+        dead_space_ratio=dead_space_ratio,
+        progress_callback=progress_callback,
+    )
 
 
 def _run_final_attempts(
@@ -80,8 +125,21 @@ def _run_final_attempts(
     config: Q2SearchConfig,
     seeds: tuple[int, ...],
     workers: int,
+    *,
+    candidate: str | None = None,
+    dead_space_ratio: float | None = None,
+    progress_callback: ProgressCallback | None = None,
 ) -> list[SeedAttempt]:
-    return _run_seed_attempts(instance, config, seeds, workers, "final_cold")
+    return _run_seed_attempts(
+        instance,
+        config,
+        seeds,
+        workers,
+        "final_cold",
+        candidate=candidate,
+        dead_space_ratio=dead_space_ratio,
+        progress_callback=progress_callback,
+    )
 
 
 def _threshold_attempt(
@@ -89,6 +147,7 @@ def _threshold_attempt(
     config: Q3SearchConfig,
     dead_space_ratio: float,
     warm_state: object | None = None,
+    progress_callback: ProgressCallback | None = None,
 ) -> ThresholdAttempt:
     ratio = ratio_key(dead_space_ratio)
     inner = _inner_config(config, ratio)
@@ -100,8 +159,29 @@ def _threshold_attempt(
         and config.inner_candidate != "Q2-SP"
     ):
         warm_seed = config.seeds[0]
-        seed_attempts.append(SeedAttempt(warm_seed, "warm", _run_inner(instance, inner, warm_seed, warm_state)))
-    seed_attempts.extend(_run_cold_attempts(instance, inner, config.seeds, config.workers))
+        warm_attempt = SeedAttempt(warm_seed, "warm", _run_inner(instance, inner, warm_seed, warm_state))
+        seed_attempts.append(warm_attempt)
+        if progress_callback is not None:
+            progress_callback({
+                "event": "seed_complete",
+                "candidate": config.candidate,
+                "phase": "threshold",
+                "mode": "warm",
+                "dead_space_ratio": ratio,
+                "seed": warm_attempt.seed,
+                "seed_index": 1,
+                "seed_total": 1,
+                **warm_attempt.as_dict(),
+            })
+    seed_attempts.extend(_run_cold_attempts(
+        instance,
+        inner,
+        config.seeds,
+        config.workers,
+        candidate=config.candidate,
+        dead_space_ratio=ratio,
+        progress_callback=progress_callback,
+    ))
     return ThresholdAttempt(ratio, outline_side(instance, ratio), seed_attempts)
 
 
@@ -127,15 +207,32 @@ def _ratios_linear(config: Q3SearchConfig) -> list[float]:
     return ratios
 
 
-def _threshold_search(instance: Instance, config: Q3SearchConfig) -> list[ThresholdAttempt]:
+def _threshold_search(
+    instance: Instance,
+    config: Q3SearchConfig,
+    progress_callback: ProgressCallback | None = None,
+) -> list[ThresholdAttempt]:
     attempts: list[ThresholdAttempt] = []
     by_ratio: dict[float, ThresholdAttempt] = {}
 
     def attempt(ratio: float, warm_state: object | None = None) -> ThresholdAttempt:
         key = ratio_key(ratio)
         if key not in by_ratio:
-            by_ratio[key] = _threshold_attempt(instance, config, key, warm_state)
-            attempts.append(by_ratio[key])
+            current = _threshold_attempt(instance, config, key, warm_state, progress_callback)
+            by_ratio[key] = current
+            attempts.append(current)
+            if progress_callback is not None:
+                progress_callback({
+                    "event": "threshold_complete",
+                    "candidate": config.candidate,
+                    "phase": "threshold",
+                    "dead_space_ratio": current.dead_space_ratio,
+                    "outline_side": current.outline_side,
+                    "cold_runs": len(current.cold_attempts),
+                    "cold_legal_runs": len(current.cold_legal_attempts),
+                    "cold_success_rate": current.success_rate,
+                    "robust": current.success_rate >= config.robust_min_success_rate,
+                })
         return by_ratio[key]
 
     upper = attempt(config.upper_ratio)
@@ -181,22 +278,59 @@ def _minimum_ratio(attempts: list[ThresholdAttempt], config: Q3SearchConfig, rob
     return min(candidates) if candidates else None
 
 
-def _final_attempts(instance: Instance, config: Q3SearchConfig, selected_ratio: float | None) -> list[SeedAttempt]:
+def _final_attempts(
+    instance: Instance,
+    config: Q3SearchConfig,
+    selected_ratio: float | None,
+    progress_callback: ProgressCallback | None = None,
+) -> list[SeedAttempt]:
     if selected_ratio is None:
         return []
     inner = _inner_config(config, selected_ratio, final=True)
-    return _run_final_attempts(instance, inner, config.final_seeds, config.workers)
+    attempts = _run_final_attempts(
+        instance,
+        inner,
+        config.final_seeds,
+        config.workers,
+        candidate=config.candidate,
+        dead_space_ratio=selected_ratio,
+        progress_callback=progress_callback,
+    )
+    if progress_callback is not None:
+        progress_callback({
+            "event": "final_complete",
+            "candidate": config.candidate,
+            "phase": "final",
+            "dead_space_ratio": selected_ratio,
+            "final_runs": len(attempts),
+            "final_legal_runs": sum(
+                attempt.result.status != "crash" and attempt.result.audit_metrics.get("legal") is True
+                for attempt in attempts
+            ),
+        })
+    return attempts
 
 
-def solve_q3(instance: Instance, config: Q3SearchConfig) -> Q3Result:
+def solve_q3(
+    instance: Instance,
+    config: Q3SearchConfig,
+    *,
+    progress_callback: ProgressCallback | None = None,
+) -> Q3Result:
     """Search a documented heuristic boundary, then re-optimize HPWL there.
 
     A failed inner run means only that its finite budget did not find a layout.
     It is never returned as a mathematical proof of infeasibility.
     """
     validate_config(config)
-    attempts = _threshold_search(instance, config)
+    attempts = _threshold_search(instance, config, progress_callback)
     d_best = _minimum_ratio(attempts, config, robust=False)
     d_robust = _minimum_ratio(attempts, config, robust=True)
     selected = d_robust if config.decision_rule == "robust" else d_best
-    return Q3Result(attempts, d_best, d_robust, selected, _final_attempts(instance, config, selected))
+    return Q3Result(
+        attempts,
+        d_best,
+        d_robust,
+        selected,
+        _final_attempts(instance, config, selected, progress_callback),
+    )
