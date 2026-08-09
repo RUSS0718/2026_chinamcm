@@ -1,4 +1,4 @@
-# Q4 V3 论文交接（REVIEWING）
+# Q4 V3 论文交接（VERIFIED）
 
 ## 可用证据
 
@@ -21,4 +21,6 @@ Exact 紧包围盒目标面积：G- 在两个声明域均为 24，G0 在两个�
 - SA 的 timeout 必须保留并纳入分母；incumbent gap 只相对同几何同声明域 exact 参考。SA best、median 或 gap=0 均不等价于全局最优。
 - Q4 无 nets，HPWL=0 仅为共享 schema 字段，不作优化效果结论。
 
-当前阶段保持 `REVIEWING`。人工复核完成前，不生成 `final/` 论文结论、最优宣称或连续域图表。
+2026-08-09，人工复核人（用户）接受声明整数域、完整 exact 界、SA 预算敏感性和 timeout 保留边界，批准本交接为 `VERIFIED`，但不是 `FINAL`。不得生成 `final/`、连续域结论或把 SA 命中 exact 写成最优性证明。
+
+论文图：[`v3_route_layouts.png`](../../outputs/q4/figures/v3_route_layouts.png)与[`v3_exact_sa_consistency.png`](../../outputs/q4/figures/v3_exact_sa_consistency.png)。
