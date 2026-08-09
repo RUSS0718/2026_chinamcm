@@ -109,6 +109,34 @@ def _write_json(path: Path, payload: object) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
+class _ProgressWriter:
+    """Append-only seed progress stream for an external local viewer."""
+
+    def __init__(self, path: Path) -> None:
+        self.path = path
+        self._stream = None
+        self.error: str | None = None
+
+    def open(self) -> None:
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        self._stream = self.path.open("w", encoding="utf-8", newline="\n")
+
+    def __call__(self, event: dict) -> None:
+        if self._stream is None or self.error is not None:
+            return
+        record = {"timestamp": time.time(), **event}
+        try:
+            self._stream.write(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n")
+            self._stream.flush()
+        except (OSError, TypeError, ValueError) as exc:
+            self.error = f"{type(exc).__name__}: {exc}"
+
+    def close(self) -> None:
+        if self._stream is not None:
+            self._stream.close()
+            self._stream = None
+
+
 def _attempt_rows(result, config: Q3SearchConfig, layout_path: str = "") -> list[dict]:
     rows: list[dict] = []
     for attempt in result.attempts:
@@ -219,10 +247,44 @@ def main(argv: list[str] | None = None) -> int:
     config_hash = _config_hash(config)
     data_hash = _data_hash(Path(args.raw), args.instance)
     run_id = args.run_id or f"v2_{args.candidate.lower()}_{args.instance}_{config_hash}"
-    result = solve_q3(instance, config)
+    runtime_dir = Path(args.runtime_root) / args.instance / run_id
+    progress_path = runtime_dir / "_live_progress.jsonl"
+    progress = _ProgressWriter(progress_path)
+    progress.open()
+    progress({
+        "event": "run_start",
+        "candidate": config.candidate,
+        "phase": "run",
+        "run_id": run_id,
+        "instance": args.instance,
+        "workers": config.workers,
+        "cold_seeds": list(config.seeds),
+        "final_seeds": list(config.final_seeds),
+    })
+    try:
+        result = solve_q3(instance, config, progress_callback=progress)
+    except BaseException as exc:
+        progress({
+            "event": "run_error",
+            "candidate": config.candidate,
+            "phase": "run",
+            "run_id": run_id,
+            "error": f"{type(exc).__name__}: {exc}",
+        })
+        progress.close()
+        raise
     final_best = result.final_best
     status = final_best.result.status if final_best is not None else "no_feasible"
-    runtime_dir = Path(args.runtime_root) / args.instance / run_id
+    progress({
+        "event": "run_complete",
+        "candidate": config.candidate,
+        "phase": "run",
+        "run_id": run_id,
+        "status": status,
+        "selected_ratio": result.selected_ratio,
+        "progress_error": progress.error,
+    })
+    progress.close()
     layout_path = ""
     if final_best is not None:
         final_layout_path = runtime_dir / "layout.json"
@@ -262,6 +324,8 @@ def main(argv: list[str] | None = None) -> int:
                 "runtime_metadata": {
                     "command": actual_command,
                     "environment": environment,
+                    "progress_path": progress_path.as_posix(),
+                    "progress_error": progress.error,
                 },
             },
         )
@@ -281,6 +345,8 @@ def main(argv: list[str] | None = None) -> int:
         "layout_path": layout_path,
         "command": actual_command,
         "environment": environment,
+        "progress_path": progress_path.as_posix(),
+        "progress_error": progress.error,
         "runtime_seconds": runtime_seconds,
         **result_payload,
     }

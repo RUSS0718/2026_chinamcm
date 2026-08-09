@@ -389,6 +389,40 @@ class Q3SearchTests(unittest.TestCase):
         self.assertEqual([attempt.seed for attempt in attempts], [3, 1, 2])
         self.assertEqual(seen, [(3, None), (1, None), (2, None)])
 
+    def test_progress_callback_reports_each_seed_without_changing_order(self):
+        instance = next(tiny_instance())
+        config = Q3SearchConfig(
+            candidate="Q3-BIN",
+            inner_candidate="Q2-BT",
+            seeds=(3, 1, 2),
+            final_seeds=(9,),
+            max_evaluations=1,
+            time_limit=1.0,
+            restarts=1,
+            final_max_evaluations=1,
+            final_time_limit=1.0,
+            final_restarts=1,
+            workers=1,
+        )
+        events = []
+
+        with patch.object(search, "_run_inner", return_value=FakeResult(True, hpwl=1.0)):
+            attempts = search._run_cold_attempts(
+                instance,
+                search._inner_config(config, 0.1),
+                config.seeds,
+                config.workers,
+                candidate=config.candidate,
+                dead_space_ratio=0.1,
+                progress_callback=events.append,
+            )
+
+        self.assertEqual([attempt.seed for attempt in attempts], [3, 1, 2])
+        self.assertEqual([event["event"] for event in events], ["seed_complete"] * 3)
+        self.assertEqual([event["seed"] for event in events], [3, 1, 2])
+        self.assertEqual([event["seed_index"] for event in events], [1, 2, 3])
+        self.assertTrue(all(event["phase"] == "threshold" for event in events))
+
     def test_workers_five_uses_process_pool_and_preserves_seed_order(self):
         instance = next(tiny_instance())
         config = Q3SearchConfig(
@@ -627,11 +661,24 @@ class Q3CliTests(unittest.TestCase):
             result_path = root / "runtime" / "tiny" / payload["run_id"] / "result.json"
             layout_path = Path(payload["layout_path"])
             table_path = root / "tables" / f"{payload['run_id']}_attempts.csv"
+            progress_path = Path(payload["progress_path"])
 
             self.assertTrue(result_path.is_file())
             self.assertTrue(layout_path.is_file())
             self.assertEqual(payload["layout_path"], json.loads(result_path.read_text(encoding="utf-8"))["layout_path"])
             self.assertTrue(table_path.is_file())
+            self.assertTrue(progress_path.is_file())
+            self.assertIsNone(payload["progress_error"])
+            progress_events = [
+                json.loads(line)
+                for line in progress_path.read_text(encoding="utf-8").splitlines()
+                if line.strip()
+            ]
+            self.assertEqual(progress_events[0]["event"], "run_start")
+            self.assertIn("seed_complete", {event["event"] for event in progress_events})
+            self.assertIn("threshold_complete", {event["event"] for event in progress_events})
+            self.assertIn("final_complete", {event["event"] for event in progress_events})
+            self.assertEqual(progress_events[-1]["event"], "run_complete")
 
             layout_payload = json.loads(layout_path.read_text(encoding="utf-8"))
             self.assertEqual(set(layout_payload["layout"]), {"b0"})

@@ -1,0 +1,553 @@
+{
+  "attempt_root": "E:/2026_chinamcm/outputs/q3/_runtime/v3_n200",
+  "mechanical_decision": {
+    "d_robust_priority": true,
+    "decision": "selected",
+    "final_HPWL_noninferior": [
+      "Q3-BIN",
+      "Q3-LIN",
+      "Q3-CONT-R"
+    ],
+    "final_legal_rate_noninferior": [
+      "Q3-BIN",
+      "Q3-LIN",
+      "Q3-CONT-R"
+    ],
+    "rankings": [
+      {
+        "d_robust": 0.075,
+        "final_iqr_HPWL": 5050.875,
+        "final_legal_rate": 1.0,
+        "final_median_HPWL": 520098.75,
+        "robust_rank": 1,
+        "route": "Q3-BIN",
+        "route_rank": 0
+      },
+      {
+        "d_robust": 0.075,
+        "final_iqr_HPWL": 5050.875,
+        "final_legal_rate": 1.0,
+        "final_median_HPWL": 520098.75,
+        "robust_rank": 2,
+        "route": "Q3-LIN",
+        "route_rank": 1
+      },
+      {
+        "d_robust": 0.075,
+        "final_iqr_HPWL": 5050.875,
+        "final_legal_rate": 1.0,
+        "final_median_HPWL": 520098.75,
+        "robust_rank": 3,
+        "route": "Q3-CONT-R",
+        "route_rank": 2
+      }
+    ],
+    "robust_tie_routes": [
+      "Q3-BIN",
+      "Q3-LIN",
+      "Q3-CONT-R"
+    ],
+    "selected": "Q3-BIN"
+  },
+  "problem": "q3",
+  "registered_routes": [
+    "Q3-BIN",
+    "Q3-LIN",
+    "Q3-CONT-R"
+  ],
+  "summary_by_route": {
+    "Q3-BIN": {
+      "d_best": 0.075,
+      "d_robust": 0.075,
+      "final_excluded_from_cold": true,
+      "final_iqr_HPWL": 5050.875,
+      "final_legal_rate": 1.0,
+      "final_median_HPWL": 520098.75,
+      "final_missing_runs": 0,
+      "final_p90_HPWL": 522641.75,
+      "final_runs": 20,
+      "final_status_counts": {
+        "status_crash": 0,
+        "status_no_feasible": 0,
+        "status_success": 0,
+        "status_timeout": 20
+      },
+      "status_counts": {
+        "status_crash": 0,
+        "status_no_feasible": 100,
+        "status_success": 0,
+        "status_timeout": 60
+      },
+      "threshold_cold_legal_rate": 0.2857142857142857,
+      "threshold_cold_missing_runs": 0,
+      "threshold_cold_registered_runs": 140,
+      "threshold_cold_runs": 140,
+      "threshold_cold_status_counts": {
+        "status_crash": 0,
+        "status_no_feasible": 100,
+        "status_success": 0,
+        "status_timeout": 40
+      },
+      "threshold_count": 7,
+      "threshold_warm_runs": 0,
+      "threshold_warm_status_counts": {
+        "status_crash": 0,
+        "status_no_feasible": 0,
+        "status_success": 0,
+        "status_timeout": 0
+      },
+      "thresholds": [
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.0,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.0375,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.05625,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.065625,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.0703125,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 1.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.075,
+          "has_cold_legal": true,
+          "missing_cold_runs": 0,
+          "robust": true
+        },
+        {
+          "cold_legal_rate": 1.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.15,
+          "has_cold_legal": true,
+          "missing_cold_runs": 0,
+          "robust": true
+        }
+      ],
+      "warm_excluded_from_cold": true
+    },
+    "Q3-CONT-R": {
+      "d_best": 0.075,
+      "d_robust": 0.075,
+      "final_excluded_from_cold": true,
+      "final_iqr_HPWL": 5050.875,
+      "final_legal_rate": 1.0,
+      "final_median_HPWL": 520098.75,
+      "final_missing_runs": 0,
+      "final_p90_HPWL": 522641.75,
+      "final_runs": 20,
+      "final_status_counts": {
+        "status_crash": 0,
+        "status_no_feasible": 0,
+        "status_success": 0,
+        "status_timeout": 20
+      },
+      "status_counts": {
+        "status_crash": 0,
+        "status_no_feasible": 105,
+        "status_success": 0,
+        "status_timeout": 61
+      },
+      "threshold_cold_legal_rate": 0.2857142857142857,
+      "threshold_cold_missing_runs": 0,
+      "threshold_cold_registered_runs": 140,
+      "threshold_cold_runs": 140,
+      "threshold_cold_status_counts": {
+        "status_crash": 0,
+        "status_no_feasible": 100,
+        "status_success": 0,
+        "status_timeout": 40
+      },
+      "threshold_count": 7,
+      "threshold_warm_runs": 6,
+      "threshold_warm_status_counts": {
+        "status_crash": 0,
+        "status_no_feasible": 5,
+        "status_success": 0,
+        "status_timeout": 1
+      },
+      "thresholds": [
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.0,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.0375,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.05625,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.065625,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.0703125,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 1.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.075,
+          "has_cold_legal": true,
+          "missing_cold_runs": 0,
+          "robust": true
+        },
+        {
+          "cold_legal_rate": 1.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.15,
+          "has_cold_legal": true,
+          "missing_cold_runs": 0,
+          "robust": true
+        }
+      ],
+      "warm_excluded_from_cold": true
+    },
+    "Q3-LIN": {
+      "d_best": 0.075,
+      "d_robust": 0.075,
+      "final_excluded_from_cold": true,
+      "final_iqr_HPWL": 5050.875,
+      "final_legal_rate": 1.0,
+      "final_median_HPWL": 520098.75,
+      "final_missing_runs": 0,
+      "final_p90_HPWL": 522641.75,
+      "final_runs": 20,
+      "final_status_counts": {
+        "status_crash": 0,
+        "status_no_feasible": 0,
+        "status_success": 0,
+        "status_timeout": 20
+      },
+      "status_counts": {
+        "status_crash": 0,
+        "status_no_feasible": 300,
+        "status_success": 0,
+        "status_timeout": 340
+      },
+      "threshold_cold_legal_rate": 0.5161290322580645,
+      "threshold_cold_missing_runs": 0,
+      "threshold_cold_registered_runs": 620,
+      "threshold_cold_runs": 620,
+      "threshold_cold_status_counts": {
+        "status_crash": 0,
+        "status_no_feasible": 300,
+        "status_success": 0,
+        "status_timeout": 320
+      },
+      "threshold_count": 31,
+      "threshold_warm_runs": 0,
+      "threshold_warm_status_counts": {
+        "status_crash": 0,
+        "status_no_feasible": 0,
+        "status_success": 0,
+        "status_timeout": 0
+      },
+      "thresholds": [
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.0,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.005,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.01,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.015,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.02,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.025,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.03,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.035,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.04,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.045,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.05,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.055,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.06,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.065,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 0.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.07,
+          "has_cold_legal": false,
+          "missing_cold_runs": 0,
+          "robust": false
+        },
+        {
+          "cold_legal_rate": 1.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.075,
+          "has_cold_legal": true,
+          "missing_cold_runs": 0,
+          "robust": true
+        },
+        {
+          "cold_legal_rate": 1.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.08,
+          "has_cold_legal": true,
+          "missing_cold_runs": 0,
+          "robust": true
+        },
+        {
+          "cold_legal_rate": 1.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.085,
+          "has_cold_legal": true,
+          "missing_cold_runs": 0,
+          "robust": true
+        },
+        {
+          "cold_legal_rate": 1.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.09,
+          "has_cold_legal": true,
+          "missing_cold_runs": 0,
+          "robust": true
+        },
+        {
+          "cold_legal_rate": 1.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.095,
+          "has_cold_legal": true,
+          "missing_cold_runs": 0,
+          "robust": true
+        },
+        {
+          "cold_legal_rate": 1.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.1,
+          "has_cold_legal": true,
+          "missing_cold_runs": 0,
+          "robust": true
+        },
+        {
+          "cold_legal_rate": 1.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.105,
+          "has_cold_legal": true,
+          "missing_cold_runs": 0,
+          "robust": true
+        },
+        {
+          "cold_legal_rate": 1.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.11,
+          "has_cold_legal": true,
+          "missing_cold_runs": 0,
+          "robust": true
+        },
+        {
+          "cold_legal_rate": 1.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.115,
+          "has_cold_legal": true,
+          "missing_cold_runs": 0,
+          "robust": true
+        },
+        {
+          "cold_legal_rate": 1.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.12,
+          "has_cold_legal": true,
+          "missing_cold_runs": 0,
+          "robust": true
+        },
+        {
+          "cold_legal_rate": 1.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.125,
+          "has_cold_legal": true,
+          "missing_cold_runs": 0,
+          "robust": true
+        },
+        {
+          "cold_legal_rate": 1.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.13,
+          "has_cold_legal": true,
+          "missing_cold_runs": 0,
+          "robust": true
+        },
+        {
+          "cold_legal_rate": 1.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.135,
+          "has_cold_legal": true,
+          "missing_cold_runs": 0,
+          "robust": true
+        },
+        {
+          "cold_legal_rate": 1.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.14,
+          "has_cold_legal": true,
+          "missing_cold_runs": 0,
+          "robust": true
+        },
+        {
+          "cold_legal_rate": 1.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.145,
+          "has_cold_legal": true,
+          "missing_cold_runs": 0,
+          "robust": true
+        },
+        {
+          "cold_legal_rate": 1.0,
+          "cold_runs": 20,
+          "dead_space_ratio": 0.15,
+          "has_cold_legal": true,
+          "missing_cold_runs": 0,
+          "robust": true
+        }
+      ],
+      "warm_excluded_from_cold": true
+    }
+  },
+  "validation_note": "Q3-CONT-R warm/cold attempts share seed 2201 by protocol; validation key included mode for this audited summary."
+}
