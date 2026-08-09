@@ -2,9 +2,9 @@
   "q1": {
     "code_files": [
       {
-        "bytes": 73781,
+        "bytes": 73814,
         "path": "src/v3.py",
-        "sha256": "df7ff8f61016253aa90cb0aafbc49dd010b0d3546326336c0719498ad2cd033d"
+        "sha256": "2461523bdfbeb1b41b4cd7cbad02cba3a9f366043b6434d56233e44323a5b388"
       },
       {
         "bytes": 43,
@@ -47,7 +47,7 @@
         "sha256": "cd2c8231c67364aad3febfc54d70b9fa3ebb4e655da95957ff9f43aec943e0cd"
       }
     ],
-    "code_manifest_hash": "c2f788030087a876e69a676187f01801e4677672a610e9169916cf059fc99355",
+    "code_manifest_hash": "ab121728295be4aaf9db6108ef1cc8a00153594304511fdc9c82d837bd7897c5",
     "commands": [
       {
         "auxiliary_suffixes": [],
@@ -608,9 +608,9 @@
   "q2": {
     "code_files": [
       {
-        "bytes": 73781,
+        "bytes": 73814,
         "path": "src/v3.py",
-        "sha256": "df7ff8f61016253aa90cb0aafbc49dd010b0d3546326336c0719498ad2cd033d"
+        "sha256": "2461523bdfbeb1b41b4cd7cbad02cba3a9f366043b6434d56233e44323a5b388"
       },
       {
         "bytes": 53,
@@ -673,7 +673,7 @@
         "sha256": "cd2c8231c67364aad3febfc54d70b9fa3ebb4e655da95957ff9f43aec943e0cd"
       }
     ],
-    "code_manifest_hash": "c6b25af869a9608c97d21c1abf3e934139be0d7c0167eb04f55e0b68de47fd98",
+    "code_manifest_hash": "25de3df5323233dbfcaf8c0e0713bc52bc2128562b51d0d50d366457139b346e",
     "commands": [
       {
         "auxiliary_suffixes": [],
@@ -1000,9 +1000,9 @@
   "q3": {
     "code_files": [
       {
-        "bytes": 73781,
+        "bytes": 73814,
         "path": "src/v3.py",
-        "sha256": "df7ff8f61016253aa90cb0aafbc49dd010b0d3546326336c0719498ad2cd033d"
+        "sha256": "2461523bdfbeb1b41b4cd7cbad02cba3a9f366043b6434d56233e44323a5b388"
       },
       {
         "bytes": 44,
@@ -1010,9 +1010,9 @@
         "sha256": "2800ceed9dab81125eceb923c64be6200a8775fc09fb07926010c2f1170439c6"
       },
       {
-        "bytes": 11859,
+        "bytes": 14066,
         "path": "src/Q3/__main__.py",
-        "sha256": "f3adf101ca72a37579d6356112b90b59b6235006ce42699d75a3df766ca1e829"
+        "sha256": "89e373de6abf09970605da0bbf87f73d9932480929a2bb159f04236a290faa76"
       },
       {
         "bytes": 8678,
@@ -1020,9 +1020,9 @@
         "sha256": "589ba3a4b1f50e36b239154300be3574f6d126c75402593f66cdf3b654988daa"
       },
       {
-        "bytes": 7307,
+        "bytes": 11268,
         "path": "src/Q3/search.py",
-        "sha256": "83be29382cd2e7e8ba11efa8cc98971dd7de7876a859d21b6f995799bf574d8d"
+        "sha256": "bbc61c58ca6fff6006e48daabe5ec42088fe61f5dec57afabb24085cefee524a"
       },
       {
         "bytes": 53,
@@ -1085,7 +1085,7 @@
         "sha256": "cd2c8231c67364aad3febfc54d70b9fa3ebb4e655da95957ff9f43aec943e0cd"
       }
     ],
-    "code_manifest_hash": "f29038af5d3c57c130fc066a1d76d4e42b5944b7e2ce65c88ab7f5294fb2e5b1",
+    "code_manifest_hash": "839947e21e0b5cf25465d1d1410b9afc9afdf276c9af64d49f69696d015d75d7",
     "commands": [
       {
         "auxiliary_suffixes": [
@@ -1122,7 +1122,7 @@
           "--restarts",
           "4",
           "--workers",
-          "5",
+          "4",
           "--adaptive-constraints",
           "on",
           "--hypergraph-init",
@@ -1227,7 +1227,7 @@
           "--restarts",
           "4",
           "--workers",
-          "5",
+          "4",
           "--adaptive-constraints",
           "on",
           "--hypergraph-init",
@@ -1332,7 +1332,7 @@
           "--restarts",
           "4",
           "--workers",
-          "5",
+          "4",
           "--adaptive-constraints",
           "on",
           "--hypergraph-init",
@@ -1465,7 +1465,7 @@
         ],
         "time_limit": 60.0,
         "upper_ratio": 0.15,
-        "workers": 5
+        "workers": 4
       },
       "Q3-CONT-R": {
         "adaptive_constraints": true,
@@ -1528,7 +1528,7 @@
         ],
         "time_limit": 60.0,
         "upper_ratio": 0.15,
-        "workers": 5
+        "workers": 4
       },
       "Q3-LIN": {
         "adaptive_constraints": true,
@@ -1591,7 +1591,7 @@
         ],
         "time_limit": 60.0,
         "upper_ratio": 0.15,
-        "workers": 5
+        "workers": 4
       }
     },
     "data_files": [
@@ -1625,7 +1625,7 @@
       "python_version": "3.10.20",
       "rng": "random.Random (CPython MT19937)",
       "threads": 1,
-      "workers": 5
+      "workers": 4
     },
     "spec": {
       "budgets": {
@@ -1639,14 +1639,14 @@
         "Q3-CONT-R"
       ],
       "code_hashes": {
-        "Q3-BIN": "5ae7215aef11fdd348e1fe071c403b50f5f218cc97c73277b6b34d23bfc9a0ee",
-        "Q3-CONT-R": "5ae7215aef11fdd348e1fe071c403b50f5f218cc97c73277b6b34d23bfc9a0ee",
-        "Q3-LIN": "5ae7215aef11fdd348e1fe071c403b50f5f218cc97c73277b6b34d23bfc9a0ee"
+        "Q3-BIN": "af3206f66f6a554c0861c9e8a75f74660a48ba97a6076fcd58e1dbbbb2597a99",
+        "Q3-CONT-R": "af3206f66f6a554c0861c9e8a75f74660a48ba97a6076fcd58e1dbbbb2597a99",
+        "Q3-LIN": "af3206f66f6a554c0861c9e8a75f74660a48ba97a6076fcd58e1dbbbb2597a99"
       },
       "config_hashes": {
-        "Q3-BIN": "d199c899ccd7e0b32551015e1021c53be677c9a11ab13e22435017b1f7bb75ea",
-        "Q3-CONT-R": "77b287aa2415021bd1c49881aa318cd0c8508da7c2755d64da51616815cf0864",
-        "Q3-LIN": "0873b30da1bab74d09d0f63a8c4a64ab4535df540237cb0ad8728119247c0cce"
+        "Q3-BIN": "0d76fc973af444d1849e9a3413c75cb51d7a8d9cda91a8582b168cbeb6e47cba",
+        "Q3-CONT-R": "ae5becde3ed321d8ca6e1f4726934399a8eb33116da5b19de7aca82285455e06",
+        "Q3-LIN": "20a8329f4f661c574fc4a4f9c0192fa5ae7a73d969741ca6feb782be34fdca99"
       },
       "data_hash": "475e63eefda4a1592adaddb9596e92595f6ef6d5404ae0fd1e826d367bd056a7",
       "final_seeds": [
@@ -1706,15 +1706,15 @@
         "preserve_failure_status"
       ],
       "threads": 1,
-      "workers": 5
+      "workers": 4
     }
   },
   "q4": {
     "code_files": [
       {
-        "bytes": 73781,
+        "bytes": 73814,
         "path": "src/v3.py",
-        "sha256": "df7ff8f61016253aa90cb0aafbc49dd010b0d3546326336c0719498ad2cd033d"
+        "sha256": "2461523bdfbeb1b41b4cd7cbad02cba3a9f366043b6434d56233e44323a5b388"
       },
       {
         "bytes": 598,
@@ -1752,7 +1752,7 @@
         "sha256": "c5b18970ddc807a77646cf920954fe27097c90c2d82b75a38fe68eebd01863ae"
       }
     ],
-    "code_hash": "1d60e17ce3467c4a0e2a2012de24bccd68a812a1a5e41ccfa02f781fd14d89e3",
+    "code_hash": "f7f990bef6454d74ceb86aa20a5c59f2c1000615d35d2bb567fdbe083bce48b4",
     "config_hash": "1ca180449987b53740782fb797d7046a3fad2c6b724e6078413917bc932594e4",
     "configurations": {
       "G+_12x12_exact": {
