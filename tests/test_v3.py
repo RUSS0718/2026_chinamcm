@@ -39,6 +39,14 @@ from src.v3 import (
 )
 from src.v3 import _q4_config_digest, _q4_slot_configs, _validate_completed
 from src.Q4.geometry import EXTERNAL_DATA_MANIFEST_HASH
+from src.q3_holdout import (
+    COLD_SEEDS as Q3_HOLDOUT_COLD_SEEDS,
+    FINAL_SEEDS as Q3_HOLDOUT_FINAL_SEEDS,
+    build_holdout_plan,
+    build_holdout_spec,
+    check_holdout_spec,
+    dry_run_payload,
+)
 
 
 class V3ProtocolTests(unittest.TestCase):
@@ -167,6 +175,36 @@ class V3ProtocolTests(unittest.TestCase):
         self.assertEqual(specs["q2"].threads, 1)
         self.assertEqual(specs["q2"].workers, 4)
         self.assertEqual(specs["q3"].workers, 4)  # Q3 inner cold-seed workers; outer route execution stays serial.
+
+    def test_q3_n300_holdout_is_single_route_bounded_and_independent(self):
+        spec = build_holdout_spec()
+        check_holdout_spec(spec)
+        plan = build_holdout_plan(spec, "holdout_test")
+        payload = dry_run_payload(spec, plan, "holdout_test")
+
+        self.assertEqual(spec.instance, "n300")
+        self.assertEqual(spec.candidates, ("Q3-BIN",))
+        self.assertEqual(spec.seeds, Q3_HOLDOUT_COLD_SEEDS)
+        self.assertEqual(spec.final_seeds, Q3_HOLDOUT_FINAL_SEEDS)
+        self.assertEqual((spec.processes, spec.workers, spec.threads), (4, 4, 1))
+        self.assertEqual(payload["max_thresholds"], 7)
+        self.assertEqual(payload["max_threshold_attempts"], 210)
+        self.assertEqual(payload["max_final_attempts"], 30)
+        self.assertEqual(payload["max_attempts"], 240)
+        self.assertLessEqual(payload["estimated_runtime_minutes"]["upper"], 95)
+        self.assertTrue(all(payload["gate"].values()))
+        command = " ".join(plan.command)
+        self.assertIn("Q3-BIN", command)
+        self.assertNotIn("Q3-LIN", command)
+        self.assertNotIn("Q3-CONT-R", command)
+        self.assertIn("3301-3330", command)
+        self.assertIn("3401-3430", command)
+        self.assertIn("--stop-submissions-after 6000.0", command)
+        self.assertIn("--hard-stop-after 6260.0", command)
+        self.assertEqual({Path(item["path"]).name for item in payload["data_files"]}, {"n300.blocks", "n300.nets", "n300.pl"})
+
+        with self.assertRaises(FreezeError):
+            check_holdout_spec(replace(spec, candidates=("Q3-BIN", "Q3-LIN")))
 
     def test_q1_execution_manifest_is_immutable_run_snapshot(self):
         payload = json.loads(Path("outputs/q1/tables/v3_n200_execution_manifest.json").read_text(encoding="utf-8"))
