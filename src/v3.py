@@ -32,6 +32,7 @@ from .Q2.__main__ import (
 from .Q2.common import Q2SearchConfig
 from .Q3.__main__ import _code_hash as q3_code_hash, _config_hash as q3_config_hash
 from .Q3.common import Q3SearchConfig
+from .Q4.geometry import EXTERNAL_DATA_MANIFEST_HASH
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -41,6 +42,13 @@ Q1_CANDIDATES = ("Q1-G", "Q1-SP", "Q1-BT", "Q1-BT-D")
 Q1_ABLATION_CANDIDATES = ("Q1-BT-directed-only", "Q1-BT-dedup-only", "Q1-BT-both")
 Q2_CANDIDATES = ("P0", "P1", "P2")
 Q3_CANDIDATES = ("Q3-BIN", "Q3-LIN", "Q3-CONT-R")
+Q4_GEOMETRIES = (("G-", 1), ("G0", 2), ("G+", 3))
+Q4_DOMAINS = ((9, 9), (12, 12))
+Q4_SA_EVALUATIONS = (10_000, 30_000, 60_000)
+Q4_SA_TIME_LIMITS = (60.0, 120.0)
+Q4_EXACT_TIME_LIMIT = 300.0
+Q4_UPPER_AREA = 36
+Q4_DATA_HASH = EXTERNAL_DATA_MANIFEST_HASH
 HASH_RE = __import__("re").compile(r"^[0-9a-f]{64}$")
 ATTEMPT_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
 RESERVED_ATTEMPTS = {".", "..", "base", "final", "root", "runtime", "tables", "outputs", "con", "prn", "nul", "aux"}
@@ -125,6 +133,10 @@ def _config_digest(value: Mapping[str, Any]) -> str:
     return hashlib.sha256(json.dumps(value, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()
 
 
+def _q4_config_digest(value: Mapping[str, Any]) -> str:
+    return hashlib.sha256(json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
+
+
 def _q1_configs() -> dict[str, Q1SearchConfig]:
     common = {"max_evaluations": 100_000, "time_limit": 180.0, "restarts": 4}
     return {
@@ -174,6 +186,25 @@ def _q3_configs() -> dict[str, Q3SearchConfig]:
     }
 
 
+def _q4_slot_configs() -> dict[str, dict[str, Any]]:
+    configs: dict[str, dict[str, Any]] = {}
+    for geometry, thickness in Q4_GEOMETRIES:
+        for domain in Q4_DOMAINS:
+            base = {"geometry": geometry, "b1_beam_thickness": thickness, "domain": list(domain),
+                    "grid_step": 1, "rotations": [0, 90, 180, 270], "search_domain": "integer_translation_grid"}
+            exact_id = f"{geometry}_{domain[0]}x{domain[1]}_exact"
+            configs[exact_id] = {**base, "mode": "exact", "upper_area": Q4_UPPER_AREA,
+                                 "time_limit": Q4_EXACT_TIME_LIMIT}
+            for max_evaluations in Q4_SA_EVALUATIONS:
+                for time_limit in Q4_SA_TIME_LIMITS:
+                    for seed in COLD_SEEDS:
+                        slot_id = f"{geometry}_{domain[0]}x{domain[1]}_sa_e{max_evaluations}_t{int(time_limit)}_s{seed}"
+                        configs[slot_id] = {**base, "mode": "sa", "max_evaluations": max_evaluations,
+                                            "time_limit": time_limit, "restarts": 4, "seed": seed,
+                                            "temperature_schedule": "per_restart_linear"}
+    return configs
+
+
 def build_specs(root: Path = ROOT, output_root: str = "outputs") -> dict[str, FreezeSpec]:
     """Build current-checkout specs; all hashes are calculated from bytes now."""
     data_root = root / "data" / "raw" / "附件"
@@ -184,7 +215,7 @@ def build_specs(root: Path = ROOT, output_root: str = "outputs") -> dict[str, Fr
     q2_configs = _q2_configs()
     q3_configs = _q3_configs()
     common_stop = ("max_evaluations", "wall_clock", "uncaught_exception", "preserve_failure_status")
-    return {
+    specs = {
         "q1": FreezeSpec(
             "q1", "n200", Q1_CANDIDATES,
             {name: q1_code_hash() for name in q1_configs},
@@ -207,6 +238,17 @@ def build_specs(root: Path = ROOT, output_root: str = "outputs") -> dict[str, Fr
             1, 1, 5, "random.Random (CPython MT19937)", common_stop, str(Path(output_root) / "q3" / "_runtime" / "v3_n200"), FINAL_SEEDS,
         ),
     }
+    q4_configs = _q4_slot_configs()
+    q4_code = _q4_cli_code_hash(root)
+    specs["q4"] = FreezeSpec(
+        "q4", "integer-domain", tuple(q4_configs), {name: q4_code for name in q4_configs},
+        {name: _q4_config_digest(config) for name, config in q4_configs.items()}, Q4_DATA_HASH, COLD_SEEDS,
+        {"exact_time_limit": Q4_EXACT_TIME_LIMIT, "upper_area": Q4_UPPER_AREA,
+         "sa_max_evaluations": list(Q4_SA_EVALUATIONS), "sa_time_limits": list(Q4_SA_TIME_LIMITS), "restarts": 4},
+        1, 1, 8, "random.Random (CPython MT19937)", common_stop,
+        str(Path(output_root) / "q4" / "_runtime" / "v3_integer_domain"),
+    )
+    return specs
 
 
 def _code_paths(problem: str, root: Path = ROOT) -> tuple[Path, ...]:
@@ -225,6 +267,18 @@ def _code_paths(problem: str, root: Path = ROOT) -> tuple[Path, ...]:
         q4 = tuple(root / "src" / "Q4" / name for name in ("__init__.py", "__main__.py", "geometry.py", "model.py", "sa.py", "search.py"))
         return v3 + q4 + (root / "src" / "_internal" / "audit.py",)
     raise FreezeError(f"unsupported problem: {problem}")
+
+
+def _q4_core_code_paths(root: Path = ROOT) -> tuple[Path, ...]:
+    return tuple(root / "src" / "Q4" / name for name in ("__init__.py", "__main__.py", "geometry.py", "model.py", "sa.py", "search.py")) + (root / "src" / "_internal" / "audit.py",)
+
+
+def _q4_cli_code_hash(root: Path = ROOT) -> str:
+    digest = hashlib.sha256()
+    for path in sorted(_q4_core_code_paths(root), key=lambda item: item.relative_to(root).as_posix()):
+        digest.update(path.relative_to(root).as_posix().encode("utf-8"))
+        digest.update(_normal_bytes(path))
+    return digest.hexdigest()
 
 
 def _data_paths(problem: str, root: Path = ROOT) -> tuple[Path, ...]:
@@ -299,21 +353,26 @@ def load_frozen_manifest(path: Path = FROZEN_MANIFEST_PATH) -> dict[str, Any]:
 def q4_extension_checklist(root: Path = ROOT) -> dict[str, Any]:
     """Return the independently frozen integer-domain Q4 extension matrix."""
     code_files = file_manifest(_code_paths("q4", root), root)
-    code_hash = manifest_hash(code_files)
-    configurations = {}
-    for geometry, thickness in (("G-", 1), ("G0", 2), ("G+", 3)):
-        for domain in ((9, 9), (12, 12)):
+    core_code_files = file_manifest(_q4_core_code_paths(root), root)
+    code_hash = _q4_cli_code_hash(root)
+    runner_code_hash = manifest_hash(code_files)
+    slots = _q4_slot_configs()
+    configurations: dict[str, dict[str, Any]] = {}
+    for geometry, thickness in Q4_GEOMETRIES:
+        for domain in Q4_DOMAINS:
             for mode in ("exact", "sa"):
                 key = f"{geometry}_{domain[0]}x{domain[1]}_{mode}"
-                config = {
-                    "geometry": geometry, "b1_beam_thickness": thickness,
-                    "domain": list(domain), "mode": mode, "rotations": [0, 90, 180, 270], "grid_step": 1,
-                }
+                config = {"geometry": geometry, "b1_beam_thickness": thickness, "domain": list(domain),
+                          "mode": mode, "rotations": [0, 90, 180, 270], "grid_step": 1,
+                          "search_domain": "integer_translation_grid"}
                 if mode == "exact":
-                    config.update({"upper_area": 36, "time_limit": 300.0})
+                    config.update({"upper_area": Q4_UPPER_AREA, "time_limit": Q4_EXACT_TIME_LIMIT})
                 else:
-                    config.update({"max_evaluations": [10000, 30000, 60000], "time_limits": [60.0, 120.0], "seeds": list(COLD_SEEDS), "restarts": 4})
-                configurations[key] = {"config": config, "config_hash": _config_digest(config)}
+                    config.update({"max_evaluations": list(Q4_SA_EVALUATIONS), "time_limits": list(Q4_SA_TIME_LIMITS),
+                                   "seeds": list(COLD_SEEDS), "restarts": 4,
+                                   "temperature_schedule": "per_restart_linear"})
+                configurations[key] = {"config": config, "config_hash": _q4_config_digest(config),
+                                      "slot_ids": [slot for slot in slots if slot.startswith(f"{key}_") or slot == key]}
     return {
         "problem": "q4",
         "selection_scope": "geometry_budget_domain_sensitivity_only",
@@ -321,10 +380,13 @@ def q4_extension_checklist(root: Path = ROOT) -> dict[str, Any]:
         "integer_domain_confirmed": True,
         "continuous_domain_confirmed": False,
         "code_hash": code_hash,
+        "core_code_files": core_code_files,
+        "runner_code_hash": runner_code_hash,
         "code_files": code_files,
         "configurations": configurations,
-        "config_hash": manifest_hash([{"path": key, **value} for key, value in configurations.items()]),
-        "data_hash": None,
+        "slots": {key: {"config": config, "config_hash": _q4_config_digest(config)} for key, config in slots.items()},
+        "config_hash": manifest_hash([{"slot": key, "config": config, "config_hash": _q4_config_digest(config)} for key, config in slots.items()]),
+        "data_hash": Q4_DATA_HASH,
         "environment": {
             "python_executable": str(Path(sys.executable).resolve()),
             "python_version": platform.python_version(),
@@ -332,12 +394,15 @@ def q4_extension_checklist(root: Path = ROOT) -> dict[str, Any]:
             "os": platform.system(),
             "platform": platform.platform(),
             "logical_cpu_count": os.cpu_count(),
-            "workers": 1,
+            "workers": 8,
             "threads": 1,
             "omp_num_threads": "1",
             "mkl_num_threads": "1",
             "openblas_num_threads": "1",
         },
+        "output_root": "outputs/q4/_runtime/v3_integer_domain",
+        "plan_count": len(slots),
+        "registered_slots": len(slots),
         "status": "frozen_integer_domain_pending_main_run_review",
     }
 
@@ -347,8 +412,19 @@ def check_q4_extension(manifest: Mapping[str, Any]) -> None:
         raise FreezeError("Q4 extension is independent of n200 selection")
     if not manifest.get("geometry_confirmed") or not manifest.get("integer_domain_confirmed") or manifest.get("continuous_domain_confirmed"):
         raise FreezeError("Q4 requires confirmed integer domain and must not claim continuous domain")
-    for key in ("code_hash", "config_hash"):
+    for key in ("code_hash", "runner_code_hash", "config_hash"):
         _require_hash(f"q4.{key}", manifest.get(key))
+    if manifest.get("plan_count") != 726 or manifest.get("registered_slots") != 726:
+        raise FreezeError("Q4 registration must contain 726 slots")
+    if manifest.get("output_root") != "outputs/q4/_runtime/v3_integer_domain":
+        raise FreezeError("Q4 output root must remain independent of n200")
+    if manifest.get("environment", {}).get("workers") != 8:
+        raise FreezeError("Q4 outer workers must be 8")
+    slots = manifest.get("slots")
+    if not isinstance(slots, Mapping) or len(slots) != 726:
+        raise FreezeError("Q4 slot matrix is incomplete")
+    if any("n200" in str(value).lower() or "n300" in str(value).lower() for value in slots.values()):
+        raise FreezeError("Q4 slot labels cannot claim n200/n300")
     if manifest.get("n200_selection") or manifest.get("n300_selection"):
         raise FreezeError("Q4 extension cannot be labelled n200/n300 selection")
 
@@ -530,6 +606,32 @@ def build_plan(
                 thread_env,
                 (root / "tables" / f"{run_id}_attempts.csv", root / "tables" / f"{run_id}_config_snapshot.json"),
             ))
+    elif spec.problem == "q4":
+        for slot_id, config in _q4_slot_configs().items():
+            geometry = config["geometry"]
+            domain = tuple(config["domain"])
+            output = root / slot_id / "result.json"
+            if config["mode"] == "exact":
+                command = (python, "-B", "-m", "src.Q4", "exact", "--geometry", geometry,
+                           "--domain-width", str(domain[0]), "--domain-height", str(domain[1]),
+                           "--upper-area", str(config["upper_area"]), "--time-limit", str(config["time_limit"]),
+                           "--output", str(output))
+                seed = None
+            else:
+                seed = config["seed"]
+                command = (python, "-B", "-m", "src.Q4", "sa", "--geometry", geometry,
+                           "--seed", str(seed), "--max-evaluations", str(config["max_evaluations"]),
+                           "--time-limit", str(config["time_limit"]), "--restarts", str(config["restarts"]),
+                           "--domain-width", str(domain[0]), "--domain-height", str(domain[1]),
+                           "--output", str(output))
+            fingerprint = {"problem": "q4", "instance": spec.instance, "config_id": slot_id,
+                           "geometry": geometry, "b1_beam_thickness": config["b1_beam_thickness"],
+                           "domain": list(domain), "mode": config["mode"], "seed": seed, "config": config,
+                           "code_hash": spec.code_hashes[slot_id], "config_hash": spec.config_hashes[slot_id],
+                           "data_hash": Q4_DATA_HASH, "attempt": attempt or "base",
+                           "command": subprocess.list2cmdline(command), "command_argv": list(command),
+                           "environment": runtime_environment(spec, python=python)}
+            plans.append(CommandPlan(command, output, fingerprint, thread_env))
     else:
         raise FreezeError(f"unsupported problem: {spec.problem}")
     return tuple(plans)
@@ -628,6 +730,63 @@ def _validate_completed(plan: CommandPlan) -> dict[str, Any]:
         if not isinstance(record.get("formal_audit_match"), bool):
             raise FreezeError(f"run marker audit flag is not boolean: {plan.marker}")
         return record
+    if plan.fingerprint.get("problem") == "q4":
+        try:
+            payload = json.loads(plan.marker.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            raise FreezeError(f"invalid Q4 result marker: {plan.marker}") from exc
+        if not isinstance(payload, dict) or payload.get("problem") != "Q4":
+            raise FreezeError(f"incomplete Q4 result marker: {plan.marker}")
+        required = ("instance", "geometry", "b1_beam_thickness", "domain", "mode", "seed", "data_hash", "code_hash",
+                    "config_hash", "config", "command", "command_argv", "environment", "status", "formal", "audit",
+                    "formal_audit_match", "domain_formal", "domain_audit", "domain_audit_match")
+        if any(key not in payload for key in required):
+            raise FreezeError(f"Q4 result missing required field: {plan.marker}")
+        fingerprint = plan.fingerprint
+        for key in ("instance", "geometry", "b1_beam_thickness", "mode", "data_hash", "code_hash", "config_hash", "command"):
+            if payload.get(key) != fingerprint.get(key):
+                raise FreezeError(f"Q4 result {key} mismatch: {plan.marker}")
+        if payload.get("command_argv") != fingerprint.get("command_argv"):
+            raise FreezeError(f"Q4 result command argv mismatch: {plan.marker}")
+        if tuple(payload.get("domain", ())) != tuple(fingerprint["domain"]):
+            raise FreezeError(f"Q4 result domain mismatch: {plan.marker}")
+        if payload.get("seed") != fingerprint.get("seed"):
+            raise FreezeError(f"Q4 result seed mismatch: {plan.marker}")
+        if not isinstance(payload.get("formal_audit_match"), bool) or not isinstance(payload.get("domain_audit_match"), bool):
+            raise FreezeError(f"Q4 result audit flags are not boolean: {plan.marker}")
+        environment = payload.get("environment")
+        if not isinstance(environment, dict) or any(environment.get(key) != "1" for key in ("omp_num_threads", "mkl_num_threads", "openblas_num_threads")):
+            raise FreezeError(f"Q4 result thread environment mismatch: {plan.marker}")
+        formal, audit = payload.get("formal"), payload.get("audit")
+        domain_formal, domain_audit = payload.get("domain_formal"), payload.get("domain_audit")
+        metrics = ("legal", "W", "H", "area", "module_area", "dead_space_ratio", "aspect_ratio", "rho", "deadspace", "HPWL", "square_side")
+        if not isinstance(formal, dict) or not isinstance(audit, dict) or not isinstance(domain_formal, dict) or not isinstance(domain_audit, dict):
+            raise FreezeError(f"Q4 formal/domain evidence must be objects: {plan.marker}")
+        if formal and audit:
+            for key in metrics:
+                if key not in formal or key not in audit or formal[key] != audit[key]:
+                    raise FreezeError(f"Q4 objective formal/audit metric mismatch for {key}: {plan.marker}")
+        if domain_formal and domain_audit:
+            domain = tuple(fingerprint["domain"])
+            if domain_formal.get("W") != domain[0] or domain_formal.get("H") != domain[1] or domain_audit.get("W") != domain[0] or domain_audit.get("H") != domain[1]:
+                raise FreezeError(f"Q4 declared-domain outline mismatch: {plan.marker}")
+            for key in metrics:
+                if key not in domain_formal or key not in domain_audit or domain_formal[key] != domain_audit[key]:
+                    raise FreezeError(f"Q4 domain formal/audit metric mismatch for {key}: {plan.marker}")
+        if formal.get("legal") is True and (not domain_formal or not domain_audit or domain_formal.get("legal") is not True or payload.get("domain_audit_match") is not True):
+            raise FreezeError(f"Q4 objective-legal result lacks declared-domain legality evidence: {plan.marker}")
+        config = payload.get("config")
+        if not isinstance(config, dict) or config != fingerprint.get("config") or payload.get("config_hash") != _q4_config_digest(config):
+            raise FreezeError(f"Q4 result config hash mismatch: {plan.marker}")
+        if config.get("geometry") != fingerprint["geometry"] or config.get("b1_beam_thickness") != fingerprint["b1_beam_thickness"]:
+            raise FreezeError(f"Q4 result config geometry mismatch: {plan.marker}")
+        if tuple(config.get("domain", ())) != tuple(fingerprint["domain"]):
+            raise FreezeError(f"Q4 result config domain mismatch: {plan.marker}")
+        if payload.get("mode") == "exact" and payload.get("seed") is not None:
+            raise FreezeError(f"Q4 exact result must not carry a seed: {plan.marker}")
+        if payload.get("mode") == "sa" and not isinstance(payload.get("seed"), int):
+            raise FreezeError(f"Q4 SA result must carry an integer seed: {plan.marker}")
+        return payload
     try:
         payload = json.loads(plan.marker.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
@@ -770,7 +929,7 @@ def execute_plan(plans: Sequence[CommandPlan], *, execute: bool = False, cwd: Pa
     workers = 1
     if todo and registered[0].fingerprint:
         environment = registered[0].fingerprint.get("environment", {})
-        if registered[0].fingerprint.get("problem") == "q1":
+        if registered[0].fingerprint.get("problem") in {"q1", "q4"}:
             workers = max(1, int(environment.get("workers", 1)))
     results: list[dict[str, Any]] = list(skipped.values())
     if workers > 1 and len(todo) > 1:
@@ -902,6 +1061,77 @@ def summarize_q3(
         "final_status_counts": _status_counts(final),
         "status_counts": status_counts,
     }
+
+
+def _q4_stats(values: Sequence[float]) -> dict[str, float | None]:
+    median, p90, iqr = _spread(values)
+    return {"min": min(values) if values else None, "median": median, "iqr": iqr,
+            "p90": p90, "max": max(values) if values else None}
+
+
+def summarize_q4(rows: Sequence[Mapping[str, Any]], plans: Sequence[CommandPlan]) -> dict[str, Any]:
+    expected = {plan.fingerprint["config_id"]: plan for plan in plans if plan.fingerprint}
+    if len(expected) != 726 or len(rows) != 726:
+        raise FreezeError("Q4 summary requires all 726 registered slots")
+    exact_incumbents: dict[tuple[str, tuple[int, int]], float | None] = {}
+    exact_seen: set[tuple[str, tuple[int, int]]] = set()
+    exact_rows = []
+    sa_groups: dict[tuple[str, tuple[int, int], int, float], list[Mapping[str, Any]]] = {}
+    for row in rows:
+        plan = expected.get(row.get("config_id"))
+        if plan is None or plan.fingerprint is None:
+            raise FreezeError("Q4 summary contains unregistered slot")
+        fp = plan.fingerprint
+        geometry, domain, mode = fp["geometry"], tuple(fp["domain"]), fp["mode"]
+        if mode == "exact":
+            key = (geometry, domain)
+            if key in exact_seen:
+                raise FreezeError(f"Q4 duplicate exact record: {geometry} {domain}")
+            exact_seen.add(key)
+            formal = row.get("formal") or {}
+            domain_formal = row.get("domain_formal") or {}
+            legal = (_bool(formal.get("legal")) and row.get("formal_audit_match") is True
+                     and _bool(domain_formal.get("legal")) and row.get("domain_audit_match") is True)
+            area = float(formal["area"]) if legal and isinstance(formal.get("area"), (int, float)) else None
+            exact_incumbents[(geometry, domain)] = area
+            result = row.get("result") or {}
+            exact_rows.append({"config_id": row["config_id"], "geometry": geometry, "domain": list(domain),
+                               "status": row.get("status"), "complete": result.get("complete"),
+                               "scope": "declared_integer_domain_area_le_36", "upper_area": Q4_UPPER_AREA,
+                               "legal": legal, "area": area,
+                               "incumbent_kind": "complete_exact" if row.get("status") == "optimal" and result.get("complete") is True else "timeout_reference"})
+        else:
+            max_evaluations = int(fp["config"]["max_evaluations"])
+            time_limit = float(fp["config"]["time_limit"])
+            sa_groups.setdefault((geometry, domain, max_evaluations, time_limit), []).append(row)
+    summaries = []
+    for (geometry, domain, max_evaluations, time_limit), group in sorted(sa_groups.items()):
+        if len(group) != len(COLD_SEEDS) or sorted(row.get("seed") for row in group) != list(COLD_SEEDS):
+            raise FreezeError(f"Q4 SA cell seed set incomplete: {geometry} {domain} {max_evaluations} {time_limit}")
+        legal_rows = [row for row in group if _bool((row.get("formal") or {}).get("legal"))
+                      and row.get("formal_audit_match") is True
+                      and _bool((row.get("domain_formal") or {}).get("legal"))
+                      and row.get("domain_audit_match") is True]
+        areas = [float(row["formal"]["area"]) for row in legal_rows if isinstance((row.get("formal") or {}).get("area"), (int, float))]
+        incumbent = exact_incumbents.get((geometry, domain))
+        gaps = [(area - incumbent) / incumbent for area in areas] if incumbent is not None and incumbent else []
+        exact_reference_status = next((item["status"] for item in exact_rows if item["geometry"] == geometry and tuple(item["domain"]) == domain), None)
+        summaries.append({"geometry": geometry, "domain": list(domain), "max_evaluations": max_evaluations,
+                          "time_limit": time_limit, "registered_runs": len(COLD_SEEDS), "discovered_runs": len(group),
+                          "missing_runs": 0, "legal_runs": len(legal_rows), "legal_rate": len(legal_rows) / len(COLD_SEEDS),
+                          "formal_audit_match_runs": sum(row.get("formal_audit_match") is True for row in group),
+                          "domain_audit_match_runs": sum(row.get("domain_audit_match") is True for row in group),
+                          "exact_incumbent_area": incumbent, "exact_reference_status": exact_reference_status,
+                          "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+                          "area": _q4_stats(areas), "incumbent_gap": _q4_stats(gaps), **_status_counts(group)})
+    if len(exact_seen) != len(Q4_GEOMETRIES) * len(Q4_DOMAINS):
+        raise FreezeError("Q4 summary requires exactly one exact record per geometry/domain")
+    return {"problem": "q4", "selection_scope": "geometry_budget_domain_sensitivity_only",
+            "continuous_domain_confirmed": False, "registered_slots": len(plans), "discovered_slots": len(rows),
+            "missing_slots": 0, "exact": exact_rows, "summary_by_cell": summaries,
+            "exact_scope_note": "upper_area=36 and declared integer domain only; no global optimality or infeasibility claim",
+            "incumbent_gap_note": "incumbent gap is relative to the same geometry/domain exact reference; timeout exact is reference-only",
+            "no_feasible_scope_note": "no_feasible records do not establish infeasibility over the full domain"}
 
 
 def q3_mechanical_decision(route_summaries: Mapping[str, Mapping[str, Any]]) -> dict[str, Any]:
@@ -1161,7 +1391,29 @@ def summarize_directory(problem: str, input_root: Path, output_path: Path | None
         raise FreezeError(f"summary attempt root does not exist: {root}")
     spec, plans = _plans_for_summary_root(problem, root)
     expected_markers = {plan.marker.resolve(): plan for plan in plans}
-    if problem in {"q1", "q2"}:
+    if problem == "q4":
+        discovered = {path.resolve() for path in root.rglob("result.json")}
+        unexpected = discovered - set(expected_markers)
+        if unexpected:
+            raise FreezeError(f"summary found unregistered Q4 result(s): {sorted(map(str, unexpected))}")
+        rows: list[dict[str, Any]] = []
+        missing = []
+        for marker, plan in expected_markers.items():
+            if not marker.is_file():
+                if marker.parent.is_dir() and any(marker.parent.iterdir()):
+                    raise FreezeError(f"Q4 summary found partial output: {marker.parent}")
+                missing.append(plan.fingerprint["config_id"])
+                continue
+            # Q4 result markers predate the analysis join key.  Trust only
+            # the plan fingerprint after full marker/sidecar validation;
+            # never accept a marker-supplied config_id.
+            row = dict(_validate_completed(plan))
+            row["config_id"] = plan.fingerprint["config_id"]
+            rows.append(row)
+        if missing:
+            raise FreezeError(f"Q4 summary missing registered slots: {missing[:5]} ({len(missing)} total)")
+        payload = {"problem": problem, "attempt_root": root.as_posix(), **summarize_q4(rows, plans)}
+    elif problem in {"q1", "q2"}:
         discovered = {path.resolve() for path in root.rglob("events.jsonl")}
         unexpected = discovered - set(expected_markers)
         if unexpected:
@@ -1281,7 +1533,7 @@ def _pad_registered_summaries(
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="V3 fail-closed plan/dry-run helper")
     parser.add_argument("command", choices=("dry-run", "plan", "run", "summary", "q4-check"))
-    parser.add_argument("--problem", choices=("q1", "q2", "q3"), default="q2")
+    parser.add_argument("--problem", choices=("q1", "q2", "q3", "q4"), default="q2")
     parser.add_argument("--input", type=Path)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--attempt", help="safe retry suffix; never reuses a prior output path")
@@ -1309,6 +1561,20 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     specs = build_specs()
     spec = specs[args.problem]
+    if args.problem == "q4":
+        check_q4_registered()
+        plans = build_plan(spec, attempt=args.attempt)
+        if args.command == "run" and not args.execute:
+            parser.error("run requires --execute; use dry-run for a non-executing plan")
+        if args.command == "run":
+            payload = {"spec": spec.as_dict(), "results": execute_plan(plans, execute=True)}
+        else:
+            payload = {"spec": spec.as_dict(), "commands": [{"command": list(item.command), "marker": item.marker.as_posix(), "fingerprint": item.fingerprint} for item in plans]}
+        if args.output:
+            write_once(args.output, payload)
+        else:
+            print(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True))
+        return 0
     actual = registered_payload(spec)
     frozen = load_frozen_manifest()
     check_registered(actual, frozen[args.problem])

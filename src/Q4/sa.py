@@ -59,6 +59,7 @@ def solve_sa(
     time_limit: float = 60.0,
     restarts: int = 4,
     domain: tuple[int, int] = (9, 9),
+    geometry: str | None = None,
 ) -> SAResult:
     instance = instance or Q4Instance.default()
     if not isinstance(max_evaluations, int) or max_evaluations <= 0:
@@ -119,6 +120,11 @@ def solve_sa(
         raise AssertionError("formal evaluator and independent audit disagree")
     from src._internal.audit import audit_layout
 
+    config = {"seed": seed, "max_evaluations": max_evaluations, "time_limit": time_limit, "restarts": restarts, "domain": domain, "temperature_schedule": "per_restart_linear", "grid_step": 1, "rotations": (0, 90, 180, 270), "search_domain": "integer_translation_grid"}
+    if geometry is not None:
+        config["mode"] = "sa"
+        config["geometry"] = geometry
+        config["b1_beam_thickness"] = {"G-": 1, "G0": 2, "G+": 3}[geometry]
     return SAResult(
         "timeout" if stop else "success",
         seed,
@@ -128,7 +134,7 @@ def solve_sa(
         best_eval,
         initial_eval.area,
         matched,
-        {"seed": seed, "max_evaluations": max_evaluations, "time_limit": time_limit, "restarts": restarts, "domain": domain, "temperature_schedule": "per_restart_linear", "grid_step": 1, "rotations": (0, 90, 180, 270), "search_domain": "integer_translation_grid"},
+        config,
         restarts_completed,
         audit_layout(instance, best_layout),
     )

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Mapping
 
 from .geometry import bbox, polygon_area, rotate_normalized
@@ -23,6 +23,9 @@ class ExactResult:
     formal_audit_match: bool
     audit: dict
     domain: dict
+    domain_evaluation: Q4Evaluation | None = None
+    domain_audit: dict = field(default_factory=dict)
+    domain_audit_match: bool = False
 
     def as_dict(self) -> dict:
         return {
@@ -39,6 +42,9 @@ class ExactResult:
             "formal_audit_match": self.formal_audit_match,
             "audit": self.audit,
             "domain": self.domain,
+            "domain_evaluation": self.domain_evaluation.as_dict() if self.domain_evaluation else {},
+            "domain_audit": self.domain_audit,
+            "domain_audit_match": self.domain_audit_match,
         }
 
 
@@ -101,6 +107,7 @@ def solve_exact(
     *,
     upper_area: int = 36,
     time_limit: float | None = None,
+    domain: tuple[int, int] | None = None,
 ) -> ExactResult:
     instance = instance or Q4Instance.default()
     if not isinstance(upper_area, int):
@@ -109,9 +116,13 @@ def solve_exact(
         raise ValueError("upper_area must be at least module_area")
     if time_limit is not None and time_limit < 0:
         raise ValueError("time_limit must be non-negative")
+    if domain is not None and (not isinstance(domain, tuple) or len(domain) != 2 or any(not isinstance(value, int) or value <= 0 for value in domain)):
+        raise ValueError("domain dimensions must be positive integers")
     started = time.perf_counter()
     module_area = instance.module_area
     containers = _container_sizes(instance, upper_area)
+    if domain is not None:
+        containers = [item for item in containers if item[0] <= domain[0] and item[1] <= domain[1]]
     declared_domain = {
         "grid_step": 1,
         "rotations": [0, 90, 180, 270],
@@ -122,23 +133,33 @@ def solve_exact(
         "height_range": [min(height for _, height in containers), max(height for _, height in containers)] if containers else [],
         "containers_total": len(containers),
     }
+    if domain is not None:
+        declared_domain["declared_outline"] = list(domain)
     placements_tested = 0
     containers_checked = 0
 
     best_layout = None
     best_evaluation = None
     best_audit: dict = {}
+    best_domain_evaluation: Q4Evaluation | None = None
+    best_domain_audit: dict = {}
+    best_domain_match = False
     row = _row_layout(instance)
-    row_evaluation = evaluate_layout(instance, row)
-    if row_evaluation.legal and row_evaluation.area <= upper_area:
+    row_objective = evaluate_layout(instance, row)
+    row_bounded = evaluate_layout(instance, row, domain) if domain else row_objective
+    if row_objective.legal and row_bounded.legal and row_objective.area <= upper_area:
         best_layout = row
-        best_evaluation = row_evaluation
+        best_evaluation = row_objective
+        best_domain_evaluation = row_bounded if domain else None
         from src._internal.audit import audit_layout
 
         best_audit = audit_layout(instance, row)
+        if domain:
+            best_domain_audit = audit_layout(instance, row, (0, 0, *domain))
+            best_domain_match = formal_audit_match(instance, row, domain)
     if time_limit is not None and time_limit <= 0:
         matched = formal_audit_match(instance, best_layout) if best_layout is not None else False
-        return ExactResult("timeout", False, best_layout, best_evaluation, module_area, best_evaluation.area if best_evaluation else None, upper_area, 0, 0, 0.0, matched, best_audit, {**declared_domain, "containers_checked": 0})
+        return ExactResult("timeout", False, best_layout, best_evaluation, module_area, best_evaluation.area if best_evaluation else None, upper_area, 0, 0, 0.0, matched, best_audit, {**declared_domain, "containers_checked": 0}, best_domain_evaluation, best_domain_audit, best_domain_match)
 
     ordered = tuple(sorted(instance.blocks, key=lambda name: (-instance.blocks[name].polygon.__len__(), name)))
 
@@ -189,31 +210,38 @@ def solve_exact(
                 if index + 1 < len(containers):
                     lower_bound = containers[index + 1][0] * containers[index + 1][1]
                 continue
-            evaluation = evaluate_layout(instance, layout, (width, height))
-            if not evaluation.legal:
+            objective = evaluate_layout(instance, layout)
+            bounded = evaluate_layout(instance, layout, domain) if domain else objective
+            if not objective.legal or not bounded.legal or objective.area > upper_area:
                 raise AssertionError("exact search produced an illegal layout")
-            matched = formal_audit_match(instance, layout, (width, height))
+            matched = formal_audit_match(instance, layout)
             if not matched:
                 raise AssertionError("formal evaluator and independent audit disagree")
+            bounded_match = formal_audit_match(instance, layout, domain) if domain else False
+            if domain and not bounded_match:
+                raise AssertionError("declared-domain evaluator and independent audit disagree")
             from src._internal.audit import audit_layout
 
             return ExactResult(
                 "optimal",
                 True,
                 layout,
-                evaluation,
-                evaluation.area,
-                evaluation.area,
+                objective,
+                objective.area,
+                objective.area,
                 upper_area,
                 containers_checked,
                 placements_tested,
                 time.perf_counter() - started,
                 True,
-                audit_layout(instance, layout, (0, 0, width, height)),
+                audit_layout(instance, layout),
                 {**declared_domain, "containers_checked": containers_checked},
+                bounded if domain else None,
+                audit_layout(instance, layout, (0, 0, *domain)) if domain else {},
+                bounded_match,
             )
     except _SearchTimeout:
         matched = formal_audit_match(instance, best_layout) if best_layout is not None else False
-        return ExactResult("timeout", False, best_layout, best_evaluation, lower_bound, best_evaluation.area if best_evaluation else None, upper_area, containers_checked, placements_tested, time.perf_counter() - started, matched, best_audit, {**declared_domain, "containers_checked": containers_checked})
+        return ExactResult("timeout", False, best_layout, best_evaluation, lower_bound, best_evaluation.area if best_evaluation else None, upper_area, containers_checked, placements_tested, time.perf_counter() - started, matched, best_audit, {**declared_domain, "containers_checked": containers_checked}, best_domain_evaluation, best_domain_audit, best_domain_match)
 
     return ExactResult("no_feasible", True, None, None, lower_bound, None, upper_area, containers_checked, placements_tested, time.perf_counter() - started, False, {}, {**declared_domain, "containers_checked": containers_checked})
