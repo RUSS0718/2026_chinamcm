@@ -1,0 +1,1438 @@
+{
+  "attempt_root": "D:/project/chinamcm_2026/2026_chinamcm/outputs/q4/_runtime/v3_integer_domain",
+  "continuous_domain_confirmed": false,
+  "discovered_slots": 726,
+  "exact": [
+    {
+      "area": 24.0,
+      "complete": true,
+      "config_id": "G-_9x9_exact",
+      "domain": [
+        9,
+        9
+      ],
+      "geometry": "G-",
+      "incumbent_kind": "complete_exact",
+      "legal": true,
+      "scope": "declared_integer_domain_area_le_36",
+      "status": "optimal",
+      "upper_area": 36
+    },
+    {
+      "area": 24.0,
+      "complete": true,
+      "config_id": "G-_12x12_exact",
+      "domain": [
+        12,
+        12
+      ],
+      "geometry": "G-",
+      "incumbent_kind": "complete_exact",
+      "legal": true,
+      "scope": "declared_integer_domain_area_le_36",
+      "status": "optimal",
+      "upper_area": 36
+    },
+    {
+      "area": 24.0,
+      "complete": true,
+      "config_id": "G0_9x9_exact",
+      "domain": [
+        9,
+        9
+      ],
+      "geometry": "G0",
+      "incumbent_kind": "complete_exact",
+      "legal": true,
+      "scope": "declared_integer_domain_area_le_36",
+      "status": "optimal",
+      "upper_area": 36
+    },
+    {
+      "area": 24.0,
+      "complete": true,
+      "config_id": "G0_12x12_exact",
+      "domain": [
+        12,
+        12
+      ],
+      "geometry": "G0",
+      "incumbent_kind": "complete_exact",
+      "legal": true,
+      "scope": "declared_integer_domain_area_le_36",
+      "status": "optimal",
+      "upper_area": 36
+    },
+    {
+      "area": 28.0,
+      "complete": true,
+      "config_id": "G+_9x9_exact",
+      "domain": [
+        9,
+        9
+      ],
+      "geometry": "G+",
+      "incumbent_kind": "complete_exact",
+      "legal": true,
+      "scope": "declared_integer_domain_area_le_36",
+      "status": "optimal",
+      "upper_area": 36
+    },
+    {
+      "area": 28.0,
+      "complete": true,
+      "config_id": "G+_12x12_exact",
+      "domain": [
+        12,
+        12
+      ],
+      "geometry": "G+",
+      "incumbent_kind": "complete_exact",
+      "legal": true,
+      "scope": "declared_integer_domain_area_le_36",
+      "status": "optimal",
+      "upper_area": 36
+    }
+  ],
+  "exact_scope_note": "upper_area=36 and declared integer domain only; no global optimality or infeasibility claim",
+  "incumbent_gap_note": "incumbent gap is relative to the same geometry/domain exact reference; timeout exact is reference-only",
+  "missing_slots": 0,
+  "no_feasible_scope_note": "no_feasible records do not establish infeasibility over the full domain",
+  "problem": "q4",
+  "registered_slots": 726,
+  "selection_scope": "geometry_budget_domain_sensitivity_only",
+  "summary_by_cell": [
+    {
+      "area": {
+        "iqr": 2.0,
+        "max": 30.0,
+        "median": 30.0,
+        "min": 28.0,
+        "p90": 30.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        9,
+        9
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 28.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G+",
+      "incumbent_gap": {
+        "iqr": 0.07142857142857142,
+        "max": 0.07142857142857142,
+        "median": 0.07142857142857142,
+        "min": 0.0,
+        "p90": 0.07142857142857142
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 10000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 60.0
+    },
+    {
+      "area": {
+        "iqr": 2.0,
+        "max": 30.0,
+        "median": 30.0,
+        "min": 28.0,
+        "p90": 30.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        9,
+        9
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 28.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G+",
+      "incumbent_gap": {
+        "iqr": 0.07142857142857142,
+        "max": 0.07142857142857142,
+        "median": 0.07142857142857142,
+        "min": 0.0,
+        "p90": 0.07142857142857142
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 10000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 120.0
+    },
+    {
+      "area": {
+        "iqr": 0.0,
+        "max": 30.0,
+        "median": 28.0,
+        "min": 28.0,
+        "p90": 28.200000000000003
+      },
+      "discovered_runs": 20,
+      "domain": [
+        9,
+        9
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 28.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G+",
+      "incumbent_gap": {
+        "iqr": 0.0,
+        "max": 0.07142857142857142,
+        "median": 0.0,
+        "min": 0.0,
+        "p90": 0.007142857142857244
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 30000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 60.0
+    },
+    {
+      "area": {
+        "iqr": 0.0,
+        "max": 30.0,
+        "median": 28.0,
+        "min": 28.0,
+        "p90": 28.200000000000003
+      },
+      "discovered_runs": 20,
+      "domain": [
+        9,
+        9
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 28.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G+",
+      "incumbent_gap": {
+        "iqr": 0.0,
+        "max": 0.07142857142857142,
+        "median": 0.0,
+        "min": 0.0,
+        "p90": 0.007142857142857244
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 30000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 120.0
+    },
+    {
+      "area": {
+        "iqr": 0.0,
+        "max": 30.0,
+        "median": 28.0,
+        "min": 28.0,
+        "p90": 28.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        9,
+        9
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 28.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G+",
+      "incumbent_gap": {
+        "iqr": 0.0,
+        "max": 0.07142857142857142,
+        "median": 0.0,
+        "min": 0.0,
+        "p90": 0.0
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 60000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 0,
+      "status_timeout": 20,
+      "time_limit": 60.0
+    },
+    {
+      "area": {
+        "iqr": 0.0,
+        "max": 28.0,
+        "median": 28.0,
+        "min": 28.0,
+        "p90": 28.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        9,
+        9
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 28.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G+",
+      "incumbent_gap": {
+        "iqr": 0.0,
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0,
+        "p90": 0.0
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 60000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 120.0
+    },
+    {
+      "area": {
+        "iqr": 2.0,
+        "max": 32.0,
+        "median": 30.0,
+        "min": 28.0,
+        "p90": 32.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        12,
+        12
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 28.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G+",
+      "incumbent_gap": {
+        "iqr": 0.07142857142857142,
+        "max": 0.14285714285714285,
+        "median": 0.07142857142857142,
+        "min": 0.0,
+        "p90": 0.14285714285714285
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 10000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 60.0
+    },
+    {
+      "area": {
+        "iqr": 2.0,
+        "max": 32.0,
+        "median": 30.0,
+        "min": 28.0,
+        "p90": 32.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        12,
+        12
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 28.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G+",
+      "incumbent_gap": {
+        "iqr": 0.07142857142857142,
+        "max": 0.14285714285714285,
+        "median": 0.07142857142857142,
+        "min": 0.0,
+        "p90": 0.14285714285714285
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 10000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 120.0
+    },
+    {
+      "area": {
+        "iqr": 2.0,
+        "max": 32.0,
+        "median": 28.0,
+        "min": 28.0,
+        "p90": 30.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        12,
+        12
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 28.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G+",
+      "incumbent_gap": {
+        "iqr": 0.07142857142857142,
+        "max": 0.14285714285714285,
+        "median": 0.0,
+        "min": 0.0,
+        "p90": 0.07142857142857142
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 30000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 60.0
+    },
+    {
+      "area": {
+        "iqr": 2.0,
+        "max": 32.0,
+        "median": 28.0,
+        "min": 28.0,
+        "p90": 30.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        12,
+        12
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 28.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G+",
+      "incumbent_gap": {
+        "iqr": 0.07142857142857142,
+        "max": 0.14285714285714285,
+        "median": 0.0,
+        "min": 0.0,
+        "p90": 0.07142857142857142
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 30000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 120.0
+    },
+    {
+      "area": {
+        "iqr": 2.0,
+        "max": 30.0,
+        "median": 28.0,
+        "min": 28.0,
+        "p90": 30.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        12,
+        12
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 28.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G+",
+      "incumbent_gap": {
+        "iqr": 0.07142857142857142,
+        "max": 0.07142857142857142,
+        "median": 0.0,
+        "min": 0.0,
+        "p90": 0.07142857142857142
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 60000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 0,
+      "status_timeout": 20,
+      "time_limit": 60.0
+    },
+    {
+      "area": {
+        "iqr": 0.5,
+        "max": 30.0,
+        "median": 28.0,
+        "min": 28.0,
+        "p90": 30.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        12,
+        12
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 28.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G+",
+      "incumbent_gap": {
+        "iqr": 0.017857142857142856,
+        "max": 0.07142857142857142,
+        "median": 0.0,
+        "min": 0.0,
+        "p90": 0.07142857142857142
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 60000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 120.0
+    },
+    {
+      "area": {
+        "iqr": 1.0,
+        "max": 30.0,
+        "median": 25.0,
+        "min": 24.0,
+        "p90": 28.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        9,
+        9
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G-",
+      "incumbent_gap": {
+        "iqr": 0.04166666666666666,
+        "max": 0.25,
+        "median": 0.041666666666666664,
+        "min": 0.0,
+        "p90": 0.16666666666666666
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 10000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 60.0
+    },
+    {
+      "area": {
+        "iqr": 1.0,
+        "max": 30.0,
+        "median": 25.0,
+        "min": 24.0,
+        "p90": 28.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        9,
+        9
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G-",
+      "incumbent_gap": {
+        "iqr": 0.04166666666666666,
+        "max": 0.25,
+        "median": 0.041666666666666664,
+        "min": 0.0,
+        "p90": 0.16666666666666666
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 10000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 120.0
+    },
+    {
+      "area": {
+        "iqr": 1.0,
+        "max": 28.0,
+        "median": 24.0,
+        "min": 24.0,
+        "p90": 25.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        9,
+        9
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G-",
+      "incumbent_gap": {
+        "iqr": 0.041666666666666664,
+        "max": 0.16666666666666666,
+        "median": 0.0,
+        "min": 0.0,
+        "p90": 0.041666666666666664
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 30000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 60.0
+    },
+    {
+      "area": {
+        "iqr": 1.0,
+        "max": 28.0,
+        "median": 24.0,
+        "min": 24.0,
+        "p90": 25.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        9,
+        9
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G-",
+      "incumbent_gap": {
+        "iqr": 0.041666666666666664,
+        "max": 0.16666666666666666,
+        "median": 0.0,
+        "min": 0.0,
+        "p90": 0.041666666666666664
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 30000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 120.0
+    },
+    {
+      "area": {
+        "iqr": 0.0,
+        "max": 25.0,
+        "median": 24.0,
+        "min": 24.0,
+        "p90": 25.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        9,
+        9
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G-",
+      "incumbent_gap": {
+        "iqr": 0.0,
+        "max": 0.041666666666666664,
+        "median": 0.0,
+        "min": 0.0,
+        "p90": 0.041666666666666664
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 60000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 0,
+      "status_timeout": 20,
+      "time_limit": 60.0
+    },
+    {
+      "area": {
+        "iqr": 0.0,
+        "max": 25.0,
+        "median": 24.0,
+        "min": 24.0,
+        "p90": 25.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        9,
+        9
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G-",
+      "incumbent_gap": {
+        "iqr": 0.0,
+        "max": 0.041666666666666664,
+        "median": 0.0,
+        "min": 0.0,
+        "p90": 0.041666666666666664
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 60000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 120.0
+    },
+    {
+      "area": {
+        "iqr": 0.75,
+        "max": 30.0,
+        "median": 28.0,
+        "min": 25.0,
+        "p90": 30.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        12,
+        12
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G-",
+      "incumbent_gap": {
+        "iqr": 0.03125,
+        "max": 0.25,
+        "median": 0.16666666666666666,
+        "min": 0.041666666666666664,
+        "p90": 0.25
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 10000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 60.0
+    },
+    {
+      "area": {
+        "iqr": 0.75,
+        "max": 30.0,
+        "median": 28.0,
+        "min": 25.0,
+        "p90": 30.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        12,
+        12
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G-",
+      "incumbent_gap": {
+        "iqr": 0.03125,
+        "max": 0.25,
+        "median": 0.16666666666666666,
+        "min": 0.041666666666666664,
+        "p90": 0.25
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 10000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 120.0
+    },
+    {
+      "area": {
+        "iqr": 1.0,
+        "max": 28.0,
+        "median": 24.5,
+        "min": 24.0,
+        "p90": 28.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        12,
+        12
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G-",
+      "incumbent_gap": {
+        "iqr": 0.041666666666666664,
+        "max": 0.16666666666666666,
+        "median": 0.020833333333333332,
+        "min": 0.0,
+        "p90": 0.16666666666666666
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 30000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 60.0
+    },
+    {
+      "area": {
+        "iqr": 1.0,
+        "max": 28.0,
+        "median": 24.5,
+        "min": 24.0,
+        "p90": 28.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        12,
+        12
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G-",
+      "incumbent_gap": {
+        "iqr": 0.041666666666666664,
+        "max": 0.16666666666666666,
+        "median": 0.020833333333333332,
+        "min": 0.0,
+        "p90": 0.16666666666666666
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 30000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 120.0
+    },
+    {
+      "area": {
+        "iqr": 1.0,
+        "max": 25.0,
+        "median": 24.5,
+        "min": 24.0,
+        "p90": 25.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        12,
+        12
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G-",
+      "incumbent_gap": {
+        "iqr": 0.041666666666666664,
+        "max": 0.041666666666666664,
+        "median": 0.020833333333333332,
+        "min": 0.0,
+        "p90": 0.041666666666666664
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 60000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 0,
+      "status_timeout": 20,
+      "time_limit": 60.0
+    },
+    {
+      "area": {
+        "iqr": 1.0,
+        "max": 25.0,
+        "median": 24.0,
+        "min": 24.0,
+        "p90": 25.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        12,
+        12
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G-",
+      "incumbent_gap": {
+        "iqr": 0.041666666666666664,
+        "max": 0.041666666666666664,
+        "median": 0.0,
+        "min": 0.0,
+        "p90": 0.041666666666666664
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 60000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 120.0
+    },
+    {
+      "area": {
+        "iqr": 0.0,
+        "max": 30.0,
+        "median": 28.0,
+        "min": 24.0,
+        "p90": 30.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        9,
+        9
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G0",
+      "incumbent_gap": {
+        "iqr": 0.0,
+        "max": 0.25,
+        "median": 0.16666666666666666,
+        "min": 0.0,
+        "p90": 0.25
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 10000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 60.0
+    },
+    {
+      "area": {
+        "iqr": 0.0,
+        "max": 30.0,
+        "median": 28.0,
+        "min": 24.0,
+        "p90": 30.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        9,
+        9
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G0",
+      "incumbent_gap": {
+        "iqr": 0.0,
+        "max": 0.25,
+        "median": 0.16666666666666666,
+        "min": 0.0,
+        "p90": 0.25
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 10000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 120.0
+    },
+    {
+      "area": {
+        "iqr": 4.0,
+        "max": 28.0,
+        "median": 25.0,
+        "min": 24.0,
+        "p90": 28.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        9,
+        9
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G0",
+      "incumbent_gap": {
+        "iqr": 0.16666666666666666,
+        "max": 0.16666666666666666,
+        "median": 0.041666666666666664,
+        "min": 0.0,
+        "p90": 0.16666666666666666
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 30000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 60.0
+    },
+    {
+      "area": {
+        "iqr": 4.0,
+        "max": 28.0,
+        "median": 25.0,
+        "min": 24.0,
+        "p90": 28.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        9,
+        9
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G0",
+      "incumbent_gap": {
+        "iqr": 0.16666666666666666,
+        "max": 0.16666666666666666,
+        "median": 0.041666666666666664,
+        "min": 0.0,
+        "p90": 0.16666666666666666
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 30000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 120.0
+    },
+    {
+      "area": {
+        "iqr": 1.75,
+        "max": 28.0,
+        "median": 24.0,
+        "min": 24.0,
+        "p90": 28.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        9,
+        9
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G0",
+      "incumbent_gap": {
+        "iqr": 0.07291666666666666,
+        "max": 0.16666666666666666,
+        "median": 0.0,
+        "min": 0.0,
+        "p90": 0.16666666666666666
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 60000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 0,
+      "status_timeout": 20,
+      "time_limit": 60.0
+    },
+    {
+      "area": {
+        "iqr": 1.0,
+        "max": 28.0,
+        "median": 24.0,
+        "min": 24.0,
+        "p90": 28.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        9,
+        9
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G0",
+      "incumbent_gap": {
+        "iqr": 0.041666666666666664,
+        "max": 0.16666666666666666,
+        "median": 0.0,
+        "min": 0.0,
+        "p90": 0.16666666666666666
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 60000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 120.0
+    },
+    {
+      "area": {
+        "iqr": 2.0,
+        "max": 30.0,
+        "median": 28.0,
+        "min": 24.0,
+        "p90": 30.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        12,
+        12
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G0",
+      "incumbent_gap": {
+        "iqr": 0.08333333333333334,
+        "max": 0.25,
+        "median": 0.16666666666666666,
+        "min": 0.0,
+        "p90": 0.25
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 10000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 60.0
+    },
+    {
+      "area": {
+        "iqr": 2.0,
+        "max": 30.0,
+        "median": 28.0,
+        "min": 24.0,
+        "p90": 30.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        12,
+        12
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G0",
+      "incumbent_gap": {
+        "iqr": 0.08333333333333334,
+        "max": 0.25,
+        "median": 0.16666666666666666,
+        "min": 0.0,
+        "p90": 0.25
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 10000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 120.0
+    },
+    {
+      "area": {
+        "iqr": 3.0,
+        "max": 28.0,
+        "median": 28.0,
+        "min": 24.0,
+        "p90": 28.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        12,
+        12
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G0",
+      "incumbent_gap": {
+        "iqr": 0.125,
+        "max": 0.16666666666666666,
+        "median": 0.16666666666666666,
+        "min": 0.0,
+        "p90": 0.16666666666666666
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 30000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 60.0
+    },
+    {
+      "area": {
+        "iqr": 3.0,
+        "max": 28.0,
+        "median": 28.0,
+        "min": 24.0,
+        "p90": 28.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        12,
+        12
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G0",
+      "incumbent_gap": {
+        "iqr": 0.125,
+        "max": 0.16666666666666666,
+        "median": 0.16666666666666666,
+        "min": 0.0,
+        "p90": 0.16666666666666666
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 30000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 120.0
+    },
+    {
+      "area": {
+        "iqr": 4.0,
+        "max": 30.0,
+        "median": 26.5,
+        "min": 24.0,
+        "p90": 28.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        12,
+        12
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G0",
+      "incumbent_gap": {
+        "iqr": 0.16666666666666666,
+        "max": 0.25,
+        "median": 0.10416666666666666,
+        "min": 0.0,
+        "p90": 0.16666666666666666
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 60000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 0,
+      "status_timeout": 20,
+      "time_limit": 60.0
+    },
+    {
+      "area": {
+        "iqr": 4.0,
+        "max": 28.0,
+        "median": 25.0,
+        "min": 24.0,
+        "p90": 28.0
+      },
+      "discovered_runs": 20,
+      "domain": [
+        12,
+        12
+      ],
+      "domain_audit_match_runs": 20,
+      "exact_incumbent_area": 24.0,
+      "exact_reference_status": "optimal",
+      "formal_audit_match_runs": 20,
+      "geometry": "G0",
+      "incumbent_gap": {
+        "iqr": 0.16666666666666666,
+        "max": 0.16666666666666666,
+        "median": 0.041666666666666664,
+        "min": 0.0,
+        "p90": 0.16666666666666666
+      },
+      "incumbent_gap_scope": "same_geometry_domain_exact_reference",
+      "legal_rate": 1.0,
+      "legal_runs": 20,
+      "max_evaluations": 60000,
+      "missing_runs": 0,
+      "registered_runs": 20,
+      "status_crash": 0,
+      "status_no_feasible": 0,
+      "status_success": 20,
+      "status_timeout": 0,
+      "time_limit": 120.0
+    }
+  ]
+}
