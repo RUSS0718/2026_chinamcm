@@ -1,0 +1,27 @@
+{
+  "input_tables": [
+    "outputs/q2/tables/v2_n100_p0_current_run_details.csv",
+    "outputs/q2/tables/v2_n100_p1_current_run_details.csv",
+    "outputs/q2/tables/v2_n100_p2_off_current_run_details.csv",
+    "outputs/q2/tables/v2_n100_p2_on_current_run_details.csv"
+  ],
+  "code_hash": "fac6f6f1cd9dc87cfcf4b3a2aa7efd2f72b589c68f28562029218338dd395f4e",
+  "budget": [
+    "30000",
+    "60.0",
+    "4"
+  ],
+  "seeds": [
+    2101,
+    2102,
+    2103,
+    2104,
+    2105,
+    2106,
+    2107,
+    2108,
+    2109,
+    2110
+  ],
+  "scope": "n100 development coarse screening; not final model selection"
+}

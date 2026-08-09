@@ -1,0 +1,251 @@
+{
+  "audit": {
+    "H": 5,
+    "HPWL": 0,
+    "W": 5,
+    "area": 25,
+    "aspect_ratio": 1.0,
+    "dead_space_ratio": 0.041666666666666664,
+    "deadspace": 1.0,
+    "legal": true,
+    "module_area": 24.0,
+    "rho": 0.04,
+    "square_side": 5
+  },
+  "code_hash": "5f9b461b33e142f399a717c9fab309c0667da57a09af8d86efec389274550b02",
+  "code_manifest": [
+    {
+      "bytes": 598,
+      "path": "src/Q4/__init__.py",
+      "sha256": "fb2b9adee946defd3c5232bbd9eb1d87299f99d60e34cd42f9c9f1fcfa17e870"
+    },
+    {
+      "bytes": 4359,
+      "path": "src/Q4/__main__.py",
+      "sha256": "00675478a08b9b9b0eb1576c1fa168575009f74957932a65ac5c2f57678ed296"
+    },
+    {
+      "bytes": 1344,
+      "path": "src/Q4/geometry.py",
+      "sha256": "6b7b123ca2c9ff5b84d6d1d1d9650f1a3a1252db59691204f7170d19bfe7eec2"
+    },
+    {
+      "bytes": 5332,
+      "path": "src/Q4/model.py",
+      "sha256": "29fcd897ff9b90cfbeb19cca403e190edbc441c9336cc7308d19df533d3fa73b"
+    },
+    {
+      "bytes": 5093,
+      "path": "src/Q4/sa.py",
+      "sha256": "ca643a63fbc8d6c257712280b848b7432b648954baf2d3fce410e4e9b8873ebd"
+    },
+    {
+      "bytes": 8998,
+      "path": "src/Q4/search.py",
+      "sha256": "621fe2eaf346bdd1202ecc7787692003d8e5c09cc2f2ca8d910e4d3f65cad00d"
+    },
+    {
+      "bytes": 2617,
+      "path": "src/_internal/audit.py",
+      "sha256": "c5b18970ddc807a77646cf920954fe27097c90c2d82b75a38fe68eebd01863ae"
+    }
+  ],
+  "command": "D:\\Anaconda\\envs\\CA-py310\\python.exe -B -m src.Q4 sa --seed 1105 --max-evaluations 30000 --time-limit 60 --restarts 4 --domain-width 9 --domain-height 9 --output outputs/q4/_runtime/v2/sa/seed_1105.json",
+  "config": {
+    "domain": [
+      9,
+      9
+    ],
+    "grid_step": 1,
+    "max_evaluations": 30000,
+    "restarts": 4,
+    "rotations": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "search_domain": "integer_translation_grid",
+    "seed": 1105,
+    "temperature_schedule": "per_restart_linear",
+    "time_limit": 60.0
+  },
+  "config_hash": "9296646c4bc2371824c660cdfcf2ae6447ba5a07f5eb8f8eab0045d9dd61a9eb",
+  "domain": {},
+  "environment": {
+    "cpu_count": 16,
+    "cwd": "D:\\project\\chinamcm_2026\\2026_chinamcm",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "python": "3.10.20 | packaged by Anaconda, Inc. | (main, Mar 11 2026, 17:42:35) [MSC v.1942 64 bit (AMD64)]"
+  },
+  "formal": {
+    "H": 5,
+    "HPWL": 0,
+    "W": 5,
+    "area": 25,
+    "aspect_ratio": 1.0,
+    "dead_space_ratio": 0.041666666666666664,
+    "deadspace": 1,
+    "layout": {
+      "b1": {
+        "rotation": 0,
+        "x": 5,
+        "y": 2
+      },
+      "b2": {
+        "rotation": 0,
+        "x": 4,
+        "y": 2
+      },
+      "b3": {
+        "rotation": 90,
+        "x": 8,
+        "y": 2
+      },
+      "b4": {
+        "rotation": 90,
+        "x": 4,
+        "y": 6
+      }
+    },
+    "legal": true,
+    "module_area": 24,
+    "rho": 0.04,
+    "square_side": 5
+  },
+  "formal_audit_match": true,
+  "layout": {
+    "b1": {
+      "rotation": 0,
+      "x": 5,
+      "y": 2
+    },
+    "b2": {
+      "rotation": 0,
+      "x": 4,
+      "y": 2
+    },
+    "b3": {
+      "rotation": 90,
+      "x": 8,
+      "y": 2
+    },
+    "b4": {
+      "rotation": 90,
+      "x": 4,
+      "y": 6
+    }
+  },
+  "mode": "sa",
+  "problem": "Q4",
+  "result": {
+    "H": 5,
+    "HPWL": 0,
+    "W": 5,
+    "area": 25,
+    "aspect_ratio": 1.0,
+    "audit": {
+      "H": 5,
+      "HPWL": 0,
+      "W": 5,
+      "area": 25,
+      "aspect_ratio": 1.0,
+      "dead_space_ratio": 0.041666666666666664,
+      "deadspace": 1.0,
+      "legal": true,
+      "module_area": 24.0,
+      "rho": 0.04,
+      "square_side": 5
+    },
+    "config": {
+      "domain": [
+        9,
+        9
+      ],
+      "grid_step": 1,
+      "max_evaluations": 30000,
+      "restarts": 4,
+      "rotations": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "search_domain": "integer_translation_grid",
+      "seed": 1105,
+      "temperature_schedule": "per_restart_linear",
+      "time_limit": 60.0
+    },
+    "dead_space_ratio": 0.041666666666666664,
+    "deadspace": 1,
+    "evaluation": {
+      "H": 5,
+      "HPWL": 0,
+      "W": 5,
+      "area": 25,
+      "aspect_ratio": 1.0,
+      "dead_space_ratio": 0.041666666666666664,
+      "deadspace": 1,
+      "layout": {
+        "b1": {
+          "rotation": 0,
+          "x": 5,
+          "y": 2
+        },
+        "b2": {
+          "rotation": 0,
+          "x": 4,
+          "y": 2
+        },
+        "b3": {
+          "rotation": 90,
+          "x": 8,
+          "y": 2
+        },
+        "b4": {
+          "rotation": 90,
+          "x": 4,
+          "y": 6
+        }
+      },
+      "legal": true,
+      "module_area": 24,
+      "rho": 0.04,
+      "square_side": 5
+    },
+    "evaluations": 30000,
+    "formal_audit_match": true,
+    "initial_area": 36,
+    "layout": {
+      "b1": {
+        "rotation": 0,
+        "x": 5,
+        "y": 2
+      },
+      "b2": {
+        "rotation": 0,
+        "x": 4,
+        "y": 2
+      },
+      "b3": {
+        "rotation": 90,
+        "x": 8,
+        "y": 2
+      },
+      "b4": {
+        "rotation": 90,
+        "x": 4,
+        "y": 6
+      }
+    },
+    "legal": true,
+    "module_area": 24,
+    "restarts_completed": 4,
+    "rho": 0.04,
+    "runtime": 20.49981169999228,
+    "seed": 1105,
+    "square_side": 5,
+    "status": "success"
+  },
+  "status": "success"
+}

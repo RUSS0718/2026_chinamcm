@@ -1,0 +1,64 @@
+{
+  "code_hash": "05aeb28bf29253376439b2a4c2cf07db2b92297d941f64e205109a8fa3d287e3",
+  "command": "python -B -m src.Q1 batch --instance n100 --candidates Q1-G,Q1-SP,Q1-BT --seeds 1101-1110 --max-evaluations 100000 --time-limit 60 --restarts 4 --raw data/raw/附件 --runtime-root outputs/q1/_runtime/v2_n100_p0_p1 --table-root outputs/q1/tables --run-id v2_n100_p0_p1",
+  "configs": [
+    {
+      "calibration_samples": null,
+      "candidate": "Q1-G",
+      "config_hash": "61a88f418e559bd3a8be41e948cd0d140263117de0f6d0518e6a3abdd50a9237",
+      "directed_moves": false,
+      "fast_sa_c": 100.0,
+      "fast_sa_k": 7,
+      "initial_acceptance": 0.9,
+      "max_evaluations": 100000,
+      "restarts": 4,
+      "state_dedup": false,
+      "time_limit": 60.0
+    },
+    {
+      "calibration_samples": null,
+      "candidate": "Q1-SP",
+      "config_hash": "e7360dcc4dfe835b61c44c095a8a72d056ccf52ddd04278146ff4d5ee27ac545",
+      "directed_moves": false,
+      "fast_sa_c": 100.0,
+      "fast_sa_k": 7,
+      "initial_acceptance": 0.9,
+      "max_evaluations": 100000,
+      "restarts": 4,
+      "state_dedup": false,
+      "time_limit": 60.0
+    },
+    {
+      "calibration_samples": null,
+      "candidate": "Q1-BT",
+      "config_hash": "3b9025ae5c61e1c06841d50739b8eb84afcdb131876913df9f4b8e182067a2ca",
+      "directed_moves": false,
+      "fast_sa_c": 100.0,
+      "fast_sa_k": 7,
+      "initial_acceptance": 0.9,
+      "max_evaluations": 100000,
+      "restarts": 4,
+      "state_dedup": false,
+      "time_limit": 60.0
+    }
+  ],
+  "environment": {
+    "implementation": "CPython",
+    "logical_cpu_count": 16,
+    "platform": "Windows-10-10.0.26200-SP0",
+    "python": "3.10.20 | packaged by Anaconda, Inc. | (main, Mar 11 2026, 17:42:35) [MSC v.1942 64 bit (AMD64)]",
+    "rng": "random.Random (CPython seeded Mersenne Twister)"
+  },
+  "seeds": [
+    1101,
+    1102,
+    1103,
+    1104,
+    1105,
+    1106,
+    1107,
+    1108,
+    1109,
+    1110
+  ]
+}

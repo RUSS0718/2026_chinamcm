@@ -1,0 +1,2 @@
+config_id,candidate,runs,legal_runs,status_success,status_timeout,status_no_feasible,status_crash,best_HPWL,median_HPWL,median_evaluations,best_layout_path
+P1-RANDOM,Q2-BT,10,1,1,0,9,0,291940.5,291940.5,30000.0,outputs/q2/_runtime/v2_n100_repaired_fix2/P1-RANDOM/n100/P1-RANDOM/seed_1104/layout.json

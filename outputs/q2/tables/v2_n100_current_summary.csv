@@ -1,0 +1,5 @@
+config_id,candidate,hypergraph_init,runs,legal_runs,audit_matches,status_success,status_timeout,status_no_feasible,status_crash,best_HPWL,median_HPWL,median_first_feasible_evaluation,median_first_feasible_time,median_evaluations,median_runtime
+P0,Q2-SP,False,10,10,10,0,10,0,0,296924.5,297261.0,1.0,0.003800050002610078,19193.0,60.00123425000129
+P1,Q2-BT,False,10,10,10,7,3,0,0,256205.5,263293.5,1.0,0.002035149998846464,30000.0,49.34255660000417
+P2-OFF,Q2-HG,False,10,10,10,10,0,0,0,256205.5,263293.5,1.0,0.0022361499977705535,30000.0,53.208881549999205
+P2-ON,Q2-HG,True,10,10,10,10,0,0,0,241764.5,248082.75,1.0,0.013795849998132326,30000.0,50.13918414999716

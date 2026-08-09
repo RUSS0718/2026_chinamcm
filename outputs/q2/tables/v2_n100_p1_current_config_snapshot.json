@@ -1,0 +1,39 @@
+{
+  "code_hash": "fac6f6f1cd9dc87cfcf4b3a2aa7efd2f72b589c68f28562029218338dd395f4e",
+  "command": "python -B -m src.Q2 batch --instance n100 --candidates Q2-BT --seeds 2101-2110 --max-evaluations 30000 --time-limit 60 --restarts 4 --raw data/raw/附件 --runtime-root outputs/q2/_runtime/v2_n100_p1_current --table-root outputs/q2/tables --run-id v2_n100_p1_current",
+  "configs": [
+    {
+      "adaptive_constraints": true,
+      "calibration_samples": null,
+      "candidate": "Q2-BT",
+      "config_hash": "e7a4ed8f0358f0babe8dcd6f79518d5d169d8e46d74423ff47a7c21fb1dd6582",
+      "coordinate_tolerance": 0.0,
+      "dead_space_ratio": 0.15,
+      "fast_sa_c": 100.0,
+      "fast_sa_k": 7,
+      "hypergraph_init": false,
+      "initial_acceptance": 0.9,
+      "max_evaluations": 30000,
+      "restarts": 4,
+      "time_limit": 60.0
+    }
+  ],
+  "environment": {
+    "implementation": "CPython",
+    "logical_cpu_count": 16,
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.13 (main, Mar  3 2026, 15:01:35) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "seeds": [
+    2101,
+    2102,
+    2103,
+    2104,
+    2105,
+    2106,
+    2107,
+    2108,
+    2109,
+    2110
+  ]
+}

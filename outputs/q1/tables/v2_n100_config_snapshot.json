@@ -1,0 +1,89 @@
+{
+  "assumptions": {
+    "area_noninferiority_relative_tolerance": 0.005,
+    "max_evaluations_per_run": 100000,
+    "n100_seeds": [
+      1101,
+      1102,
+      1103,
+      1104,
+      1105,
+      1106,
+      1107,
+      1108,
+      1109,
+      1110
+    ],
+    "p0_scope": "P1/P2 only; P0 remains a missing dependency",
+    "restarts_per_run": 4,
+    "time_limit_seconds_per_run": 60.0
+  },
+  "code_hash": "a66be2e21bd3f0641b21c86ac8978539e9485eb1ce02e87b8ee2ba07bbf61e39",
+  "command": "python -B -m src.q1 batch --instance n100 --seeds 1101-1110 --max-evaluations 100000 --time-limit 60 --restarts 4 --raw data/raw/附件 --runtime-root outputs/q1/_runtime/v2_n100 --table-root outputs/q1/tables --processed-audit data/processed/q1_v2_input_audit.json --report outputs/q1/reports/v2_model_report.md",
+  "configs": [
+    {
+      "calibration_samples": null,
+      "candidate": "Q1-BT",
+      "config_hash": "3b9025ae5c61e1c06841d50739b8eb84afcdb131876913df9f4b8e182067a2ca",
+      "config_id": "P1",
+      "directed_moves": false,
+      "fast_sa_c": 100.0,
+      "fast_sa_k": 7,
+      "initial_acceptance": 0.9,
+      "max_evaluations": 100000,
+      "restarts": 4,
+      "state_dedup": false,
+      "time_limit": 60.0
+    },
+    {
+      "calibration_samples": null,
+      "candidate": "Q1-BT-D",
+      "config_hash": "7124cb0cc6541d3e570e567d6fd2d6226d040a6ad9b0ef18f3c3692dac034227",
+      "config_id": "P2-directed-only",
+      "directed_moves": true,
+      "fast_sa_c": 100.0,
+      "fast_sa_k": 7,
+      "initial_acceptance": 0.9,
+      "max_evaluations": 100000,
+      "restarts": 4,
+      "state_dedup": false,
+      "time_limit": 60.0
+    },
+    {
+      "calibration_samples": null,
+      "candidate": "Q1-BT-D",
+      "config_hash": "abf118fc662338a6bcf7051d08658c12aa1bd43026021bf8f24758870e73580d",
+      "config_id": "P2-dedup-only",
+      "directed_moves": false,
+      "fast_sa_c": 100.0,
+      "fast_sa_k": 7,
+      "initial_acceptance": 0.9,
+      "max_evaluations": 100000,
+      "restarts": 4,
+      "state_dedup": true,
+      "time_limit": 60.0
+    },
+    {
+      "calibration_samples": null,
+      "candidate": "Q1-BT-D",
+      "config_hash": "d56cc283d14fd972de7e251837503d7bad5b9f00d2bca6e891990077f53c99b7",
+      "config_id": "P2",
+      "directed_moves": true,
+      "fast_sa_c": 100.0,
+      "fast_sa_k": 7,
+      "initial_acceptance": 0.9,
+      "max_evaluations": 100000,
+      "restarts": 4,
+      "state_dedup": true,
+      "time_limit": 60.0
+    }
+  ],
+  "environment": {
+    "implementation": "CPython",
+    "logical_cpu_count": 12,
+    "platform": "Windows-10-10.0.22631-SP0",
+    "processor": "Intel64 Family 6 Model 165 Stepping 2, GenuineIntel",
+    "python": "3.11.14 | packaged by Anaconda, Inc. | (main, Oct 21 2025, 18:30:03) [MSC v.1929 64 bit (AMD64)]",
+    "rng": "random.Random (CPython seeded Mersenne Twister)"
+  }
+}

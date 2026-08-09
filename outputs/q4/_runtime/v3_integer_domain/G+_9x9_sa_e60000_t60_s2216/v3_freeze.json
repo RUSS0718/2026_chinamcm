@@ -1,0 +1,78 @@
+{
+  "attempt": "base",
+  "b1_beam_thickness": 3,
+  "code_hash": "51df5eac273ea439410170bda7198b38ed3c360bad647679442303aea02f7db3",
+  "command": "D:\\Anaconda\\envs\\CA-py310\\python.exe -B -m src.Q4 sa --geometry G+ --seed 2216 --max-evaluations 60000 --time-limit 60.0 --restarts 4 --domain-width 9 --domain-height 9 --output D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q4\\_runtime\\v3_integer_domain\\G+_9x9_sa_e60000_t60_s2216\\result.json",
+  "command_argv": [
+    "D:\\Anaconda\\envs\\CA-py310\\python.exe",
+    "-B",
+    "-m",
+    "src.Q4",
+    "sa",
+    "--geometry",
+    "G+",
+    "--seed",
+    "2216",
+    "--max-evaluations",
+    "60000",
+    "--time-limit",
+    "60.0",
+    "--restarts",
+    "4",
+    "--domain-width",
+    "9",
+    "--domain-height",
+    "9",
+    "--output",
+    "D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q4\\_runtime\\v3_integer_domain\\G+_9x9_sa_e60000_t60_s2216\\result.json"
+  ],
+  "config": {
+    "b1_beam_thickness": 3,
+    "domain": [
+      9,
+      9
+    ],
+    "geometry": "G+",
+    "grid_step": 1,
+    "max_evaluations": 60000,
+    "mode": "sa",
+    "restarts": 4,
+    "rotations": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "search_domain": "integer_translation_grid",
+    "seed": 2216,
+    "temperature_schedule": "per_restart_linear",
+    "time_limit": 60.0
+  },
+  "config_hash": "d8af6e1af988ce14ca879289c5ad68546200eef5cfd2659cb7b93e77dc356cbe",
+  "config_id": "G+_9x9_sa_e60000_t60_s2216",
+  "data_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "domain": [
+    9,
+    9
+  ],
+  "environment": {
+    "implementation": "CPython",
+    "logical_cpu_count": 16,
+    "mkl_num_threads": "1",
+    "omp_num_threads": "1",
+    "openblas_num_threads": "1",
+    "os": "Windows",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "processes": 1,
+    "python_executable": "D:\\Anaconda\\envs\\CA-py310\\python.exe",
+    "python_version": "3.10.20",
+    "rng": "random.Random (CPython MT19937)",
+    "threads": 1,
+    "workers": 8
+  },
+  "geometry": "G+",
+  "instance": "integer-domain",
+  "mode": "sa",
+  "problem": "q4",
+  "seed": 2216
+}

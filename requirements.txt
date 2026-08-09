@@ -1,1 +1,2 @@
 # Add project dependencies here.
+matplotlib==3.10.9

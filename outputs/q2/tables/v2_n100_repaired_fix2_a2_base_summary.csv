@@ -1,0 +1,2 @@
+config_id,candidate,runs,legal_runs,status_success,status_timeout,status_no_feasible,status_crash,best_HPWL,median_HPWL,median_evaluations,best_layout_path
+A2-BASE,Q2-BT,10,10,10,0,0,0,247846.0,253640.75,30000.0,outputs/q2/_runtime/v2_n100_repaired_fix2/A2-BASE/n100/A2-BASE/seed_1102/layout.json

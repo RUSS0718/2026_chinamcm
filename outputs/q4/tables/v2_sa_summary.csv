@@ -1,0 +1,19 @@
+metric,value,method
+n_runs,10,all registered seeds; no exclusions
+legal_rate,1.0,successful legal runs / all 10 registered seeds
+formal_audit_match_rate,1.0,successful audit-matched runs / all 10 registered seeds
+best_area,24.0,minimum area across successful runs; failures retained in denominator
+median_area,28.0,ordinary median
+q1_area,25.0,Tukey lower-half median
+q3_area,28.0,Tukey upper-half median
+iqr_area,3.0,Q3-Q1
+best_gap,0.0,(area-24)/24
+median_gap,0.16666666666666666,ordinary median of (area-24)/24
+q1_gap,0.041666666666666664,Tukey lower-half median
+q3_gap,0.16666666666666666,Tukey upper-half median
+iqr_gap,0.125,Q3-Q1
+median_runtime_seconds,20.442997899997863,ordinary median
+q1_runtime_seconds,20.3088204000087,Tukey lower-half median
+q3_runtime_seconds,20.49981169999228,Tukey upper-half median
+iqr_runtime_seconds,0.19099129998357967,Q3-Q1
+median_evaluations,30000.0,ordinary median over successful runs
