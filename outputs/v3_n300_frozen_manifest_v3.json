@@ -1,0 +1,739 @@
+{
+  "instance": "n300",
+  "protocol": "v3_n300_holdout_v3",
+  "q1": {
+    "ablations": [],
+    "baselines": [
+      "Q1-G",
+      "Q1-SP"
+    ],
+    "code_files": [
+      {
+        "bytes": 11579,
+        "path": "src/n300.py",
+        "sha256": "a2a7857d341fa218eed78b30c8c1a2f4c639ad1b7072098e60a9cc79e639a44f"
+      },
+      {
+        "bytes": 92542,
+        "path": "src/v3.py",
+        "sha256": "a1f5ae95ea182e1a5d6ad1d31a27bcd7177635eb3a1a17fd4a7c84865af8cccb"
+      },
+      {
+        "bytes": 43,
+        "path": "src/Q1/__init__.py",
+        "sha256": "039ddd56ea3b86c76dde82441012d67780c3d144d47e5a7b8729c76692a4ddee"
+      },
+      {
+        "bytes": 13655,
+        "path": "src/Q1/__main__.py",
+        "sha256": "405d19d62b39bb6f85840995e43c689590058114acfbca66abd3d719b61419d1"
+      },
+      {
+        "bytes": 9807,
+        "path": "src/Q1/p0.py",
+        "sha256": "10266679bfb2a20c9272e4f628df3619970593c26678c808a7041ec85e8d357d"
+      },
+      {
+        "bytes": 21343,
+        "path": "src/Q1/p1_p2.py",
+        "sha256": "4480edbdfd26a8330e3f6cb2d8036611cc0119a7aee93556f17a36a7f9f8f5bd"
+      },
+      {
+        "bytes": 4905,
+        "path": "src/_internal/parser.py",
+        "sha256": "a03db32940f5af3f7a0f1622d5afc97f6ac3134c470a00538039be2c29be48b4"
+      },
+      {
+        "bytes": 2382,
+        "path": "src/_internal/evaluator.py",
+        "sha256": "9e9b163ad0fb563e3cbcd07da3ad6e44c1625d6371e348cfdd40a6c501b5d927"
+      },
+      {
+        "bytes": 2617,
+        "path": "src/_internal/audit.py",
+        "sha256": "c5b18970ddc807a77646cf920954fe27097c90c2d82b75a38fe68eebd01863ae"
+      },
+      {
+        "bytes": 1484,
+        "path": "src/_internal/geometry.py",
+        "sha256": "cd2c8231c67364aad3febfc54d70b9fa3ebb4e655da95957ff9f43aec943e0cd"
+      }
+    ],
+    "code_manifest_hash": "297975034e94b5cdfa7afb1cf1b28a968efba20a792ce0f3f6ebdff3c566851b",
+    "commands": [
+      {
+        "command": [
+          "D:\\Anaconda\\envs\\CA-py310\\python.exe",
+          "-B",
+          "-m",
+          "src.Q1",
+          "run",
+          "--instance",
+          "n300",
+          "--candidate",
+          "Q1-G",
+          "--seed",
+          "<registered-seed>",
+          "--max-evaluations",
+          "100000",
+          "--time-limit",
+          "600.0",
+          "--restarts",
+          "4",
+          "--raw",
+          "data/raw/附件",
+          "--output-root",
+          "D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q1\\_runtime\\v3_n300_holdout",
+          "--config-id",
+          "Q1-G"
+        ],
+        "config_id": "Q1-G",
+        "final_seed_set": [],
+        "seed_set": [
+          3301,
+          3302,
+          3303,
+          3304,
+          3305,
+          3306,
+          3307,
+          3308,
+          3309,
+          3310,
+          3311,
+          3312,
+          3313,
+          3314,
+          3315,
+          3316,
+          3317,
+          3318,
+          3319,
+          3320,
+          3321,
+          3322,
+          3323,
+          3324,
+          3325,
+          3326,
+          3327,
+          3328,
+          3329,
+          3330
+        ]
+      },
+      {
+        "command": [
+          "D:\\Anaconda\\envs\\CA-py310\\python.exe",
+          "-B",
+          "-m",
+          "src.Q1",
+          "run",
+          "--instance",
+          "n300",
+          "--candidate",
+          "Q1-SP",
+          "--seed",
+          "<registered-seed>",
+          "--max-evaluations",
+          "100000",
+          "--time-limit",
+          "600.0",
+          "--restarts",
+          "4",
+          "--raw",
+          "data/raw/附件",
+          "--output-root",
+          "D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q1\\_runtime\\v3_n300_holdout",
+          "--config-id",
+          "Q1-SP"
+        ],
+        "config_id": "Q1-SP",
+        "final_seed_set": [],
+        "seed_set": [
+          3301,
+          3302,
+          3303,
+          3304,
+          3305,
+          3306,
+          3307,
+          3308,
+          3309,
+          3310,
+          3311,
+          3312,
+          3313,
+          3314,
+          3315,
+          3316,
+          3317,
+          3318,
+          3319,
+          3320,
+          3321,
+          3322,
+          3323,
+          3324,
+          3325,
+          3326,
+          3327,
+          3328,
+          3329,
+          3330
+        ]
+      },
+      {
+        "command": [
+          "D:\\Anaconda\\envs\\CA-py310\\python.exe",
+          "-B",
+          "-m",
+          "src.Q1",
+          "run",
+          "--instance",
+          "n300",
+          "--candidate",
+          "Q1-BT",
+          "--seed",
+          "<registered-seed>",
+          "--max-evaluations",
+          "100000",
+          "--time-limit",
+          "600.0",
+          "--restarts",
+          "4",
+          "--raw",
+          "data/raw/附件",
+          "--output-root",
+          "D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q1\\_runtime\\v3_n300_holdout",
+          "--config-id",
+          "Q1-BT"
+        ],
+        "config_id": "Q1-BT",
+        "final_seed_set": [],
+        "seed_set": [
+          3301,
+          3302,
+          3303,
+          3304,
+          3305,
+          3306,
+          3307,
+          3308,
+          3309,
+          3310,
+          3311,
+          3312,
+          3313,
+          3314,
+          3315,
+          3316,
+          3317,
+          3318,
+          3319,
+          3320,
+          3321,
+          3322,
+          3323,
+          3324,
+          3325,
+          3326,
+          3327,
+          3328,
+          3329,
+          3330
+        ]
+      }
+    ],
+    "configs": {
+      "Q1-BT": {
+        "calibration_samples": null,
+        "candidate": "Q1-BT",
+        "directed_moves": false,
+        "fast_sa_c": 100.0,
+        "fast_sa_k": 7,
+        "initial_acceptance": 0.9,
+        "max_evaluations": 100000,
+        "restarts": 4,
+        "state_dedup": false,
+        "time_limit": 600.0
+      },
+      "Q1-G": {
+        "calibration_samples": null,
+        "candidate": "Q1-G",
+        "directed_moves": false,
+        "fast_sa_c": 100.0,
+        "fast_sa_k": 7,
+        "initial_acceptance": 0.9,
+        "max_evaluations": 100000,
+        "restarts": 4,
+        "state_dedup": false,
+        "time_limit": 600.0
+      },
+      "Q1-SP": {
+        "calibration_samples": null,
+        "candidate": "Q1-SP",
+        "directed_moves": false,
+        "fast_sa_c": 100.0,
+        "fast_sa_k": 7,
+        "initial_acceptance": 0.9,
+        "max_evaluations": 100000,
+        "restarts": 4,
+        "state_dedup": false,
+        "time_limit": 600.0
+      }
+    },
+    "data_files": [
+      {
+        "bytes": 21289,
+        "path": "data/raw/附件/n300.blocks",
+        "sha256": "88ca80814070d9578c7ccd31182ff31ab026a1a1ea9da5fd0e0342d26327bc82"
+      }
+    ],
+    "data_manifest_hash": "03a4b40545d0c13c136160fa998568f8ab823b8e88f29f65d848699b1fa5666d",
+    "environment": {
+      "implementation": "CPython",
+      "logical_cpu_count": 16,
+      "mkl_num_threads": "1",
+      "omp_num_threads": "1",
+      "openblas_num_threads": "1",
+      "os": "Windows",
+      "platform": "Windows-10-10.0.26200-SP0",
+      "processes": 1,
+      "python_executable": "D:\\Anaconda\\envs\\CA-py310\\python.exe",
+      "python_version": "3.10.20",
+      "rng": "random.Random (CPython MT19937)",
+      "threads": 1,
+      "workers": 8
+    },
+    "preselected": "Q1-BT",
+    "reselection_allowed": false,
+    "selection_locked": true,
+    "spec": {
+      "budgets": {
+        "max_evaluations": 100000,
+        "restarts": 4,
+        "time_limit": 600.0
+      },
+      "candidates": [
+        "Q1-G",
+        "Q1-SP",
+        "Q1-BT"
+      ],
+      "code_hashes": {
+        "Q1-BT": "3191e8fa3cfd8aaa7948395b9026ff11bb50871a09425b05f1d85c6a8a6a5aaa",
+        "Q1-G": "3191e8fa3cfd8aaa7948395b9026ff11bb50871a09425b05f1d85c6a8a6a5aaa",
+        "Q1-SP": "3191e8fa3cfd8aaa7948395b9026ff11bb50871a09425b05f1d85c6a8a6a5aaa"
+      },
+      "config_hashes": {
+        "Q1-BT": "f5f202b2944053c64e2e080e3ba489301ace522ab147b807c2e3dd0b6e51990d",
+        "Q1-G": "33e1a42d79896206cd8f79ea036307abf032c8ef9adae9927b5d7f098f9e38ad",
+        "Q1-SP": "89d9d4bb780bd5dba45d24fa3d8265e0e1286c2771d57c1476b6973e1433f1e5"
+      },
+      "data_hash": "88ca80814070d9578c7ccd31182ff31ab026a1a1ea9da5fd0e0342d26327bc82",
+      "final_seeds": [],
+      "instance": "n300",
+      "output_root": "outputs/q1/_runtime/v3_n300_holdout",
+      "problem": "q1",
+      "processes": 1,
+      "q2_v3_baseline": null,
+      "rng": "random.Random (CPython MT19937)",
+      "seeds": [
+        3301,
+        3302,
+        3303,
+        3304,
+        3305,
+        3306,
+        3307,
+        3308,
+        3309,
+        3310,
+        3311,
+        3312,
+        3313,
+        3314,
+        3315,
+        3316,
+        3317,
+        3318,
+        3319,
+        3320,
+        3321,
+        3322,
+        3323,
+        3324,
+        3325,
+        3326,
+        3327,
+        3328,
+        3329,
+        3330
+      ],
+      "stop_conditions": [
+        "max_evaluations",
+        "wall_clock",
+        "uncaught_exception",
+        "preserve_failure_status"
+      ],
+      "threads": 1,
+      "workers": 8
+    }
+  },
+  "q2": {
+    "ablations": [],
+    "baselines": [
+      "P0"
+    ],
+    "code_files": [
+      {
+        "bytes": 11579,
+        "path": "src/n300.py",
+        "sha256": "a2a7857d341fa218eed78b30c8c1a2f4c639ad1b7072098e60a9cc79e639a44f"
+      },
+      {
+        "bytes": 92542,
+        "path": "src/v3.py",
+        "sha256": "a1f5ae95ea182e1a5d6ad1d31a27bcd7177635eb3a1a17fd4a7c84865af8cccb"
+      },
+      {
+        "bytes": 53,
+        "path": "src/Q2/__init__.py",
+        "sha256": "d35c903c096f2c4532cc6014f1fa979077fbea5657762640354e8027666046dd"
+      },
+      {
+        "bytes": 17217,
+        "path": "src/Q2/__main__.py",
+        "sha256": "285eb9850fde432ddbaa8d0f3162699fe6686bd4ace2f64dae7bda2ceb1596d4"
+      },
+      {
+        "bytes": 13387,
+        "path": "src/Q2/common.py",
+        "sha256": "c3af3011c6cc634e3106dc6ec4e02fd956ec04d36c0ee5b433ed2c9ac59dafa1"
+      },
+      {
+        "bytes": 11187,
+        "path": "src/Q2/p0.py",
+        "sha256": "27dfa5a67f6bf02b02e177180c2801663a8a16a56282e9759d144d57af4653d4"
+      },
+      {
+        "bytes": 14191,
+        "path": "src/Q2/p1_p2.py",
+        "sha256": "cad0162119e11b14e66aa0177efcaed5e9a7f63e7b0764465300b28093873314"
+      },
+      {
+        "bytes": 15811,
+        "path": "src/Q2/summarize.py",
+        "sha256": "686fe72b8814c1b096d6098ef51cd2521e2643f29cebdacc45a214fb34712b1d"
+      },
+      {
+        "bytes": 9807,
+        "path": "src/Q1/p0.py",
+        "sha256": "10266679bfb2a20c9272e4f628df3619970593c26678c808a7041ec85e8d357d"
+      },
+      {
+        "bytes": 21343,
+        "path": "src/Q1/p1_p2.py",
+        "sha256": "4480edbdfd26a8330e3f6cb2d8036611cc0119a7aee93556f17a36a7f9f8f5bd"
+      },
+      {
+        "bytes": 4905,
+        "path": "src/_internal/parser.py",
+        "sha256": "a03db32940f5af3f7a0f1622d5afc97f6ac3134c470a00538039be2c29be48b4"
+      },
+      {
+        "bytes": 2382,
+        "path": "src/_internal/evaluator.py",
+        "sha256": "9e9b163ad0fb563e3cbcd07da3ad6e44c1625d6371e348cfdd40a6c501b5d927"
+      },
+      {
+        "bytes": 2617,
+        "path": "src/_internal/audit.py",
+        "sha256": "c5b18970ddc807a77646cf920954fe27097c90c2d82b75a38fe68eebd01863ae"
+      },
+      {
+        "bytes": 1484,
+        "path": "src/_internal/geometry.py",
+        "sha256": "cd2c8231c67364aad3febfc54d70b9fa3ebb4e655da95957ff9f43aec943e0cd"
+      }
+    ],
+    "code_manifest_hash": "16d2ad3e785d6b0ec3048cd58875bd4ce5ee9c72964adfa84e5199bc5acb576c",
+    "commands": [
+      {
+        "command": [
+          "D:\\Anaconda\\envs\\CA-py310\\python.exe",
+          "-B",
+          "-m",
+          "src.Q2",
+          "run",
+          "--instance",
+          "n300",
+          "--candidate",
+          "Q2-SP",
+          "--seed",
+          "<registered-seed>",
+          "--max-evaluations",
+          "30000",
+          "--time-limit",
+          "600.0",
+          "--restarts",
+          "4",
+          "--adaptive-constraints",
+          "off",
+          "--hypergraph-init",
+          "off",
+          "--initialization-mode",
+          "shelf",
+          "--raw",
+          "data/raw/附件",
+          "--output-root",
+          "D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q2\\_runtime\\v3_n300_holdout",
+          "--config-id",
+          "P0"
+        ],
+        "config_id": "P0",
+        "final_seed_set": [],
+        "seed_set": [
+          3301,
+          3302,
+          3303,
+          3304,
+          3305,
+          3306,
+          3307,
+          3308,
+          3309,
+          3310,
+          3311,
+          3312,
+          3313,
+          3314,
+          3315,
+          3316,
+          3317,
+          3318,
+          3319,
+          3320,
+          3321,
+          3322,
+          3323,
+          3324,
+          3325,
+          3326,
+          3327,
+          3328,
+          3329,
+          3330
+        ]
+      },
+      {
+        "command": [
+          "D:\\Anaconda\\envs\\CA-py310\\python.exe",
+          "-B",
+          "-m",
+          "src.Q2",
+          "run",
+          "--instance",
+          "n300",
+          "--candidate",
+          "Q2-BT",
+          "--seed",
+          "<registered-seed>",
+          "--max-evaluations",
+          "30000",
+          "--time-limit",
+          "600.0",
+          "--restarts",
+          "4",
+          "--adaptive-constraints",
+          "on",
+          "--hypergraph-init",
+          "off",
+          "--initialization-mode",
+          "shelf",
+          "--raw",
+          "data/raw/附件",
+          "--output-root",
+          "D:\\project\\chinamcm_2026\\2026_chinamcm\\outputs\\q2\\_runtime\\v3_n300_holdout",
+          "--config-id",
+          "P1"
+        ],
+        "config_id": "P1",
+        "final_seed_set": [],
+        "seed_set": [
+          3301,
+          3302,
+          3303,
+          3304,
+          3305,
+          3306,
+          3307,
+          3308,
+          3309,
+          3310,
+          3311,
+          3312,
+          3313,
+          3314,
+          3315,
+          3316,
+          3317,
+          3318,
+          3319,
+          3320,
+          3321,
+          3322,
+          3323,
+          3324,
+          3325,
+          3326,
+          3327,
+          3328,
+          3329,
+          3330
+        ]
+      }
+    ],
+    "configs": {
+      "P0": {
+        "adaptive_constraints": false,
+        "calibration_samples": null,
+        "candidate": "Q2-SP",
+        "classic_final_temperature_ratio": 0.001,
+        "coordinate_tolerance": 0.0,
+        "dead_space_ratio": 0.15,
+        "fast_sa_c": 100.0,
+        "fast_sa_k": 7,
+        "hypergraph_init": false,
+        "initial_acceptance": 0.9,
+        "initialization_mode": "shelf",
+        "max_evaluations": 30000,
+        "restarts": 4,
+        "sa_schedule": "classic",
+        "time_limit": 600.0
+      },
+      "P1": {
+        "adaptive_constraints": true,
+        "calibration_samples": null,
+        "candidate": "Q2-BT",
+        "classic_final_temperature_ratio": 0.001,
+        "coordinate_tolerance": 0.0,
+        "dead_space_ratio": 0.15,
+        "fast_sa_c": 100.0,
+        "fast_sa_k": 7,
+        "hypergraph_init": false,
+        "initial_acceptance": 0.9,
+        "initialization_mode": "shelf",
+        "max_evaluations": 30000,
+        "restarts": 4,
+        "sa_schedule": "fast",
+        "time_limit": 600.0
+      }
+    },
+    "data_files": [
+      {
+        "bytes": 21289,
+        "path": "data/raw/附件/n300.blocks",
+        "sha256": "88ca80814070d9578c7ccd31182ff31ab026a1a1ea9da5fd0e0342d26327bc82"
+      },
+      {
+        "bytes": 46787,
+        "path": "data/raw/附件/n300.nets",
+        "sha256": "39d9cc7b7d347dd0ecefb8d17e0adfbcbf2af1c071079fbf64caec34bcc0d94c"
+      },
+      {
+        "bytes": 6609,
+        "path": "data/raw/附件/n300.pl",
+        "sha256": "7b095ff15624666c3fdf95c71fda72e45ffff70acdf27d10302830ba3031f035"
+      }
+    ],
+    "data_manifest_hash": "d7ad31e667df750871ff48b49954f63ac10381a333b010a703350543e285d180",
+    "environment": {
+      "implementation": "CPython",
+      "logical_cpu_count": 16,
+      "mkl_num_threads": "1",
+      "omp_num_threads": "1",
+      "openblas_num_threads": "1",
+      "os": "Windows",
+      "platform": "Windows-10-10.0.26200-SP0",
+      "processes": 8,
+      "python_executable": "D:\\Anaconda\\envs\\CA-py310\\python.exe",
+      "python_version": "3.10.20",
+      "rng": "random.Random (CPython MT19937)",
+      "threads": 1,
+      "workers": 8
+    },
+    "preselected": "P1",
+    "reselection_allowed": false,
+    "selection_locked": true,
+    "spec": {
+      "budgets": {
+        "max_evaluations": 30000,
+        "restarts": 4,
+        "time_limit": 600.0
+      },
+      "candidates": [
+        "P0",
+        "P1"
+      ],
+      "code_hashes": {
+        "P0": "815f545fff15ed9b3822f4d2050e450631daf16e7f46fde4df41151e8f8de838",
+        "P1": "815f545fff15ed9b3822f4d2050e450631daf16e7f46fde4df41151e8f8de838"
+      },
+      "config_hashes": {
+        "P0": "463b5717d175912e1c2165af18e3a9fb03627e57809273ebefd195e7ebcc95ee",
+        "P1": "399ba4abadcac00256ce03ee7a8bf717214fb3e802e86c792db4b420f70c03f5"
+      },
+      "data_hash": "d7ad31e667df750871ff48b49954f63ac10381a333b010a703350543e285d180",
+      "final_seeds": [],
+      "instance": "n300",
+      "output_root": "outputs/q2/_runtime/v3_n300_holdout",
+      "problem": "q2",
+      "processes": 8,
+      "q2_v3_baseline": "B",
+      "rng": "random.Random (CPython MT19937)",
+      "seeds": [
+        3301,
+        3302,
+        3303,
+        3304,
+        3305,
+        3306,
+        3307,
+        3308,
+        3309,
+        3310,
+        3311,
+        3312,
+        3313,
+        3314,
+        3315,
+        3316,
+        3317,
+        3318,
+        3319,
+        3320,
+        3321,
+        3322,
+        3323,
+        3324,
+        3325,
+        3326,
+        3327,
+        3328,
+        3329,
+        3330
+      ],
+      "stop_conditions": [
+        "max_evaluations",
+        "wall_clock",
+        "uncaught_exception",
+        "preserve_failure_status"
+      ],
+      "threads": 1,
+      "workers": 8
+    }
+  },
+  "reselection_allowed": false,
+  "selection_locked": true
+}
