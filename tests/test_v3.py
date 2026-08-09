@@ -4,7 +4,11 @@ from pathlib import Path
 import shutil
 import sys
 import tempfile
+import threading
+import time
 import unittest
+from types import SimpleNamespace
+from unittest.mock import patch
 
 from src.v3 import (
     COLD_SEEDS,
@@ -25,6 +29,7 @@ from src.v3 import (
     q3_mechanical_decision,
     registered_payload,
     summarize_directory,
+    summarize_q1,
     summarize_q2,
     summarize_q3,
     write_once,
@@ -32,6 +37,123 @@ from src.v3 import (
 
 
 class V3ProtocolTests(unittest.TestCase):
+    def test_outer_workers_are_frozen_q1_only(self):
+        specs = build_specs()
+        self.assertEqual(specs["q1"].workers, 8)
+        self.assertEqual(specs["q2"].workers, 1)
+        self.assertEqual(specs["q3"].workers, 5)  # Q3 inner cold-seed workers; outer route execution stays serial.
+
+    def test_q1_execution_manifest_is_immutable_run_snapshot(self):
+        payload = json.loads(Path("outputs/q1/tables/v3_n200_execution_manifest.json").read_text(encoding="utf-8"))
+        self.assertEqual(payload["execution_runner_sha"], "c5701e2a1c429f67aa20141e5c114741d2e50ab3151875a4ee160e39d1e19bb0")
+        self.assertEqual(payload["execution_overall"], "67cae4dceb0bcd8b0c01d21f6513782ba3fd8bb70dfcba659bcb4179ad02d2ef")
+        self.assertEqual(payload["base_commit"], "832e8bde7d9a857c4023693f1a67249e25f07d5d")
+        self.assertEqual(payload["q1_frozen_payload"]["spec"]["workers"], 8)
+        self.assertEqual(len(payload["q1_frozen_payload"]["commands"]), 7)
+
+    def test_q1_execute_preflights_all_slots_before_starting_children(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            plans = []
+            for index in range(140):
+                marker = root / f"config_{index}" / "seed_2201" / "events.jsonl"
+                fingerprint = {"problem": "q1", "instance": "n200", "config_id": f"C{index}", "seed": 2201,
+                               "code_hash": "a" * 64, "config_hash": "b" * 64, "data_hash": "c" * 64,
+                               "environment": {"workers": 8}}
+                plans.append(CommandPlan((sys.executable, str(marker)), marker, fingerprint))
+            partial = plans[-1].marker.parent
+            partial.mkdir(parents=True)
+            (partial / "partial.txt").write_text("interrupted", encoding="utf-8")
+            with patch("src.v3.subprocess.run") as run:
+                with self.assertRaises(FreezeError):
+                    execute_plan(tuple(plans), execute=True)
+                run.assert_not_called()
+            self.assertFalse(any(plan.marker.parent.exists() for plan in plans[:-1]))
+
+    def test_q1_execute_is_bounded_ordered_and_isolated(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            plans = []
+            for index in range(16):
+                marker = root / f"config_{index}" / "seed_2201" / "events.jsonl"
+                fingerprint = {"problem": "q1", "instance": "n200", "config_id": f"C{index}", "seed": 2201,
+                               "code_hash": "a" * 64, "config_hash": "b" * 64, "data_hash": "c" * 64,
+                               "environment": {"workers": 8}}
+                plans.append(CommandPlan((sys.executable, str(marker)), marker, fingerprint))
+            lock = threading.Lock()
+            active = 0
+            maximum = 0
+
+            def fake_run(command, **_kwargs):
+                nonlocal active, maximum
+                marker = Path(command[1])
+                with lock:
+                    active += 1
+                    maximum = max(maximum, active)
+                time.sleep(0.01)
+                record = {**next(plan.fingerprint for plan in plans if plan.marker == marker),
+                          "status": "success", "formal_audit_match": True}
+                marker.parent.mkdir(parents=True, exist_ok=True)
+                marker.write_text(json.dumps(record) + "\n", encoding="utf-8")
+                with lock:
+                    active -= 1
+                return SimpleNamespace(returncode=0, stdout="", stderr="")
+
+            with patch("src.v3.subprocess.run", side_effect=fake_run):
+                result = execute_plan(tuple(plans), execute=True)
+            self.assertEqual([item["index"] for item in result], list(range(16)))
+            self.assertTrue(all(item["status"] == "completed" for item in result))
+            self.assertEqual(maximum, 8)
+            self.assertEqual(len({item["marker"] for item in result}), 16)
+
+    def test_q3_outer_execution_stays_serial_when_inner_workers_are_five(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            plans = []
+            for index in range(8):
+                marker = root / f"route_{index}" / "result.jsonl"
+                fingerprint = {"problem": "q3", "instance": "n200", "config_id": f"Q3-{index}", "seed": 2201,
+                               "code_hash": "a" * 64, "config_hash": "b" * 64, "data_hash": "c" * 64,
+                               "environment": {"workers": 5}}
+                plans.append(CommandPlan((sys.executable, str(marker)), marker, fingerprint))
+            lock = threading.Lock()
+            active = 0
+            maximum = 0
+
+            def fake_run(command, **_kwargs):
+                nonlocal active, maximum
+                marker = Path(command[1])
+                with lock:
+                    active += 1
+                    maximum = max(maximum, active)
+                time.sleep(0.01)
+                plan = next(plan for plan in plans if plan.marker == marker)
+                marker.parent.mkdir(parents=True, exist_ok=True)
+                marker.write_text(json.dumps({**plan.fingerprint, "status": "success", "formal_audit_match": True}) + "\n", encoding="utf-8")
+                with lock:
+                    active -= 1
+                return SimpleNamespace(returncode=0, stdout="", stderr="")
+
+            with patch("src.v3.subprocess.run", side_effect=fake_run):
+                result = execute_plan(tuple(plans), execute=True)
+            self.assertEqual([item["index"] for item in result], list(range(8)))
+            self.assertEqual(maximum, 1)
+
+    def test_q1_interrupt_cancels_unstarted_futures(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            plans = []
+            for index in range(32):
+                marker = root / f"config_{index}" / "seed_2201" / "events.jsonl"
+                fingerprint = {"problem": "q1", "instance": "n200", "config_id": f"C{index}", "seed": 2201,
+                               "code_hash": "a" * 64, "config_hash": "b" * 64, "data_hash": "c" * 64,
+                               "environment": {"workers": 8}}
+                plans.append(CommandPlan((sys.executable, str(marker)), marker, fingerprint))
+            with patch("src.v3._execute_one", side_effect=KeyboardInterrupt) as run:
+                with self.assertRaises(KeyboardInterrupt):
+                    execute_plan(tuple(plans), execute=True)
+                self.assertLessEqual(run.call_count, 8)
+
     def test_default_specs_are_complete_and_q2_b_is_frozen(self):
         specs = build_specs()
         self.assertEqual(specs["q2"].q2_v3_baseline, "B")
@@ -214,11 +336,28 @@ class V3ProtocolTests(unittest.TestCase):
                                           "median_first_feasible_evaluation": 1}
         q1 = q1_mechanical_decision([good(name, "area") for name in ("Q1-G", "Q1-SP", "Q1-BT", "Q1-BT-D", "Q1-BT-both", "Q1-BT-directed-only", "Q1-BT-dedup-only")])
         self.assertEqual(q1["decision"], "selected")
+        self.assertEqual([row["config_id"] for row in q1["rankings"]], ["Q1-BT", "Q1-BT-D", "Q1-G", "Q1-SP"])
+        self.assertNotIn("Q1-BT-both", [row["config_id"] for row in q1["rankings"]])
+        self.assertEqual(set(q1["ablation_completeness"]), {"Q1-BT-both", "Q1-BT-directed-only", "Q1-BT-dedup-only"})
+        self.assertIn("p2_legal_noninferior", q1)
+        missing = q1_mechanical_decision([good(name, "area") for name in ("Q1-G", "Q1-SP", "Q1-BT")])
+        self.assertEqual(missing["decision"], "blocked_missing_main_candidate")
         q2 = q2_mechanical_decision([good(name, "HPWL") for name in ("P0", "P1", "P2")])
         self.assertEqual(q2["decision"], "selected")
         routes = {name: {"d_robust": 0.1 if name == "Q3-BIN" else 0.105, "final_legal_rate": 1.0,
                          "final_median_HPWL": 10.0, "final_iqr_HPWL": 1.0} for name in ("Q3-BIN", "Q3-LIN", "Q3-CONT-R")}
         self.assertEqual(q3_mechanical_decision(routes)["selected"], "Q3-BIN")
+
+    def test_q1_summary_min_max_and_first_feasible_protocol_deviation(self):
+        rows = [{"config_id": config, "seed": 2201, "area": area, "aspect_ratio": aspect,
+                 "legal": True, "formal_audit_match": True, "status": "timeout"}
+                for config, area, aspect in (("Q1-G", 10, 2), ("Q1-SP", 11, 3), ("Q1-BT", 12, 4), ("Q1-BT-D", 13, 5))]
+        summary = next(item for item in summarize_q1(rows, (2201,)) if item["config_id"] == "Q1-G")
+        self.assertEqual(summary["min_area"], 10.0)
+        self.assertEqual(summary["max_area"], 10.0)
+        self.assertEqual(summary["min_aspect_ratio"], 2.0)
+        self.assertEqual(summary["max_aspect_ratio"], 2.0)
+        self.assertEqual(summary["first_feasible_status"], "not_recorded_protocol_deviation")
 
     def test_write_once_is_idempotent_and_refuses_different_record(self):
         with tempfile.TemporaryDirectory() as tmp:

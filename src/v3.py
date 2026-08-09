@@ -20,6 +20,7 @@ import re
 import statistics
 import subprocess
 import sys
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from typing import Any, Iterable, Mapping, Sequence
 
 from .Q1.__main__ import _code_hash as q1_code_hash, _config_hash as q1_config_hash
@@ -37,6 +38,7 @@ ROOT = Path(__file__).resolve().parents[1]
 COLD_SEEDS = tuple(range(2201, 2221))
 FINAL_SEEDS = tuple(range(2301, 2321))
 Q1_CANDIDATES = ("Q1-G", "Q1-SP", "Q1-BT", "Q1-BT-D")
+Q1_ABLATION_CANDIDATES = ("Q1-BT-directed-only", "Q1-BT-dedup-only", "Q1-BT-both")
 Q2_CANDIDATES = ("P0", "P1", "P2")
 Q3_CANDIDATES = ("Q3-BIN", "Q3-LIN", "Q3-CONT-R")
 HASH_RE = __import__("re").compile(r"^[0-9a-f]{64}$")
@@ -188,7 +190,7 @@ def build_specs(root: Path = ROOT, output_root: str = "outputs") -> dict[str, Fr
             {name: q1_code_hash() for name in q1_configs},
             {name: q1_config_hash(config) for name, config in q1_configs.items()},
             q1_data[0]["sha256"], COLD_SEEDS, {"max_evaluations": 100_000, "time_limit": 180.0, "restarts": 4},
-            1, 1, 1, "random.Random (CPython MT19937)", common_stop, str(Path(output_root) / "q1" / "_runtime" / "v3_n200"),
+            1, 1, 8, "random.Random (CPython MT19937)", common_stop, str(Path(output_root) / "q1" / "_runtime" / "v3_n200"),
         ),
         "q2": FreezeSpec(
             "q2", "n200", Q2_CANDIDATES,
@@ -667,24 +669,28 @@ def _validate_completed(plan: CommandPlan) -> dict[str, Any]:
     return payload
 
 
-def execute_plan(plans: Sequence[CommandPlan], *, execute: bool = False, cwd: Path = ROOT) -> list[dict[str, Any]]:
-    """Run isolated commands only with explicit consent; never overwrite records."""
-    results = []
-    for index, plan in enumerate(plans):
-        parent = plan.marker.parent
-        if plan.marker.exists():
-            _validate_completed(plan)
-            results.append({"index": index, "status": "skipped_existing", "marker": plan.marker.as_posix()})
-            continue
-        if any(parent.iterdir()) if parent.is_dir() else False:
-            raise FreezeError(f"partial output exists; refusing overwrite: {parent}")
-        for auxiliary in plan.auxiliary_markers:
-            sibling_conflicts = tuple(auxiliary.parent.glob(f"{auxiliary.stem}*")) if auxiliary.parent.is_dir() else ()
-            if auxiliary.exists() or sibling_conflicts:
-                raise FreezeError(f"partial auxiliary output exists; refusing overwrite: {auxiliary}")
-        if not execute:
-            results.append({"index": index, "status": "planned", "command": list(plan.command), "marker": plan.marker.as_posix()})
-            continue
+def _preflight_plan(plan: CommandPlan) -> bool:
+    """Validate one output slot without creating files or starting a child."""
+    parent = plan.marker.parent
+    if plan.marker.exists():
+        _validate_completed(plan)
+        return True
+    if parent.exists() and not parent.is_dir():
+        raise FreezeError(f"output parent is not a directory: {parent}")
+    if parent.is_dir() and any(parent.iterdir()):
+        raise FreezeError(f"partial output exists; refusing overwrite: {parent}")
+    for auxiliary in plan.auxiliary_markers:
+        sibling_conflicts = tuple(auxiliary.parent.glob(f"{auxiliary.stem}*")) if auxiliary.parent.is_dir() else ()
+        if auxiliary.exists() or sibling_conflicts:
+            raise FreezeError(f"partial auxiliary output exists; refusing overwrite: {auxiliary}")
+    return False
+
+
+def _execute_one(index: int, plan: CommandPlan, cwd: Path) -> dict[str, Any]:
+    """Execute one already-preflighted plan and retain every failure state."""
+    parent = plan.marker.parent
+    status: dict[str, Any] = {"index": index, "command": list(plan.command), "marker": plan.marker.as_posix()}
+    try:
         parent.mkdir(parents=True, exist_ok=True)
         if plan.fingerprint is not None:
             write_once(parent / "v3_freeze.json", plan.fingerprint)
@@ -692,16 +698,86 @@ def execute_plan(plans: Sequence[CommandPlan], *, execute: bool = False, cwd: Pa
         if plan.env:
             child_env.update(plan.env)
         completed = subprocess.run(plan.command, cwd=cwd, env=child_env, capture_output=True, text=True, check=False)
-        status = {"index": index, "returncode": completed.returncode, "command": list(plan.command),
-                  "stdout": completed.stdout, "stderr": completed.stderr, "marker": plan.marker.as_posix()}
+        status.update({"returncode": completed.returncode, "stdout": completed.stdout, "stderr": completed.stderr})
+    except Exception as exc:  # retain spawn/IO failures; retry is an explicit new attempt
+        status.update({"returncode": None, "stdout": "", "stderr": "", "exception": f"{type(exc).__name__}: {exc}"})
         write_once(parent / "_orchestrator_status.json", status)
-        if plan.marker.exists():
+        return {"status": "failed_exception", **status}
+    if plan.marker.exists():
+        try:
             _validate_completed(plan)
-            run_status = "completed" if completed.returncode == 0 else "completed_failure"
+            run_status = "completed" if status["returncode"] == 0 else "completed_failure"
+        except Exception as exc:  # preserve invalid marker for audit instead of aborting siblings
+            status["validation_error"] = f"{type(exc).__name__}: {exc}"
+            run_status = "failed_invalid_marker"
+    else:
+        run_status = "failed_missing_marker"
+    write_once(parent / "_orchestrator_status.json", status)
+    return {"status": run_status, **status}
+
+
+def _execute_parallel(todo: Sequence[tuple[int, CommandPlan]], workers: int, cwd: Path) -> list[dict[str, Any]]:
+    """Keep at most ``workers`` futures in flight and stop submitting after interruption."""
+    executor = ThreadPoolExecutor(max_workers=min(workers, len(todo)))
+    futures: dict[Any, int] = {}
+    pending = iter(todo)
+    results: dict[int, dict[str, Any]] = {}
+
+    def submit_one() -> None:
+        try:
+            index, plan = next(pending)
+        except StopIteration:
+            return
+        futures[executor.submit(_execute_one, index, plan, cwd)] = index
+
+    try:
+        for _ in range(min(workers, len(todo))):
+            submit_one()
+        while futures:
+            done, _ = wait(tuple(futures), return_when=FIRST_COMPLETED)
+            for future in sorted(done, key=lambda item: futures[item]):
+                index = futures.pop(future)
+                results[index] = future.result()
+                submit_one()
+    except BaseException:
+        for future in futures:
+            future.cancel()
+        executor.shutdown(wait=False, cancel_futures=True)
+        raise
+    executor.shutdown(wait=True)
+    return [results[index] for index, _ in todo]
+
+
+def execute_plan(plans: Sequence[CommandPlan], *, execute: bool = False, cwd: Path = ROOT) -> list[dict[str, Any]]:
+    """Run isolated commands only with explicit consent; never overwrite records."""
+    registered = tuple(plans)
+    seen_markers: set[Path] = set()
+    skipped: dict[int, dict[str, Any]] = {}
+    todo: list[tuple[int, CommandPlan]] = []
+    # Full preflight happens before any formal child starts, including Q1's 140 slots.
+    for index, plan in enumerate(registered):
+        marker = plan.marker.resolve()
+        if marker in seen_markers:
+            raise FreezeError(f"duplicate registered marker path: {plan.marker}")
+        seen_markers.add(marker)
+        if _preflight_plan(plan):
+            skipped[index] = {"index": index, "status": "skipped_existing", "marker": plan.marker.as_posix()}
         else:
-            run_status = "failed_missing_marker"
-        results.append({"index": index, "status": run_status, **status})
-    return results
+            todo.append((index, plan))
+    if not execute:
+        return [skipped.get(index, {"index": index, "status": "planned", "command": list(plan.command),
+                                     "marker": plan.marker.as_posix()}) for index, plan in enumerate(registered)]
+    workers = 1
+    if todo and registered[0].fingerprint:
+        environment = registered[0].fingerprint.get("environment", {})
+        if registered[0].fingerprint.get("problem") == "q1":
+            workers = max(1, int(environment.get("workers", 1)))
+    results: list[dict[str, Any]] = list(skipped.values())
+    if workers > 1 and len(todo) > 1:
+        results.extend(_execute_parallel(todo, workers, cwd))
+    else:
+        results.extend(_execute_one(index, plan, cwd) for index, plan in todo)
+    return sorted(results, key=lambda item: item["index"])
 
 
 def _bool(value: Any) -> bool:
@@ -736,10 +812,23 @@ def summarize_q1(rows: Sequence[Mapping[str, Any]], registered_seeds: Sequence[i
     summaries = _summarize_metric(rows, "area", "aspect_ratio", "Q1", registered_seeds)
     for summary in summaries:
         group = [row for row in rows if str(row.get("config_id")) == summary["config_id"]]
+        legal_rows = [row for row in group if _bool(row.get("legal")) and _bool(row.get("formal_audit_match"))]
+        area_values = [float(row["area"]) for row in legal_rows if row.get("area") not in (None, "")]
+        aspect_values = [float(row["aspect_ratio"]) for row in legal_rows if row.get("aspect_ratio") not in (None, "")]
+        summary["min_area"] = min(area_values) if area_values else None
+        summary["max_area"] = max(area_values) if area_values else None
+        summary["min_aspect_ratio"] = min(aspect_values) if aspect_values else None
+        summary["max_aspect_ratio"] = max(aspect_values) if aspect_values else None
         values = [float(row["first_feasible_evaluation"]) for row in group if row.get("first_feasible_evaluation") not in (None, "")]
         summary["median_first_feasible_evaluation"] = statistics.median(values) if values else None
-        summary["first_feasible_status"] = "complete" if values else "missing"
+        summary["first_feasible_status"] = "complete" if values else "not_recorded_protocol_deviation"
     return summaries
+
+
+def _q1_protocol_deviations(summaries: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
+    return [{"config_id": summary.get("config_id"), "field": "first_feasible_evaluation",
+             "status": "not_recorded_protocol_deviation", "runs": summary.get("runs", 0)}
+            for summary in summaries if summary.get("first_feasible_status") == "not_recorded_protocol_deviation"]
 
 
 def summarize_q2(rows: Sequence[Mapping[str, Any]], registered_seeds: Sequence[int] | None = None) -> list[dict[str, Any]]:
@@ -871,35 +960,57 @@ def paired_differences(
 
 def q1_mechanical_decision(summaries: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
     by_id = {row.get("config_id"): row for row in summaries}
-    required = tuple(by_id)
-    hard_gate = all(
-        by_id.get(config_id, {}).get("legal_rate", 0.0) >= 0.90
-        and by_id.get(config_id, {}).get("audit_match_runs") == 20
-        and by_id.get(config_id, {}).get("missing_runs") == 0
-        for config_id in required
-    ) and bool(required)
+    missing_main = [config_id for config_id in Q1_CANDIDATES if config_id not in by_id]
+    main_rows = [by_id[config_id] for config_id in Q1_CANDIDATES if config_id in by_id]
+    hard_gate = not missing_main and all(
+        row.get("legal_rate", 0.0) >= 0.90 and row.get("audit_match_runs") == 20 and row.get("missing_runs") == 0
+        for row in main_rows
+    )
     rankings = sorted(
-        ({"config_id": config_id, "median_area": by_id[config_id].get("median_area"),
-          "median_aspect_ratio": by_id[config_id].get("median_aspect_ratio"),
-          "legal_rate": by_id[config_id].get("legal_rate", 0.0),
-          "eligible": hard_gate}
-         for config_id in required),
+        ({"config_id": row["config_id"], "median_area": row.get("median_area"),
+          "median_aspect_ratio": row.get("median_aspect_ratio"),
+          "legal_rate": row.get("legal_rate", 0.0), "eligible": hard_gate}
+         for row in main_rows),
         key=lambda row: (row["median_area"] is None, row["median_area"] if row["median_area"] is not None else float("inf"),
                          row["median_aspect_ratio"] if row["median_aspect_ratio"] is not None else float("inf"), row["config_id"]),
     )
     for rank, row in enumerate(rankings, 1):
         row["rank"] = rank
+    ablation_rows = [by_id[config_id] for config_id in Q1_ABLATION_CANDIDATES if config_id in by_id]
+    ablation_completeness = {
+        row["config_id"]: {"registered_runs": row.get("registered_runs", 0), "runs": row.get("runs", 0),
+                            "missing_runs": row.get("missing_runs", 0), "audit_match_runs": row.get("audit_match_runs", 0),
+                            "complete": row.get("missing_runs", 0) == 0 and row.get("audit_match_runs") == 20}
+        for row in ablation_rows
+    }
+    ablation_comparisons = {
+        row["config_id"]: {"baseline": "Q1-BT", "median_area": row.get("median_area"),
+                           "median_aspect_ratio": row.get("median_aspect_ratio"),
+                           "legal_rate": row.get("legal_rate", 0.0)}
+        for row in ablation_rows
+    }
+    if missing_main:
+        return {"decision": "blocked_missing_main_candidate", "hard_gate": False, "missing_main_candidates": missing_main,
+                "rankings": rankings, "selected": None, "ablation_completeness": ablation_completeness,
+                "ablation_comparisons": ablation_comparisons,
+                "p2_ablation": "blocked_missing_main_candidate", "p2_legal_noninferior": None,
+                "p2_area_noninferior": None, "p2_stability_gain": None}
     p1, p2 = by_id.get("Q1-BT"), by_id.get("Q1-BT-D")
     if not p1 or not p2 or p1.get("median_area") is None or p2.get("median_area") is None:
-        return {"decision": "blocked_missing_summary", "hard_gate": hard_gate, "rankings": rankings, "selected": None, "p2_ablation": "blocked_missing_summary"}
+        return {"decision": "blocked_missing_ablation_baseline", "hard_gate": hard_gate, "rankings": rankings, "selected": None,
+                "ablation_completeness": ablation_completeness, "ablation_comparisons": ablation_comparisons,
+                "p2_ablation": "blocked_missing_ablation_baseline",
+                "p2_legal_noninferior": None, "p2_area_noninferior": None, "p2_stability_gain": None}
     legal = p2["legal_rate"] >= p1["legal_rate"] - 0.05
     area = p2["median_area"] <= 1.01 * p1["median_area"]
     stability = ((p1.get("iqr_area") is not None and p2.get("iqr_area") is not None and p2["iqr_area"] <= 0.95 * p1["iqr_area"]) or
                  (p1.get("p90_area") is not None and p2.get("p90_area") is not None and p2["p90_area"] <= 0.99 * p1["p90_area"]))
     p2_ablation = "supports_p2" if hard_gate and legal and area and stability else "report_only"
     return {"decision": "selected" if hard_gate else "blocked_hard_gate", "hard_gate": hard_gate,
-            "selected": rankings[0]["config_id"] if hard_gate else None, "rankings": rankings,
-            "p2_ablation": p2_ablation, "legal": legal, "area": area, "stability": stability}
+            "selected": rankings[0]["config_id"] if hard_gate and rankings else None, "rankings": rankings,
+            "ablation_completeness": ablation_completeness, "ablation_comparisons": ablation_comparisons,
+            "p2_ablation": p2_ablation,
+            "p2_legal_noninferior": legal, "p2_area_noninferior": area, "p2_stability_gain": stability}
 
 
 def q2_mechanical_decision(summaries: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
@@ -1011,6 +1122,7 @@ def summarize_file(problem: str, input_path: Path, output_path: Path | None = No
     if problem == "q1":
         value: Any = summarize_q1(rows, spec.seeds)
         value = _pad_registered_summaries(value, spec.config_hashes, len(spec.seeds), "Q1", "area", secondary="aspect_ratio", checkpoints=False)
+        protocol_deviations = _q1_protocol_deviations(value)
         pairwise = {"Q1-BT_vs_Q1-BT-D": paired_differences(rows, "area", "Q1-BT", "Q1-BT-D"),
                     "Q1-BT_vs_directed_only": paired_differences(rows, "area", "Q1-BT", "Q1-BT-directed-only")}
         decision = q1_mechanical_decision(value)
@@ -1030,6 +1142,8 @@ def summarize_file(problem: str, input_path: Path, output_path: Path | None = No
     else:
         raise FreezeError(f"unsupported summary problem: {problem}")
     payload = {"problem": problem, "registered_seeds": list(spec.seeds), "summary": value, "pairwise": pairwise, "mechanical_decision": decision}
+    if problem == "q1":
+        payload["protocol_deviations"] = protocol_deviations
     if output_path:
         write_once(output_path, payload)
     return payload
@@ -1062,6 +1176,7 @@ def summarize_directory(problem: str, input_root: Path, output_path: Path | None
         _validate_summary_rows(problem, rows, spec)
         if problem == "q1":
             summary = _pad_registered_summaries(summarize_q1(rows, spec.seeds), spec.config_hashes, len(spec.seeds), "Q1", "area", secondary="aspect_ratio")
+            protocol_deviations = _q1_protocol_deviations(summary)
             decision = q1_mechanical_decision(summary)
             pairwise = {"Q1-BT_vs_Q1-BT-D": paired_differences(rows, "area", "Q1-BT", "Q1-BT-D"),
                         "Q1-BT_vs_directed_only": paired_differences(rows, "area", "Q1-BT", "Q1-BT-directed-only")}
@@ -1072,6 +1187,8 @@ def summarize_directory(problem: str, input_root: Path, output_path: Path | None
         payload = {"problem": problem, "attempt_root": root.as_posix(), "registered_runs": len(plans),
                    "discovered_runs": len(rows), "missing_runs": missing, "summary": summary,
                    "pairwise": pairwise, "mechanical_decision": decision}
+        if problem == "q1":
+            payload["protocol_deviations"] = protocol_deviations
     else:
         discovered = {path.resolve() for path in root.rglob("result.json")}
         unexpected = discovered - set(expected_markers)
@@ -1145,12 +1262,14 @@ def _pad_registered_summaries(
             "registered_runs": seed_count, "missing_runs": seed_count,
             "legal_runs": 0, "legal_rate": 0.0, "audit_match_runs": 0,
             f"median_{metric}": None, f"p90_{metric}": None, f"iqr_{metric}": None,
+            f"min_{metric}": None, f"max_{metric}": None,
             "status_success": 0, "status_timeout": 0, "status_no_feasible": 0, "status_crash": 0,
         }
         if secondary:
-            item.update({f"median_{secondary}": None, f"p90_{secondary}": None, f"iqr_{secondary}": None})
+            item.update({f"median_{secondary}": None, f"p90_{secondary}": None, f"iqr_{secondary}": None,
+                         f"min_{secondary}": None, f"max_{secondary}": None})
         if problem == "Q1":
-            item.update({"median_first_feasible_evaluation": None, "first_feasible_status": "missing"})
+            item.update({"median_first_feasible_evaluation": None, "first_feasible_status": "not_recorded_protocol_deviation"})
         if checkpoints:
             item.update({"median_first_feasible_evaluation": None,
                          "checkpoint_median_best_so_far_HPWL": {str(point): None for point in (25, 50, 75, 100)},
